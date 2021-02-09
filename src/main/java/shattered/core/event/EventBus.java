@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EventBus {
 
-	private EventBus() {
-	}
-
 	static final ConcurrentHashMap<String, IEventBus> BUS_REGISTRY = new ConcurrentHashMap<>();
 
 	@NotNull
@@ -42,5 +39,8 @@ public final class EventBus {
 			throw new NullPointerException(String.format("No EventBus with name '%s' found!", busName));
 		}
 		bus.register(listener);
+	}
+
+	private EventBus() {
 	}
 }

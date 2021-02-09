@@ -4,25 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Implemented class transforming">
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added basic workings of the EventBus">
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/Event.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusSubscriber.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/IEventBus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/IEventListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/MessageEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/MessageListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/StringUtils.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Validators.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/BaseRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/RegistryLockedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/ResourceSingletonRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/preboot/AnnotationRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/preboot/Preboot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/preboot/PrebootClassLoader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,11 +65,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/lib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core\event" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core\loader" />
@@ -118,7 +114,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612860883559</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Implemented class transforming">
+      <created>1612864570690</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1612864570690</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added basic workings of the EventBus">
+      <created>1612864613020</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1612864613020</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -135,6 +145,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented class transforming" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented class transforming" />
+    <MESSAGE value="Added basic workings of the EventBus" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added basic workings of the EventBus" />
   </component>
 </project>

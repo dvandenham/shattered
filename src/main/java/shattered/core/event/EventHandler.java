@@ -26,18 +26,18 @@ import static org.objectweb.asm.Opcodes.V1_8;
 
 final class EventHandler implements IEventListener {
 
-	private static final AtomicInteger             IDENTIFIERS               = new AtomicInteger(0);
-	private static final String                    MY_DESCRIPTION            = Type.getInternalName(IEventListener.class);
-	private static final Method                    INVOKE_METHOD             = Objects.requireNonNull(EventHandler.findInvokeMethod());
-	private static final String                    INVOKE_METHOD_DESCRIPTION = Type.getMethodDescriptor(EventHandler.INVOKE_METHOD);
-	private static final EventBusClassLoader       LOADER                    = new EventBusClassLoader();
-	private static final HashMap<Method, Class<?>> CACHE                     = new HashMap<>();
-	private final        IEventListener            handler;
-	private final        EventListener             listenerInfo;
-	private final        MessageListener           messageInfo;
-	private final        Class<?>                  listenerEventType;
-	private final        String                    name;
-	private              java.lang.reflect.Type    filter                    = null;
+	private static final AtomicInteger IDENTIFIERS = new AtomicInteger(0);
+	private static final String MY_DESCRIPTION = Type.getInternalName(IEventListener.class);
+	private static final Method INVOKE_METHOD = Objects.requireNonNull(EventHandler.findInvokeMethod());
+	private static final String INVOKE_METHOD_DESCRIPTION = Type.getMethodDescriptor(EventHandler.INVOKE_METHOD);
+	private static final EventBusClassLoader LOADER = new EventBusClassLoader();
+	private static final HashMap<Method, Class<?>> CACHE = new HashMap<>();
+	private final IEventListener handler;
+	private final EventListener listenerInfo;
+	private final MessageListener messageInfo;
+	private final Class<?> listenerEventType;
+	private final String name;
+	private java.lang.reflect.Type filter = null;
 
 	@Nullable
 	private static Method findInvokeMethod() {
@@ -115,13 +115,13 @@ final class EventHandler implements IEventListener {
 		if (result == null) {
 			//Create transformers
 			final ClassWriter writer = new ClassWriter(0);
-			MethodVisitor     visitor;
+			MethodVisitor visitor;
 			//Get transformation parameters
-			final boolean isStatic        = Modifier.isStatic(listener.getModifiers());
-			final String  name            = this.getUniqueName(listener);
-			final String  description     = name.replace('.', '/');
-			final String  instructionType = Type.getInternalName(listener.getDeclaringClass());
-			final String  eventType       = Type.getInternalName(listener.getParameterTypes()[0]);
+			final boolean isStatic = Modifier.isStatic(listener.getModifiers());
+			final String name = this.getUniqueName(listener);
+			final String description = name.replace('.', '/');
+			final String instructionType = Type.getInternalName(listener.getDeclaringClass());
+			final String eventType = Type.getInternalName(listener.getParameterTypes()[0]);
 			//Generate class
 			writer.visit(V1_8, ACC_PUBLIC | ACC_SUPER, description, null, "java/lang/Object", new String[]{EventHandler.MY_DESCRIPTION});
 			writer.visitSource(".dynamic", null);
@@ -181,7 +181,7 @@ final class EventHandler implements IEventListener {
 
 		@Override
 		protected Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
-			return Class.forName(name, resolve, Thread.currentThread().getContextClassLoader());
+			return Class.forName(name, resolve, EventBusClassLoader.class.getClassLoader());
 		}
 
 		private Class<?> defineClass(final String name, final byte[] bytes) {

@@ -73,7 +73,7 @@ abstract class BaseRegistry<K, V> implements Iterable<Map.Entry<K, V>> {
 	private static class EventHandler {
 
 		@MessageListener("registry_freeze")
-		public static void onRegistryFreeze(final MessageEvent event) {
+		public static void onRegistryFreeze(final MessageEvent ignored) {
 			BaseRegistry.REGISTRIES.values().forEach(registry -> registry.frozen = true);
 		}
 	}

@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added transformers to make @EventListener and @MethodListener methods public">
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Simplified developer mode logging">
+      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerJson.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/FileUtils.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" afterDir="false" />
@@ -31,13 +32,17 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureSimple.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureType.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/ResourceLocationTypeAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/language.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/texture.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/SysProps.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -100,7 +105,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/lib/asset" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/assets/shattered/textures" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -111,11 +116,11 @@
       <recent name="shattered.lib.registry" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\textures" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\asset" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\math" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\json" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="preboot" />
@@ -257,7 +262,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612994326349</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Simplified developer mode logging">
+      <created>1612994504986</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1612994504986</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -286,6 +298,7 @@
     <MESSAGE value="Added JSON and math utils" />
     <MESSAGE value="Added a readme containing information about the boot process" />
     <MESSAGE value="Added transformers to make @EventListener and @MethodListener methods public" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added transformers to make @EventListener and @MethodListener methods public" />
+    <MESSAGE value="Simplified developer mode logging" />
+    <option name="LAST_COMMIT_MESSAGE" value="Simplified developer mode logging" />
   </component>
 </project>

@@ -3,16 +3,28 @@ package shattered.lib;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class ReflectionHelper {
 
-	@Nullable
-	public static Field getField(@NotNull final Class<?> clazz, @NotNull final Predicate<Field> predicate) {
+	private ReflectionHelper() {
+	}
+
+	public static Field[] collectFields(@NotNull final Class<?> clazz, @NotNull final Predicate<Field> predicate) {
+		return Arrays.stream(clazz.getDeclaredFields()).filter(predicate).toArray(Field[]::new);
+	}
+
+	public static Field[] filterFields(@NotNull final Field[] fields, @NotNull final Predicate<Field> predicate) {
+		return Arrays.stream(fields).filter(predicate).toArray(Field[]::new);
+	}
+
+	public static <T> Field findField(@NotNull final Class<?> clazz, @NotNull final Class<T> fieldType) {
 		for (final Field field : clazz.getDeclaredFields()) {
-			if (predicate.test(field)) {
+			if (field.getType() == fieldType) {
 				return field;
 			}
 		}
@@ -20,17 +32,50 @@ public final class ReflectionHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Nullable
-	public static <T> T getFieldValue(@NotNull final Class<?> clazz, @Nullable final Object instance, @NotNull final Class<T> fieldType) {
-		final Field field = ReflectionHelper.getField(clazz, f -> f.getType().equals(fieldType));
-		if (field == null) {
-			return null;
+	public static <T> T getField(@NotNull final Class<?> clazz, @Nullable final Object instance, @NotNull final Class<T> fieldType, @Nullable final Predicate<T> predicate) {
+		for (final Field field : clazz.getDeclaredFields()) {
+			if (field.getType() == fieldType) {
+				final T result = (T) ReflectionHelper.getField(field, instance);
+				if (predicate != null && !predicate.test(result)) {
+					continue;
+				}
+				return result;
+			}
 		}
+		return null;
+	}
+
+	public static Object getField(@NotNull final Field field, @Nullable final Object instance) {
 		try {
+			final boolean accessible = field.isAccessible();
 			field.setAccessible(true);
-			return (T) field.get(instance);
+			final Object result = field.get(instance);
+			field.setAccessible(accessible);
+			return result;
 		} catch (final IllegalAccessException e) {
 			return null;
+		}
+	}
+
+	public static void setField(@NotNull final Field field, @Nullable final Object instance, @Nullable final Object newValue) {
+		try {
+			final boolean accessible = field.isAccessible();
+			field.setAccessible(true);
+			final boolean isFinal = Modifier.isFinal(field.getModifiers());
+
+			Field modifiersField = null;
+			if (isFinal) {
+				modifiersField = Field.class.getDeclaredField("modifiers");
+				modifiersField.setAccessible(true);
+				modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+			}
+			field.set(instance, newValue);
+			if (isFinal) {
+				modifiersField.setInt(field, field.getModifiers() & Modifier.FINAL);
+				modifiersField.setAccessible(false);
+			}
+			field.setAccessible(accessible);
+		} catch (final Throwable ignored) {
 		}
 	}
 
@@ -55,8 +100,5 @@ public final class ReflectionHelper {
 		} catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
 			return null;
 		}
-	}
-
-	private ReflectionHelper() {
 	}
 }

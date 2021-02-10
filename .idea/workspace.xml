@@ -4,33 +4,42 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Fixed RegistryFrozenException name">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/init/Registries.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/FastNamedObjectMap.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetResolver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/AnnotatedExclusionStrategy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/EnumAdapterFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/IKeyValueStore.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBArray.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBCollection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBKeyTypes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBSerializers.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBTable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/Json.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonValidator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/MathTypeAdapters.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/StringTypeValidator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/math/Dimension.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/math/MathHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/math/Point.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/math/Rectangle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/.shatteredroot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added a readme containing information about the boot process">
+      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerMessageListener.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/FileUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/BinaryAsset.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/Font.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/FontGroup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/FontLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/IAsset.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImagePacker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/JsonTextureData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/LuaAsset.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/Texture.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAnimated.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlas.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasAnimated.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasDefault.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasMapped.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasStitched.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasSub.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureSimple.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/ResourceLocationTypeAdapter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +61,7 @@
       <list>
         <option value="Interface" />
         <option value="AnnotationType" />
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
@@ -77,6 +87,9 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedIndex" value="1" />
+  </component>
   <component name="ProjectId" id="1oDICm4jrW7sU3msNNqD70eQK2V" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -88,22 +101,25 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/lib/math" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/lib/asset" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="shattered.lib.registry" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\asset" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\math" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\json" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core\event" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="preboot" />
     </key>
   </component>
   <component name="RunManager">
@@ -207,7 +223,35 @@
       <option name="project" value="LOCAL" />
       <updated>1612979753099</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fixed Preboot not finding resources">
+      <created>1612986715255</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1612986715255</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Added JSON and math utils">
+      <created>1612986749088</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1612986749088</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Added JSON and math utils">
+      <created>1612986915414</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1612986915414</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Added a readme containing information about the boot process">
+      <created>1612991581923</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1612991581923</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -232,6 +276,9 @@
     <MESSAGE value="Fixed Class transforming" />
     <MESSAGE value="Fixed EventBus class cast exception" />
     <MESSAGE value="Fixed RegistryFrozenException name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed RegistryFrozenException name" />
+    <MESSAGE value="Fixed Preboot not finding resources" />
+    <MESSAGE value="Added JSON and math utils" />
+    <MESSAGE value="Added a readme containing information about the boot process" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a readme containing information about the boot process" />
   </component>
 </project>

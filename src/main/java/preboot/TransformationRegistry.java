@@ -10,7 +10,9 @@ final class TransformationRegistry {
 	private static final TreeSet<ITransformer> TRANSFORMERS = new TreeSet<>((o1, o2) -> o2.priority() - o1.priority());
 
 	static {
-		TransformationRegistry.TRANSFORMERS.add(new TransformerEventBusSubscriber());
+		TransformationRegistry.TRANSFORMERS.add(new TransformerEventBusSubscriber());   // 1
+		TransformationRegistry.TRANSFORMERS.add(new TransformerEventListener());        // 2
+		TransformationRegistry.TRANSFORMERS.add(new TransformerMessageListener());      // 3
 	}
 
 	public static byte[] transform(final String className, byte[] bytes) {

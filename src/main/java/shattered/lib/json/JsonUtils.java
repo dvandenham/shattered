@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -21,13 +23,25 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import shattered.lib.ResourceLocation;
 
 public final class JsonUtils {
 
-	private JsonUtils() {
+	public static final Gson GSON;
+
+	static {
+		final GsonBuilder builder = new GsonBuilder()
+				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+				.setExclusionStrategies(new AnnotatedExclusionStrategy())
+				.serializeNulls()
+				.registerTypeAdapterFactory(new EnumAdapterFactory())
+				.registerTypeAdapter(ResourceLocation.class, new ResourceLocationTypeAdapter());
+		MathTypeAdapters.register(builder);
+		GSON = builder.create();
 	}
 
-	public static final Gson GSON;
+	private JsonUtils() {
+	}
 
 	public static boolean hasField(@Nullable final JsonObject json, @NotNull final String name) {
 		return json != null && json.has(name);
@@ -202,7 +216,7 @@ public final class JsonUtils {
 		return primitive.getAsBoolean();
 	}
 
-	public static JsonPrimitive getNumberInternal(@Nullable final JsonObject json, @NotNull final String name) {
+	private static JsonPrimitive getNumberInternal(@Nullable final JsonObject json, @NotNull final String name) {
 		if (json == null || !json.has(name) || !json.get(name).isJsonPrimitive()) {
 			throw JsonUtils.createException(json, name, "a number");
 		}
@@ -289,6 +303,11 @@ public final class JsonUtils {
 		return JsonUtils.deserialize(new FileReader(file), type);
 	}
 
+	@Nullable
+	public static <T> T deserialize(@NotNull final InputStream stream, @NotNull final Class<T> type) {
+		return JsonUtils.deserialize(new InputStreamReader(stream), type);
+	}
+
 	@NotNull
 	private static String toString(@Nullable final JsonElement json) {
 		if (json == null) {
@@ -314,15 +333,5 @@ public final class JsonUtils {
 
 	private static JsonSyntaxException createException(@Nullable final JsonElement json, @NotNull final String name, @NotNull final String expected) {
 		return new JsonSyntaxException(String.format("Expected field '%s' to be %s but found %s", name, expected, JsonUtils.toString(json)));
-	}
-
-	static {
-		final GsonBuilder builder = new GsonBuilder()
-				.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-				.setExclusionStrategies(new AnnotatedExclusionStrategy())
-				.serializeNulls()
-				.registerTypeAdapterFactory(new EnumAdapterFactory());
-		MathTypeAdapters.register(builder);
-		GSON = builder.create();
 	}
 }

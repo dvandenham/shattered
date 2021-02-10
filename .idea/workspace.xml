@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Simplified developer mode logging">
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerJson.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added transformer to make all fields in an @Json class public">
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/FileUtils.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" afterDir="false" />
@@ -39,8 +38,6 @@
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" afterDir="false" />
@@ -269,7 +266,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612994504986</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Added transformer to make all fields in an @Json class public">
+      <created>1612995872120</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1612995872120</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -299,6 +303,7 @@
     <MESSAGE value="Added a readme containing information about the boot process" />
     <MESSAGE value="Added transformers to make @EventListener and @MethodListener methods public" />
     <MESSAGE value="Simplified developer mode logging" />
-    <option name="LAST_COMMIT_MESSAGE" value="Simplified developer mode logging" />
+    <MESSAGE value="Added transformer to make all fields in an @Json class public" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added transformer to make all fields in an @Json class public" />
   </component>
 </project>

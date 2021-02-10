@@ -8,7 +8,7 @@ public final class ResourceLocation implements Serializable {
 
 	private static final long serialVersionUID = -7886724620380363691L;
 	private static final String DEFAULT_NAMESPACE = "shattered";
-	private static final String DEFAULT_VARIANT = "default";
+	public static final String DEFAULT_VARIANT = "default";
 
 	@NotNull
 	private final String namespace;

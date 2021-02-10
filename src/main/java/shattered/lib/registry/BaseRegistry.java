@@ -23,7 +23,7 @@ abstract class BaseRegistry<K, V> implements Iterable<Map.Entry<K, V>> {
 
 	public final void register(@NotNull final K key, @Nullable final V value) {
 		if (this.frozen) {
-			throw new RegistryFrozen(this.resource);
+			throw new RegistryFrozenException(this.resource);
 		}
 		this.registerUnsafe(key, value);
 	}
@@ -38,7 +38,7 @@ abstract class BaseRegistry<K, V> implements Iterable<Map.Entry<K, V>> {
 	@Nullable
 	public final V remove(@NotNull final K key) {
 		if (this.frozen) {
-			throw new RegistryFrozen(this.resource);
+			throw new RegistryFrozenException(this.resource);
 		}
 		return this.removeUnsafe(key);
 	}

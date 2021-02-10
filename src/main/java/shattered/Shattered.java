@@ -2,10 +2,12 @@ package shattered;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import preboot.BootManager;
 import shattered.core.event.EventBus;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.registry.CreateRegistryEvent;
 
+@BootManager
 public final class Shattered {
 
 	public static final String NAME = "Shattered";
@@ -15,6 +17,12 @@ public final class Shattered {
 	public static void start(final String[] args) {
 		Shattered.LOGGER.info("{} is starting!", Shattered.NAME);
 		Shattered.instance = new Shattered(args);
+		//Register all automatic EventBus subscribers
+//		AnnotationRegistry.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener -> {
+//			System.out.println(listener);
+//			System.out.println(EventBusSubscriber.class + " " + EventBusSubscriber.class.getClassLoader());
+//			System.out.println(listener.getAnnotations()[0].annotationType() + " " + listener.getAnnotations()[0].annotationType().getClassLoader());
+//		});
 	}
 
 	private Shattered(final String[] args) {

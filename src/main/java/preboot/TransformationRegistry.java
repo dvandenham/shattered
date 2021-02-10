@@ -1,4 +1,4 @@
-package shattered.preboot;
+package preboot;
 
 import java.io.File;
 import java.io.FileOutputStream;

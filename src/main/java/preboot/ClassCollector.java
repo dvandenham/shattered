@@ -1,4 +1,4 @@
-package shattered.preboot;
+package preboot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -126,7 +126,7 @@ final class ClassCollector {
 		private static final class DirectoryIterator implements Iterator<File> {
 
 			private final File[] children;
-			private       int    index = -1;
+			private int index = -1;
 
 			public DirectoryIterator(final File directory, final FileFilter childFilter) {
 				if (!directory.isDirectory()) {
@@ -181,10 +181,10 @@ final class ClassCollector {
 
 		@Override
 		protected byte[] getBytes(final String path) throws IOException {
-			final InputStream           input  = this.jar.getInputStream(this.jar.getJarEntry(path));
-			final ByteArrayOutputStream array  = new ByteArrayOutputStream();
-			int                         read;
-			final byte[]                buffer = new byte[1024];
+			final InputStream input = this.jar.getInputStream(this.jar.getJarEntry(path));
+			final ByteArrayOutputStream array = new ByteArrayOutputStream();
+			int read;
+			final byte[] buffer = new byte[1024];
 			while ((read = input.read(buffer)) != -1) {
 				array.write(buffer, 0, read);
 			}

@@ -1,4 +1,4 @@
-package shattered.preboot;
+package preboot;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -16,7 +16,7 @@ final class TransformerEventBusSubscriber implements ITransformer {
 	@Override
 	public byte[] transform(final String className, final byte[] bytes) {
 		final ClassReader reader = new ClassReader(bytes);
-		final ClassNode   node   = new ClassNode();
+		final ClassNode node = new ClassNode();
 		reader.accept(node, 0);
 		final boolean hasAnnotation = node.visibleAnnotations != null && node.visibleAnnotations.stream().anyMatch(el ->
 				el.desc != null && el.desc.equals(TransformerEventBusSubscriber.DESCRIPTOR)
@@ -24,7 +24,7 @@ final class TransformerEventBusSubscriber implements ITransformer {
 		if (!hasAnnotation) {
 			return null;
 		}
-		final ClassWriter       writer  = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		final ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		final CheckClassAdapter adapter = new CheckClassAdapter(writer);
 		node.accept(new ClassVisitor(Opcodes.ASM5, adapter) {
 

@@ -1,4 +1,4 @@
-package shattered.preboot;
+package preboot;
 
 interface ITransformer {
 

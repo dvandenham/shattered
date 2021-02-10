@@ -11,7 +11,6 @@ enum AssetTypes {
 	FONT("fonts"),
 	AUDIO_OGG("audio"),
 	AUDIO_WAV("audio"),
-	JSON(null),
 	LUA("scripts"),
 	BINARY(null);
 

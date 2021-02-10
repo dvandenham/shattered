@@ -4,43 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added transformer to make all fields in an @Json class public">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/FileUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/BinaryAsset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/Font.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/FontGroup.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/FontLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/IAsset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImagePacker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/JsonTextureData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/LuaAsset.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/Texture.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAnimated.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasAnimated.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasDefault.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasMapped.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasStitched.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasSub.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureSimple.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/ResourceLocationTypeAdapter.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added AssetRegistry (currently only texture loading)">
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/language.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/texture.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/icon.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,6 +77,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="TODO_SCOPE" value="All Places" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/assets/shattered/textures" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
@@ -273,7 +249,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612995872120</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Added AssetRegistry (currently only texture loading)">
+      <created>1612995995048</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1612995995048</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Added AssetRegistry (currently only texture loading)">
+      <created>1612996066906</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1612996066906</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -304,6 +294,9 @@
     <MESSAGE value="Added transformers to make @EventListener and @MethodListener methods public" />
     <MESSAGE value="Simplified developer mode logging" />
     <MESSAGE value="Added transformer to make all fields in an @Json class public" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added transformer to make all fields in an @Json class public" />
+    <MESSAGE value="Added AssetRegistry (currently only texture loading)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added AssetRegistry (currently only texture loading)" />
+    <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
+    <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
 </project>

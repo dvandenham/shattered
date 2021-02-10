@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import com.google.gson.reflect.TypeToken;
 import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
@@ -61,10 +62,25 @@ public final class AssetRegistry {
 		//Parsing json registries
 		Arrays.stream(AssetTypes.values()).forEach(type -> {
 			final List<ResourceLocation> list = registries.get(type);
+			Consumer<ResourceLocation> action = null;
 			switch (type) {
+				//TODO languages
 				case TEXTURE:
-					list.forEach(AssetRegistry::loadTexture);
+					action = AssetRegistry::loadTexture;
 					break;
+				case FONT:
+					action = AssetRegistry::loadFont;
+					break;
+				case LUA:
+					action = AssetRegistry::loadLua;
+					break;
+				case BINARY:
+					action = AssetRegistry::loadBinary;
+					break;
+				//TODO audio
+			}
+			if (action != null) {
+				list.forEach(action);
 			}
 		});
 	}
@@ -124,7 +140,7 @@ public final class AssetRegistry {
 		return null;
 	}
 
-	public static void loadTextureDirectly(@NotNull final ResourceLocation resource) {
+	private static void loadTextureDirectly(@NotNull final ResourceLocation resource) {
 		final TextureSimple result = AssetRegistry.createTextureDirect(resource);
 		if (result == null) {
 			AssetRegistry.registerInternal(resource, AssetTypes.TEXTURE, null);
@@ -146,7 +162,7 @@ public final class AssetRegistry {
 		return new TextureSimple(resource, data[0], size, Dimension.create(data[1], data[2]), Rectangle.create(0, 0, size));
 	}
 
-	public static void loadFont(@NotNull final ResourceLocation resource) {
+	private static void loadFont(@NotNull final ResourceLocation resource) {
 		final FontGroup result = AssetRegistry.createFont(resource);
 		if (result == null) {
 			AssetRegistry.registerInternal(resource, AssetTypes.FONT, null);
@@ -170,14 +186,9 @@ public final class AssetRegistry {
 		return result;
 	}
 
-	@Nullable
-	public static LuaAsset loadLua(@NotNull final ResourceLocation resource) {
-		IAsset result = AssetRegistry.ASSETS.get(resource);
-		if (result instanceof LuaAsset) {
-			return (LuaAsset) result;
-		}
+	private static void loadLua(@NotNull final ResourceLocation resource) {
 		if (AssetRegistry.ASSETS.contains(resource)) {
-			return null;
+			return;
 		}
 		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.LUA, "lua");
 		final URL location = AssetRegistry.getPathUrl(path);
@@ -185,25 +196,17 @@ public final class AssetRegistry {
 			AssetRegistry.LOGGER.error("Registered script \"{}\" does not exist!", resource);
 			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
 			AssetRegistry.registerInternal(resource, AssetTypes.LUA, null);
-			return null;
+			return;
 		}
-		result = new LuaAsset(resource, path);
-		AssetRegistry.registerInternal(resource, AssetTypes.LUA, result);
-		return (LuaAsset) result;
+		AssetRegistry.registerInternal(resource, AssetTypes.LUA, new LuaAsset(resource, path));
 	}
 
-	@Nullable
-	public static BinaryAsset loadBinary(@NotNull final ResourceLocation resource, @NotNull final String extension) {
-		IAsset result = AssetRegistry.ASSETS.get(resource);
-		if (result instanceof BinaryAsset) {
-			return (BinaryAsset) result;
-		}
+	private static void loadBinary(@NotNull final ResourceLocation resource) {
 		if (AssetRegistry.ASSETS.contains(resource)) {
-			return null;
+			return;
 		}
-		result = new BinaryAsset(resource, AssetRegistry.getResourcePath(resource, AssetTypes.BINARY, extension));
-		AssetRegistry.registerInternal(resource, AssetTypes.BINARY, result);
-		return (BinaryAsset) result;
+		final BinaryAsset asset = new BinaryAsset(resource, AssetRegistry.getResourcePath(resource, AssetTypes.BINARY, ""));
+		AssetRegistry.registerInternal(resource, AssetTypes.BINARY, asset);
 	}
 
 	private static void registerInternal(@NotNull final ResourceLocation resource, @NotNull final AssetTypes type, @Nullable final IAsset asset) {
@@ -213,7 +216,14 @@ public final class AssetRegistry {
 
 	@NotNull
 	static String getResourcePath(@NotNull final ResourceLocation resource, @NotNull final AssetTypes type, @NotNull final String extension) {
-		return String.format("/assets/%s/%s%s.%s", resource.getNamespace(), type.getRoot(), resource.getResource(), extension);
+		final StringBuilder builder = new StringBuilder("/assets/");
+		builder.append(resource.getNamespace()).append('/');
+		builder.append(type.getRoot());
+		builder.append(resource.getResource());
+		if (extension.length() > 0) {
+			builder.append('.').append(extension);
+		}
+		return builder.toString();
 	}
 
 	static URL getPathUrl(@NotNull final String path) {

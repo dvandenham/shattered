@@ -38,7 +38,10 @@ public final class Preboot {
 				Preboot.class.getProtectionDomain().getCodeSource().getLocation()
 		}).entrySet().stream()
 				.filter(entry -> !entry.getKey().startsWith(Preboot.PREBOOT_PACKAGE_NAME))
-				.forEach(entry -> Preboot.CLASS_BYTES.put(entry.getKey(), entry.getValue()));
+				.forEach(entry -> {
+					final byte[] transformed = TransformationRegistry.transform(entry.getKey(), entry.getValue());
+					Preboot.CLASS_BYTES.put(entry.getKey(), transformed);
+				});
 		for (final Map.Entry<String, byte[]> entry : new HashMap<>(Preboot.CLASS_BYTES).entrySet()) {
 			Preboot.loadClassRecursive(entry.getKey());
 		}
@@ -57,7 +60,9 @@ public final class Preboot {
 		Arrays.stream(reader.getInterfaces()).forEach(Preboot::loadClassRecursive);
 
 		if (Preboot.CLASS_BYTES.containsKey(className)) {
-			System.out.println("Loading class " + className);
+			if (SysProps.LOG_CLASS_EXISTENCE) {
+				Preboot.LOGGER.debug("Loading class {}", className);
+			}
 			Preboot.LOADER.defineClass(className, Preboot.CLASS_BYTES.get(className));
 			Preboot.CLASS_BYTES.remove(className);
 		}

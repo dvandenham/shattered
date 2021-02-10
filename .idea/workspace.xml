@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Fixed Preboot ClassLoading (again!)">
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="AnnotationRegistry access fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/BaseRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/BaseRegistry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +71,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="settings.saveactions" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -156,7 +157,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612978500901</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="AnnotationRegistry access fix">
+      <created>1612978761551</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1612978761552</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -177,6 +185,7 @@
     <MESSAGE value="Added ResourceLocation, an immutable identifier" />
     <MESSAGE value="Started working on secondary boot process" />
     <MESSAGE value="Fixed Preboot ClassLoading (again!)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Preboot ClassLoading (again!)" />
+    <MESSAGE value="AnnotationRegistry access fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="AnnotationRegistry access fix" />
   </component>
 </project>

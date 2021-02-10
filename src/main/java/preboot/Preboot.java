@@ -1,6 +1,7 @@
 package preboot;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -96,20 +97,22 @@ public final class Preboot {
 					.filter(method -> method.getReturnType().equals(Void.TYPE))
 					.filter(method -> method.getParameterCount() == 1 && method.getParameterTypes()[0].equals(String[].class))
 					.findFirst()
-					.orElseThrow(() -> {
-						final IllegalStateException e = new IllegalStateException("Fatal error during secondary boot stage");
-						e.setStackTrace(new StackTraceElement[0]);
-						return e;
+					.orElseGet(() -> {
+						Preboot.LOGGER.fatal("Fatal error during secondary boot stage!");
+						Runtime.getRuntime().halt(-1);
+						return null;
 					});
 			bootMethod.invoke(null, (Object) args);
-		} catch (final Throwable cause) {
+		} catch (Throwable cause) {
 			if (SysProps.DEVELOPER_MODE) {
-				throw new RuntimeException(cause);
+				if (cause instanceof InvocationTargetException) {
+					cause = cause.getCause();
+				}
+				Preboot.LOGGER.fatal("Fatal error during secondary boot stage", cause);
 			} else {
-				final IllegalStateException e = new IllegalStateException("Fatal error during secondary boot stage");
-				e.setStackTrace(new StackTraceElement[0]);
-				throw e;
+				Preboot.LOGGER.fatal("Fatal error during secondary boot stage!");
 			}
+			Runtime.getRuntime().halt(-1);
 		}
 	}
 }

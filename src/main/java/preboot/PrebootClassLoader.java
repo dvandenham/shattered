@@ -20,10 +20,12 @@ final class PrebootClassLoader extends ClassLoader {
 		} else if (name.startsWith(Preboot.PREBOOT_PACKAGE_NAME)) {
 			if (name.equals(BootManager.class.getName())) {
 				return BootManager.class;
+			} else if (name.equals(AnnotationRegistry.class.getName())) {
+				return AnnotationRegistry.class;
 			} else {
 				final String message = String.format(
 						"Illegal access to preboot class%s!",
-						PrebootClassLoader.LOG_ILLEGAL_CLASS ? "( " + name + ')' : ""
+						PrebootClassLoader.LOG_ILLEGAL_CLASS ? " (" + name + ')' : ""
 				);
 				throw new SecurityException(message);
 			}

@@ -4,22 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Started working on secondary boot process">
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/BootManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/SysProps.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Fixed Preboot ClassLoading (again!)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/AnnotationRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/AnnotationRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/ClassCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/ClassCollector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/ITransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/ITransformer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/Preboot.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/PrebootClassLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/SysProps.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/TransformationRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/preboot/TransformerEventBusSubscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventBusSubscriber.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +149,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612953204414</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Fixed Preboot ClassLoading (again!)">
+      <created>1612978500901</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1612978500901</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -180,6 +176,7 @@
     <MESSAGE value="Added basic workings of the EventBus" />
     <MESSAGE value="Added ResourceLocation, an immutable identifier" />
     <MESSAGE value="Started working on secondary boot process" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started working on secondary boot process" />
+    <MESSAGE value="Fixed Preboot ClassLoading (again!)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Preboot ClassLoading (again!)" />
   </component>
 </project>

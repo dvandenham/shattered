@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added a readme containing information about the boot process">
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerMessageListener.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added transformers to make @EventListener and @MethodListener methods public">
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/FileUtils.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" afterDir="false" />
@@ -34,9 +32,10 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureType.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/ResourceLocationTypeAdapter.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/SysProps.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonUtils.java" afterDir="false" />
@@ -251,7 +250,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612991581923</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Added transformers to make @EventListener and @MethodListener methods public">
+      <created>1612994326349</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1612994326349</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -279,6 +285,7 @@
     <MESSAGE value="Fixed Preboot not finding resources" />
     <MESSAGE value="Added JSON and math utils" />
     <MESSAGE value="Added a readme containing information about the boot process" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a readme containing information about the boot process" />
+    <MESSAGE value="Added transformers to make @EventListener and @MethodListener methods public" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added transformers to make @EventListener and @MethodListener methods public" />
   </component>
 </project>

@@ -20,16 +20,18 @@ import org.objectweb.asm.ClassReader;
 public final class Preboot {
 
 	private static final PrebootClassLoader LOADER = new PrebootClassLoader();
+	static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer");
 	static final String PREBOOT_PACKAGE_NAME = Preboot.class.getPackage().getName();
 	static final Map<String, byte[]> CLASS_BYTES = new ConcurrentHashMap<>();
 	static final Logger LOGGER = LogManager.getLogger("Preboot");
 
 	public static void boot(final String[] args) {
-		Configurator.setRootLevel(Level.ALL);
+		if (Preboot.DEVELOPER_MODE) {
+			Configurator.setRootLevel(Level.ALL);
+		}
 		Preboot.loadClasses();
 		Preboot.registerAnnotations();
 		Preboot.LOGGER.debug("Starting secondary boot stage");
-		Configurator.setRootLevel(Level.INFO);
 		Preboot.nextBoot(args);
 	}
 
@@ -60,7 +62,7 @@ public final class Preboot {
 		Arrays.stream(reader.getInterfaces()).forEach(Preboot::loadClassRecursive);
 
 		if (Preboot.CLASS_BYTES.containsKey(className)) {
-			if (SysProps.LOG_CLASS_EXISTENCE) {
+			if (Preboot.DEVELOPER_MODE) {
 				Preboot.LOGGER.debug("Loading class {}", className);
 			}
 			Preboot.LOADER.defineClass(className, Preboot.CLASS_BYTES.get(className));
@@ -73,7 +75,7 @@ public final class Preboot {
 		Preboot.LOADER.classes.forEach((className, clazz) -> {
 			final Annotation[] annotations = clazz.getDeclaredAnnotations();
 			if (annotations.length > 0) {
-				if (SysProps.LOG_ANNOTATIONS) {
+				if (Preboot.DEVELOPER_MODE) {
 					Preboot.LOGGER.debug(
 							"Registered {} using annotations {}",
 							className,
@@ -109,7 +111,7 @@ public final class Preboot {
 					});
 			bootMethod.invoke(null, (Object) args);
 		} catch (Throwable cause) {
-			if (SysProps.DEVELOPER_MODE) {
+			if (Preboot.DEVELOPER_MODE) {
 				if (cause instanceof InvocationTargetException) {
 					cause = cause.getCause();
 				}

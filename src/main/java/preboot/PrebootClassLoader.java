@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 final class PrebootClassLoader extends ClassLoader {
 
-	private static final boolean LOG_ILLEGAL_CLASS = SysProps.DEVELOPER_MODE ||
-			"true".equals(System.getProperty("shattered.preboot.log.illegal"));
 	private final ClassLoader parentLoader = this.getClass().getClassLoader();
 	final HashMap<String, Class<?>> classes = new HashMap<>();
 
@@ -26,7 +24,7 @@ final class PrebootClassLoader extends ClassLoader {
 			} else {
 				final String message = String.format(
 						"Illegal access to preboot class%s!",
-						PrebootClassLoader.LOG_ILLEGAL_CLASS ? " (" + name + ')' : ""
+						Preboot.DEVELOPER_MODE ? " (" + name + ')' : ""
 				);
 				throw new SecurityException(message);
 			}

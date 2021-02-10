@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 final class TransformationRegistry {
 
+	private static final boolean DUMP_CLASSES = Boolean.getBoolean("shattered.debug.dump_transformed");
 	private static final TreeSet<ITransformer> TRANSFORMERS = new TreeSet<>((o1, o2) -> o2.priority() - o1.priority());
 
 	static {
@@ -23,18 +24,18 @@ final class TransformationRegistry {
 				if (result != null) {
 					hasTransformed = true;
 					bytes = result;
-					if (SysProps.LOG_TRANSFORM) {
+					if (Preboot.DEVELOPER_MODE) {
 						Preboot.LOGGER.debug("Transformed class {} using transformer {}", className, transformer.getClass().getName());
 					}
 				}
 			} catch (final Throwable e) {
 				Preboot.LOGGER.fatal("Error while transforming class {} with transformer {}", className, transformer.getClass().getName());
-				if (SysProps.LOG_TRANSFORM_ERROR) {
+				if (Preboot.DEVELOPER_MODE) {
 					Preboot.LOGGER.fatal(e);
 				}
 			}
 		}
-		if (hasTransformed && SysProps.DUMP_CLASSES) {
+		if (hasTransformed && TransformationRegistry.DUMP_CLASSES) {
 			TransformationRegistry.dumpClass(className, bytes);
 		}
 		return bytes;

@@ -4,17 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added basic workings of the EventBus">
-      <change afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added ResourceLocation, an immutable identifier">
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/InvalidResourceLocationException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/StringUtils.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/BaseRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Shattered.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Shattered.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/CreateRegistryEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/RegistryLockedException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/RegistryFrozen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/ResourceSingletonRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/ResourceSingletonRegistry.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,6 +39,16 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitRewordedCommitMessages">
+    <option name="commitMessagesMapping">
+      <RewordedCommitMessageMapping>
+        <option name="originalMessage" value="Added basic workings of the EventBus" />
+        <option name="rewordedMessage" value="Added basic workings of the EventBus" />
+      </RewordedCommitMessageMapping>
+    </option>
+    <option name="currentCommit" value="1" />
+    <option name="onto" value="6643dfb412c4360b008ccdabc582209b94d609e6" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -132,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612864613020</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added ResourceLocation, an immutable identifier">
+      <created>1612951269142</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1612951269142</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -150,6 +163,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Implemented class transforming" />
     <MESSAGE value="Added basic workings of the EventBus" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added basic workings of the EventBus" />
+    <MESSAGE value="Added ResourceLocation, an immutable identifier" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added ResourceLocation, an immutable identifier" />
   </component>
 </project>

@@ -1,5 +1,6 @@
 package preboot;
 
+import java.net.URL;
 import java.util.HashMap;
 
 final class PrebootClassLoader extends ClassLoader {
@@ -43,5 +44,10 @@ final class PrebootClassLoader extends ClassLoader {
 
 	void defineClass(final String className, final byte[] bytes) {
 		this.classes.put(className, this.defineClass(className, bytes, 0, bytes.length));
+	}
+
+	@Override
+	protected URL findResource(final String name) {
+		return this.parentLoader.getResource(name);
 	}
 }

@@ -1,12 +1,18 @@
 package shattered;
 
+import java.net.URL;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
@@ -36,12 +42,17 @@ import static org.lwjgl.glfw.GLFW.glfwGetTimerValue;
 @BootManager
 public final class Shattered {
 
-	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
 	public static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer");
+
 	public static final String NAME = "Shattered";
+	public static final String VERSION = Shattered.readManifest().getMainAttributes().getValue("VERSION");
+
 	public static final Logger LOGGER = LogManager.getLogger(Shattered.NAME);
 	public static final String SYSTEM_BUS_NAME = "SYSTEM";
 	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
+
+	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
+
 	private static Shattered instance;
 	public final Tessellator tessellator;
 	public final FontRenderer fontRenderer;
@@ -55,9 +66,13 @@ public final class Shattered {
 	@SuppressWarnings("unused")
 	public static void start(final String[] args) {
 		if (Shattered.DEVELOPER_MODE) {
-			Configurator.setRootLevel(Level.ALL);
+			final LoggerContext context = (LoggerContext) LogManager.getContext(false);
+			final Configuration configuration = context.getConfiguration();
+			final LoggerConfig loggerConfig = configuration.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+			loggerConfig.setLevel(Level.ALL);
+			context.updateLoggers();
 		}
-		Shattered.LOGGER.info("{} is starting!", Shattered.NAME);
+		Shattered.LOGGER.info("Starting {} (version: {})!", Shattered.NAME, Shattered.VERSION);
 		//Register all automatic EventBus subscribers
 		AnnotationRegistry.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener ->
 				EventBus.register(listener, listener.getDeclaredAnnotation(EventBusSubscriber.class).value())
@@ -297,6 +312,24 @@ public final class Shattered {
 
 			@Nullable
 			Throwable execute(@NotNull RuntimeTimer timer);
+		}
+	}
+
+	@NotNull
+	private static Manifest readManifest() {
+		try {
+			final URL resource = Shattered.class.getClassLoader().getResource(JarFile.MANIFEST_NAME);
+			assert resource != null;
+			final Manifest manifest = new Manifest(resource.openStream());
+			final Attributes attributes = manifest.getMainAttributes();
+			if (attributes.getValue("VERSION") != null) {
+				return manifest;
+			}
+			throw new RuntimeException();
+		} catch (final Throwable e) {
+			final Manifest dummy = new Manifest();
+			dummy.getMainAttributes().putValue("VERSION", "-1");
+			return dummy;
 		}
 	}
 }

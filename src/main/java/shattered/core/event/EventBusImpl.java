@@ -28,12 +28,12 @@ public final class EventBusImpl implements IEventBus {
 	@Override
 	public void register(@NotNull final Object listener) {
 		if (this.listeners.containsKey(listener)) {
-			EventBusImpl.LOGGER.warn("[{}]Registered listener twice! Listener class: {}", this.name, listener.getClass().getName());
+			EventBusImpl.LOGGER.warn("{} Registered listener twice! Listener class: {}", this.name, listener.getClass().getName());
 			return;
 		}
 		final Set<Method> methods = this.getListenerMethods(listener);
 		if (methods.isEmpty()) {
-			EventBusImpl.LOGGER.debug("[{}]Skipping registration of invalid listener: {}", this.name, listener.getClass().getName());
+			EventBusImpl.LOGGER.debug("{} Skipping registration of invalid listener: {}", this.name, listener.getClass().getName());
 			return;
 		}
 		try {
@@ -43,7 +43,7 @@ public final class EventBusImpl implements IEventBus {
 			}
 			this.listeners.put(listener, listeners);
 		} catch (final NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-			EventBusImpl.LOGGER.error('[' + this.name + "]Could not complete registration of listener: " + listener.getClass().getName(), e);
+			EventBusImpl.LOGGER.error(this.name + " Could not complete registration of listener: " + listener.getClass().getName(), e);
 		}
 	}
 
@@ -54,7 +54,7 @@ public final class EventBusImpl implements IEventBus {
 
 	@Override
 	public boolean post(@NotNull final Event<?> event) {
-		EventBusImpl.LOGGER.trace("[{}]Posting event: {}", this.name, event.getClass().getName());
+		EventBusImpl.LOGGER.trace("{} Posting event {}", this.name, event.getClass().getName());
 		for (final List<EventHandler> listeners : new HashSet<>(this.listeners.values())) {
 			for (final EventHandler listener : listeners) {
 				if (EventBusImpl.canAcceptEvent(listener, event)) {
@@ -86,7 +86,7 @@ public final class EventBusImpl implements IEventBus {
 			return false;
 		}
 		if (hasEventListener && hasMessageListener) {
-			EventBusImpl.LOGGER.error("[{}]Listener {} cannot have an @EventListener and @MessageListener annotation!", this.name, method.getName());
+			EventBusImpl.LOGGER.error("{} Listener {} cannot have an @EventListener and @MessageListener annotation!", this.name, method.getName());
 			return false;
 		}
 		final EventListener info = hasEventListener ? method.getAnnotation(EventListener.class) : method.getAnnotation(MessageListener.class).listenerInfo();
@@ -94,11 +94,11 @@ public final class EventBusImpl implements IEventBus {
 			return false;
 		}
 		if (method.getParameterCount() != 1 || !Event.class.isAssignableFrom(method.getParameterTypes()[0])) {
-			EventBusImpl.LOGGER.error("[{}]Listener {} doesn't have valid parameters! Method should have exactly 1 parameter that extends {}", this.name, method.getName(), Event.class.getName());
+			EventBusImpl.LOGGER.error("{} Listener {} doesn't have valid parameters! Method should have exactly 1 parameter that extends {}", this.name, method.getName(), Event.class.getName());
 			return false;
 		}
 		if (hasMessageListener && !MessageEvent.class.isAssignableFrom(method.getParameterTypes()[0])) {
-			EventBusImpl.LOGGER.error("[{}]Listener {} doesn't have valid parameters! Method should have exactly 1 parameter that extends {}", this.name, method.getName(), MessageEvent.class.getName());
+			EventBusImpl.LOGGER.error("{} Listener {} doesn't have valid parameters! Method should have exactly 1 parameter that extends {}", this.name, method.getName(), MessageEvent.class.getName());
 			return false;
 		}
 		return true;

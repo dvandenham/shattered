@@ -40,7 +40,7 @@ public final class AssetRegistry {
 	private static ResourceSingletonRegistry<IAsset> ASSETS;
 	private static ResourceSingletonRegistry<AssetTypes> TYPES;
 
-	static final Logger LOGGER = LogManager.getLogger("AssetRegistry");
+	static final Logger LOGGER = LogManager.getLogger("Assets");
 	static final AtlasStitcher ATLAS = new AtlasStitcher();
 
 	@MessageListener("init_assets")

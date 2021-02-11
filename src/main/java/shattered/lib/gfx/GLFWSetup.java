@@ -61,6 +61,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 final class GLFWSetup {
 
+	private static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer.glfw");
 	private static final Logger LOGGER = LogManager.getLogger("GLFW");
 	static final Dimension DISPLAY_SIZE = Dimension.createMutable(800, 600);
 	static long windowId;
@@ -117,7 +118,7 @@ final class GLFWSetup {
 		glfwWindowHint(GLFW_GREEN_BITS, vidMode.greenBits());
 		glfwWindowHint(GLFW_BLUE_BITS, vidMode.blueBits());
 
-		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, Shattered.DEVELOPER_MODE ? GLFW_TRUE : GLFW_FALSE);
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFWSetup.DEVELOPER_MODE ? GLFW_TRUE : GLFW_FALSE);
 		glfwSetErrorCallback((error, description) -> GLFWSetup.LOGGER.error("[ErrorID={}]{}", error, description));
 	}
 
@@ -147,8 +148,10 @@ final class GLFWSetup {
 		//TODO make this configurable
 		glfwSwapInterval(1);
 
-		GLUtil.setupDebugMessageCallback(System.err);
-		GL43.glDebugMessageControl(GL43.GL_DONT_CARE, GL43.GL_DEBUG_TYPE_OTHER, GL43.GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
+		if (GLFWSetup.DEVELOPER_MODE) {
+			GLUtil.setupDebugMessageCallback(System.err);
+			GL43.glDebugMessageControl(GL43.GL_DONT_CARE, GL43.GL_DEBUG_TYPE_OTHER, GL43.GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
+		}
 
 		final Object[] icon = GLFWSetup.loadIcon();
 		if (icon == null) {

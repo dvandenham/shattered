@@ -4,12 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Cleaned up the Runtime timer">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/Assets.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added logo to main menu, enabled vsync by default">
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/screen/AbstractScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/shattered/languages/en_us.lang" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/languages/en_us.lang" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -348,7 +354,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613079701160</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Added logo to main menu, enabled vsync by default">
+      <created>1613080420871</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1613080420871</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -365,7 +378,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="Implemented class transforming" />
     <MESSAGE value="Added basic workings of the EventBus" />
     <MESSAGE value="Added ResourceLocation, an immutable identifier" />
     <MESSAGE value="Started working on secondary boot process" />
@@ -390,7 +402,8 @@
     <MESSAGE value="More work on GuiHandler, fixed resizing, added dummy main menu" />
     <MESSAGE value="Added shutdown button to main menu, changed timer workings" />
     <MESSAGE value="Cleaned up the Runtime timer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleaned up the Runtime timer" />
+    <MESSAGE value="Added logo to main menu, enabled vsync by default" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added logo to main menu, enabled vsync by default" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

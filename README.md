@@ -248,3 +248,9 @@ Animations are a series of still images inside a large image that get rendering 
     ]
 }
 ```
+
+# Debugging
+
+By default, all logging in Shattered will be kept to a minimum. This means only a small amount of information and errors/exceptions will be logged.  
+To enable all logging, start Shattered with the following JVM argument: ```-Dshattered.developer=true```  
+To enable GLFW and OpenFL debug logging; add the following JVM argument: ```-Dshattered.developer.glfw=true```

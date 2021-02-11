@@ -14,7 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.objectweb.asm.ClassReader;
 
 public final class Preboot {
@@ -27,7 +29,11 @@ public final class Preboot {
 
 	public static void boot(final String[] args) {
 		if (Preboot.DEVELOPER_MODE) {
-			Configurator.setRootLevel(Level.ALL);
+			final LoggerContext context = (LoggerContext) LogManager.getContext(false);
+			final Configuration configuration = context.getConfiguration();
+			final LoggerConfig loggerConfig = configuration.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+			loggerConfig.setLevel(Level.ALL);
+			context.updateLoggers();
 		}
 		Preboot.loadClasses();
 		Preboot.registerAnnotations();

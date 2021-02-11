@@ -6,13 +6,12 @@ import shattered.Assets;
 import shattered.Shattered;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
-import shattered.lib.gui.IGuiScreen;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
 
-public final class ScreenMainMenu extends IGuiScreen {
+public final class ScreenMainMenu extends AbstractScreen {
 
-	private final GuiButton buttonShutdown = new GuiButton("shattered.screen.main_menu.button.shutdown");
+	private final GuiButton buttonShutdown = new GuiButton("screen.main_menu.button.shutdown");
 
 	public ScreenMainMenu() {
 		this.add(this.buttonShutdown);
@@ -22,10 +21,6 @@ public final class ScreenMainMenu extends IGuiScreen {
 	public void setupComponents(@NotNull final Layout layout) {
 		layout.setInverted();
 		layout.add(this.buttonShutdown);
-	}
-
-	@Override
-	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 	}
 
 	@Override

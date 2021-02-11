@@ -4,21 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Updated README">
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Implemented Texture variant metadata">
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Callbacks.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/icon.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/language.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/texture.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/icon.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/JsonTextureData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/JsonTextureData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/MathTypeAdapters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/MathTypeAdapters.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +114,9 @@
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\math" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\json" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="preboot" />
@@ -304,7 +307,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613040191203</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Implemented Texture variant metadata">
+      <created>1613040953769</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1613040953769</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -339,7 +349,8 @@
     <MESSAGE value="Added AssetRegistry (currently only texture loading)" />
     <MESSAGE value="Implemented font/lua/binary asset loading" />
     <MESSAGE value="Updated README" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated README" />
+    <MESSAGE value="Implemented Texture variant metadata" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented Texture variant metadata" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

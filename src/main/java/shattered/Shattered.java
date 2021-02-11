@@ -1,6 +1,5 @@
 package shattered;
 
-import java.util.Objects;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,12 +34,12 @@ public final class Shattered {
 				EventBus.register(listener, listener.getDeclaredAnnotation(EventBusSubscriber.class).value())
 		);
 		//Create all registry instances
-		Shattered.SYSTEM_BUS.post(Objects.requireNonNull(ReflectionHelper.instantiate(CreateRegistryEvent.class)));
-		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
+		Shattered.instance = new Shattered(args);
 	}
 
 	private Shattered(final String[] args) {
 		this.initRegistries();
+		Shattered.SYSTEM_BUS.post(new MessageEvent("init_glfw"));
 	}
 
 	private void initRegistries() {

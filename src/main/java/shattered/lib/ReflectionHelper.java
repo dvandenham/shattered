@@ -114,7 +114,7 @@ public final class ReflectionHelper {
 			return (T) method.invoke(instance, paramValues);
 		} catch (final NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
 			if (Shattered.DEVELOPER_MODE) {
-				Shattered.LOGGER.error("Error during instantiation of class " + clazz.getName(), e);
+				Shattered.LOGGER.error("Error during invocation of method in class " + clazz.getName(), e);
 			}
 			return null;
 		}

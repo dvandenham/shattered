@@ -191,7 +191,7 @@ public final class FontRendererImpl implements FontRenderer {
 			final StringBuilder textDone = new StringBuilder();
 			String text = data.getText();
 			if (data.doLocalize()) {
-				text = Localizer.Localize(text);
+				text = Localizer.localize(text);
 			}
 			final String textFinal = text;
 			if (data.doWrapText()) {
@@ -256,7 +256,7 @@ public final class FontRendererImpl implements FontRenderer {
 	public int getWidth(@NotNull final StringData data) {
 		String text = data.getText();
 		if (data.doLocalize()) {
-			text = Localizer.Localize(text);
+			text = Localizer.localize(text);
 		}
 		return this.getWidthInternal(text);
 	}
@@ -284,7 +284,7 @@ public final class FontRendererImpl implements FontRenderer {
 		if (data.doWrapText() && !data.doWrapTextStop()) {
 			String text = data.getText();
 			if (data.doLocalize()) {
-				text = Localizer.Localize(text);
+				text = Localizer.localize(text);
 			}
 			final int rows = this.getTextRowsInternal(text, data.getWrapText());
 			return this.getHeightInternal(rows);
@@ -309,7 +309,7 @@ public final class FontRendererImpl implements FontRenderer {
 		}
 		String text = data.getText();
 		if (data.doLocalize()) {
-			text = Localizer.Localize(text);
+			text = Localizer.localize(text);
 		}
 		return this.getTextRowsInternal(text, data.getWrapText());
 	}
@@ -336,7 +336,7 @@ public final class FontRendererImpl implements FontRenderer {
 	public String getWrappedText(@NotNull final StringData data) {
 		String text = data.getText();
 		if (data.doLocalize()) {
-			text = Localizer.Localize(text);
+			text = Localizer.localize(text);
 		}
 		if (!data.doWrapText()) {
 			return text;

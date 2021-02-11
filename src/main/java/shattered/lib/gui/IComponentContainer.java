@@ -1,0 +1,19 @@
+package shattered.lib.gui;
+
+import java.util.function.Consumer;
+import org.jetbrains.annotations.NotNull;
+
+public interface IComponentContainer {
+
+	void add(@NotNull IGuiComponent component);
+
+	void remove(@NotNull IGuiComponent component);
+
+	boolean hasComponent(@NotNull IGuiComponent component);
+
+	boolean deepHasComponent(@NotNull IGuiComponent component);
+
+	void setupComponents(@NotNull Layout layout);
+
+	void doForAll(Consumer<IGuiComponent> action);
+}

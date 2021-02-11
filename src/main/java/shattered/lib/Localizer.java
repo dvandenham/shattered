@@ -20,37 +20,40 @@ import shattered.Shattered;
 public final class Localizer {
 
 	private static final ResourceLocation DEFAULT_LANGUAGE = new ResourceLocation("en_us");
-	private static final Logger LOGGER = LogManager.getLogger(Localizer.class);
+	private static final Logger LOGGER = LogManager.getLogger(Localizer.class.getSimpleName());
 	private static final Object2ObjectArrayMap<ResourceLocation, URL> LOCATIONS = new Object2ObjectArrayMap<>();
 	private static final ObjectArrayList<ResourceLocation> LANGUAGES = new ObjectArrayList<>();
 	private static final FastNamedObjectMap<String> CACHE = new FastNamedObjectMap<>();
 	private static final FastNamedObjectMap<String> CACHE_FORMATTED = new FastNamedObjectMap<>();
-	private static ResourceLocation Language = null, Fallback = null;
+	private static ResourceLocation language = null, fallback = null;
 
-	public static void AddLanguage(@NotNull final URL Location, @NotNull final ResourceLocation Language) {
-		if (Localizer.LANGUAGES.contains(Language)) {
-			Localizer.LOGGER.debug("Reloading language: {}", Language);
+	private Localizer() {
+	}
+
+	public static void addLanguage(@NotNull final URL location, @NotNull final ResourceLocation language) {
+		if (Localizer.LANGUAGES.contains(language)) {
+			Localizer.LOGGER.debug("Reloading language: {}", language);
 		} else {
-			Localizer.LANGUAGES.add(Language);
-			Localizer.LOGGER.debug("Registering language: {}", Language);
+			Localizer.LANGUAGES.add(language);
+			Localizer.LOGGER.debug("Registering language: {}", language);
 		}
-		if (Localizer.Fallback == null) {
-			Localizer.Fallback = Language;
-			Localizer.Language = Language;
-			Localizer.LOGGER.debug("Using language \"{}\" as fallback", Language);
+		if (Localizer.fallback == null) {
+			Localizer.fallback = language;
+			Localizer.language = language;
+			Localizer.LOGGER.debug("Using language \"{}\" as fallback", language);
 		}
-		if (!Localizer.LOCATIONS.containsKey(Language)) {
-			Localizer.LOCATIONS.put(Language, Location);
+		if (!Localizer.LOCATIONS.containsKey(language)) {
+			Localizer.LOCATIONS.put(language, location);
 		}
-		try (final BufferedReader Reader = new BufferedReader(new InputStreamReader(Location.openStream()))) {
-			String Line;
-			while ((Line = Reader.readLine()) != null) {
-				if (!Line.contains("=")) {
+		try (final BufferedReader reader = new BufferedReader(new InputStreamReader(location.openStream()))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				if (!line.contains("=")) {
 					continue;
 				}
-				final String[] LineData = Line.split("=", 2);
-				Localizer.CACHE.put(Language.toString() + "." + LineData[0], LineData[1]);
-				Localizer.LOGGER.trace("Registered translation: {}.{}={}", Language, LineData[0], LineData[1]);
+				final String[] lineData = line.split("=", 2);
+				Localizer.CACHE.put(language.toString() + "." + lineData[0], lineData[1]);
+				Localizer.LOGGER.trace("Registered translation: {}.{}={}", language, lineData[0], lineData[1]);
 			}
 		} catch (final IOException e) {
 			Localizer.LOGGER.error(e);
@@ -58,95 +61,92 @@ public final class Localizer {
 	}
 
 	@MessageListener("reload_localizer")
-	private static void Reload(final MessageEvent ignored) {
+	private static void onSystemMessage(final MessageEvent ignored) {
 		Localizer.CACHE.clear();
 		Localizer.CACHE_FORMATTED.clear();
 		for (final ResourceLocation LanguageCode : Localizer.LANGUAGES) {
-			Localizer.AddLanguage(Localizer.LOCATIONS.get(LanguageCode), LanguageCode);
+			Localizer.addLanguage(Localizer.LOCATIONS.get(LanguageCode), LanguageCode);
 		}
 	}
 
 	@NotNull
-	public static String Localize(@NotNull final String Key) {
-		return Localizer.Localize(Localizer.GetCurrentLanguage(), Key);
+	public static String localize(@NotNull final String key) {
+		return Localizer.localize(Localizer.getActiveLanguage(), key);
 	}
 
 	@NotNull
-	public static String Localize(@Nullable final ResourceLocation Language, @NotNull final String Key) {
-		if (Language == null) {
-			return Key;
+	public static String localize(@Nullable final ResourceLocation language, @NotNull final String key) {
+		if (language == null) {
+			return key;
 		}
-		if (Key.trim().isEmpty()) {
+		if (key.trim().isEmpty()) {
 			return "";
 		}
-		final String LanguageKey = Language.toString() + "." + Key;
-		String Result = Localizer.CACHE.get(LanguageKey);
-		if (Result != null) {
-			return Result;
+		final String languageKey = language.toString() + "." + key;
+		String result = Localizer.CACHE.get(languageKey);
+		if (result != null) {
+			return result;
 		}
-		Localizer.LOGGER.debug("No entry found for: {}", LanguageKey);
-		if (Localizer.Fallback == null) {
-			Localizer.LOGGER.debug("No fallback language found for: {}", LanguageKey);
-			Localizer.LOGGER.debug("\tRegistering: {}={}", LanguageKey, Key);
-			Localizer.CACHE.put(LanguageKey, Key);
-			return Key;
+		Localizer.LOGGER.debug("No entry found for: {}", languageKey);
+		if (Localizer.fallback == null) {
+			Localizer.LOGGER.debug("No fallback language found for: {}", languageKey);
+			Localizer.LOGGER.debug("\tRegistering: {}={}", languageKey, key);
+			Localizer.CACHE.put(languageKey, key);
+			return key;
 		}
-		if (Localizer.Fallback.equals(Language)) {
-			Localizer.LOGGER.debug("Already using fallback language for: {}", Language);
-			Localizer.LOGGER.debug("\tRegistering: {}={}", LanguageKey, Key);
-			Localizer.CACHE.put(LanguageKey, Key);
-			return Key;
+		if (Localizer.fallback.equals(language)) {
+			Localizer.LOGGER.debug("Already using fallback language for: {}", language);
+			Localizer.LOGGER.debug("\tRegistering: {}={}", languageKey, key);
+			Localizer.CACHE.put(languageKey, key);
+			return key;
 		}
-		final String FallbackKey = Localizer.Fallback + "." + Key;
-		Result = Localizer.CACHE.get(FallbackKey);
-		if (Result == null) {
-			Localizer.LOGGER.debug("No fallback-entry found for: " + LanguageKey + " and " + FallbackKey);
-			Localizer.LOGGER.debug("\tRegistering: {}={}", FallbackKey, Key);
-			Localizer.CACHE.put(FallbackKey, Key);
-			Localizer.LOGGER.debug("\tRegistering: {}={}", LanguageKey, Key);
-			Localizer.CACHE.put(LanguageKey, Key);
-			return Key;
+		final String fallbackKey = Localizer.fallback + "." + key;
+		result = Localizer.CACHE.get(fallbackKey);
+		if (result == null) {
+			Localizer.LOGGER.debug("No fallback-entry found for: " + languageKey + " and " + fallbackKey);
+			Localizer.LOGGER.debug("\tRegistering: {}={}", fallbackKey, key);
+			Localizer.CACHE.put(fallbackKey, key);
+			Localizer.LOGGER.debug("\tRegistering: {}={}", languageKey, key);
+			Localizer.CACHE.put(languageKey, key);
+			return key;
 		}
-		Localizer.LOGGER.debug("Registering: {}={}", FallbackKey, Result);
-		Localizer.CACHE.put(LanguageKey, Result);
-		return Result;
+		Localizer.LOGGER.debug("Registering: {}={}", fallbackKey, result);
+		Localizer.CACHE.put(languageKey, result);
+		return result;
 	}
 
 	@NotNull
-	public static String Format(@NotNull final String Key, final Object... FormatData) {
-		return Localizer.Format(Localizer.GetCurrentLanguage(), Key, FormatData);
+	public static String format(@NotNull final String key, final Object... formatData) {
+		return Localizer.format(Localizer.getActiveLanguage(), key, formatData);
 	}
 
 	@NotNull
-	public static String Format(@Nullable final ResourceLocation Language, @NotNull final String Key, final Object... FormatData) {
-		if (Language == null) {
-			return Key;
+	public static String format(@Nullable final ResourceLocation language, @NotNull final String key, final Object... formatData) {
+		if (language == null) {
+			return key;
 		}
-		final String LanguageKey = Language.toString() + "." + Key;
-		String Result = Localizer.CACHE_FORMATTED.get(LanguageKey);
-		if (Result != null) {
-			return Result;
+		final String languageKey = language.toString() + "." + key;
+		String result = Localizer.CACHE_FORMATTED.get(languageKey);
+		if (result != null) {
+			return result;
 		}
-		final String Unformatted = Localizer.Localize(Language, Key);
-		Result = String.format(Unformatted, FormatData);
-		Localizer.CACHE_FORMATTED.put(LanguageKey, Result);
-		return Result;
+		final String unformatted = Localizer.localize(language, key);
+		result = String.format(unformatted, formatData);
+		Localizer.CACHE_FORMATTED.put(languageKey, result);
+		return result;
 	}
 
-	public static void SetCurrentLanguage(@NotNull final ResourceLocation Language) {
-		Localizer.Language = Language;
-	}
-
-	@NotNull
-	public static ResourceLocation GetCurrentLanguage() {
-		return Localizer.Language;
+	public static void setActiveLanguage(@NotNull final ResourceLocation language) {
+		Localizer.language = language;
 	}
 
 	@NotNull
-	public static ResourceLocation GetDefaultLanguage() {
+	public static ResourceLocation getActiveLanguage() {
+		return Localizer.language;
+	}
+
+	@NotNull
+	public static ResourceLocation getDefaultLanguage() {
 		return Localizer.DEFAULT_LANGUAGE;
-	}
-
-	private Localizer() {
 	}
 }

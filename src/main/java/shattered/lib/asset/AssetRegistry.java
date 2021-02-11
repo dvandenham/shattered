@@ -106,7 +106,7 @@ public final class AssetRegistry {
 	}
 
 	private static void loadLanguage(@NotNull final ResourceLocation resource) {
-		Localizer.AddLanguage(
+		Localizer.addLanguage(
 				AssetRegistry.getPathUrl(AssetRegistry.getResourcePath(resource, AssetTypes.LANGUAGE, "lang")),
 				resource
 		);

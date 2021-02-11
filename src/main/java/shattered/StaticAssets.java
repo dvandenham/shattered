@@ -22,6 +22,9 @@ public final class StaticAssets {
 	public static final ResourceLocation RESOURCE_FONT_DEFAULT = new ResourceLocation("default");
 	public static FontGroup FONT_DEFAULT;
 
+	public static final ResourceLocation RESOURCE_FONT_SIMPLE = new ResourceLocation("simple");
+	public static FontGroup FONT_SIMPLE;
+
 	private StaticAssets() {
 	}
 
@@ -47,6 +50,13 @@ public final class StaticAssets {
 				FontGroup.class,
 				ResourceLocation.class,
 				StaticAssets.RESOURCE_FONT_DEFAULT
+		);
+		StaticAssets.FONT_SIMPLE = ReflectionHelper.invokeMethod(
+				AssetRegistry.class,
+				null,
+				FontGroup.class,
+				ResourceLocation.class,
+				StaticAssets.RESOURCE_FONT_SIMPLE
 		);
 	}
 }

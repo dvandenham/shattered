@@ -130,11 +130,6 @@ public abstract class IGuiScreen implements IComponentContainer {
 		this.setSize(bounds.getSize());
 	}
 
-	@NotNull
-	public final Rectangle getBounds() {
-		return this.boundsCached.toImmutable();
-	}
-
 	public final int getX() {
 		return this.boundsCached.getX();
 	}
@@ -143,12 +138,27 @@ public abstract class IGuiScreen implements IComponentContainer {
 		return this.boundsCached.getY();
 	}
 
+	@NotNull
+	public final Point getPosition() {
+		return this.boundsCached.getPosition().toImmutable();
+	}
+
 	public final int getWidth() {
 		return this.boundsCached.getWidth();
 	}
 
 	public final int getHeight() {
 		return this.boundsCached.getHeight();
+	}
+
+	@NotNull
+	public final Dimension getSize() {
+		return this.boundsCached.getSize().toImmutable();
+	}
+
+	@NotNull
+	public final Rectangle getBounds() {
+		return this.boundsCached.toImmutable();
 	}
 
 	public final boolean isFullscreen() {

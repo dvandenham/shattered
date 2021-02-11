@@ -145,7 +145,7 @@ final class GLFWSetup {
 		GL.createCapabilities();
 
 		//TODO make this configurable
-		glfwSwapInterval(0);
+		glfwSwapInterval(1);
 
 		GLUtil.setupDebugMessageCallback(System.err);
 		GL43.glDebugMessageControl(GL43.GL_DONT_CARE, GL43.GL_DEBUG_TYPE_OTHER, GL43.GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);

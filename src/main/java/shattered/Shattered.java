@@ -123,6 +123,11 @@ public final class Shattered {
 		final MessageEvent handleInputSetupEvent = new MessageEvent("input_setup");
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
 		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
+		//Stitching textures
+		GLHelper.requestContext();
+		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
+		GLHelper.releaseContext();
+		//TODO Boot LuaMachine
 		//Stop loading screen
 		this.loadingScreen.tryStop();
 	}

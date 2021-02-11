@@ -2,6 +2,7 @@ package shattered.screen;
 
 import org.jetbrains.annotations.NotNull;
 import shattered.core.event.EventListener;
+import shattered.Assets;
 import shattered.Shattered;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
@@ -29,6 +30,10 @@ public final class ScreenMainMenu extends IGuiScreen {
 
 	@Override
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+		tessellator.start();
+		tessellator.set(this.getPosition(), Assets.TEXTURE_LOGO);
+		tessellator.center(this.getWidth(), this.getHeight() / 4);
+		tessellator.draw();
 	}
 
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)

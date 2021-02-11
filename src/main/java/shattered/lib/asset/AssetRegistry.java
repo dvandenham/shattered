@@ -25,6 +25,8 @@ import shattered.core.event.EventListener;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
 import shattered.Shattered;
+import shattered.lib.Localizer;
+import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.json.JsonUtils;
 import shattered.lib.math.Dimension;
@@ -68,7 +70,9 @@ public final class AssetRegistry {
 			}
 			Consumer<ResourceLocation> action = null;
 			switch (type) {
-				//TODO languages
+				case LANGUAGE:
+					action = AssetRegistry::loadLanguage;
+					break;
 				case TEXTURE:
 					action = AssetRegistry::loadTexture;
 					break;
@@ -87,6 +91,7 @@ public final class AssetRegistry {
 				list.forEach(action);
 			}
 		});
+		Shattered.SYSTEM_BUS.post(new MessageEvent("reload_localizer"));
 	}
 
 	@EventListener
@@ -98,6 +103,13 @@ public final class AssetRegistry {
 	@Nullable
 	public static IAsset getAsset(final ResourceLocation resource) {
 		return AssetRegistry.ASSETS.get(resource);
+	}
+
+	private static void loadLanguage(@NotNull final ResourceLocation resource) {
+		Localizer.AddLanguage(
+				AssetRegistry.getPathUrl(AssetRegistry.getResourcePath(resource, AssetTypes.LANGUAGE, "lang")),
+				resource
+		);
 	}
 
 	private static void loadTexture(@NotNull final ResourceLocation resource) {
@@ -148,17 +160,17 @@ public final class AssetRegistry {
 		return null;
 	}
 
-	@MessageListener("create_texture_direct")
-	private static void onCreateTextureDirectMessage(final MessageEvent event) {
-		final ResourceLocation resource = (ResourceLocation) event.getData()[0];
+	@ReflectionHelper.Reflectable
+	private static Texture createSimpleTexture(@NotNull final ResourceLocation resource) {
 		final TextureSimple result = AssetRegistry.createTextureDirect(resource);
 		if (result == null) {
 			AssetRegistry.registerInternal(resource, AssetTypes.TEXTURE, null);
 			AssetRegistry.LOGGER.error("Could not load texture: {}", resource);
-			return;
+			return null;
 		}
 		AssetRegistry.registerInternal(resource, AssetTypes.TEXTURE, result);
 		AssetRegistry.LOGGER.debug("Registered texture: {}", resource);
+		return result;
 	}
 
 	@Nullable
@@ -172,15 +184,17 @@ public final class AssetRegistry {
 		return new TextureSimple(resource, data[0], size, Dimension.create(data[1], data[2]), Rectangle.create(0, 0, size));
 	}
 
-	private static void loadFont(@NotNull final ResourceLocation resource) {
+	@ReflectionHelper.Reflectable
+	private static FontGroup loadFont(@NotNull final ResourceLocation resource) {
 		final FontGroup result = AssetRegistry.createFont(resource);
 		if (result == null) {
 			AssetRegistry.registerInternal(resource, AssetTypes.FONT, null);
 			AssetRegistry.LOGGER.error("Could not load font: {}", resource);
-			return;
+			return null;
 		}
 		AssetRegistry.registerInternal(resource, AssetTypes.FONT, result);
 		AssetRegistry.LOGGER.debug("Registered font: {}", resource);
+		return result;
 	}
 
 	@Nullable

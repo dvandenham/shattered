@@ -10,8 +10,7 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventListener;
-import shattered.core.event.MessageEvent;
-import shattered.Shattered;
+import shattered.StaticAssets;
 import shattered.lib.Color;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
@@ -32,10 +31,8 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 @SuppressWarnings("unused")
 public final class TessellatorImpl implements Tessellator {
 
-	private static final ResourceLocation TEXTURE_MISSING_RESOURCE = new ResourceLocation("missing");
 	private final ConcurrentLinkedQueue<DrawCall> stack = new ConcurrentLinkedQueue<>();
 	private final ConcurrentLinkedDeque<Matrix4f> matrices = new ConcurrentLinkedDeque<>();
-	private final Texture textureMissing;
 	private DrawCall currentCall = null;
 	private boolean drawing = false, caching = false;
 	private Shader shader;
@@ -46,13 +43,6 @@ public final class TessellatorImpl implements Tessellator {
 		VertexArrayObject.get().bind();
 		this.matrices.offer(MatrixUtils.identity());
 		EventBus.register(this, "SYSTEM");
-
-		IAsset textureMissing = AssetRegistry.getAsset(TessellatorImpl.TEXTURE_MISSING_RESOURCE);
-		if (textureMissing == null) {
-			Shattered.SYSTEM_BUS.post(new MessageEvent("create_texture_direct", TessellatorImpl.TEXTURE_MISSING_RESOURCE));
-			textureMissing = AssetRegistry.getAsset(TessellatorImpl.TEXTURE_MISSING_RESOURCE);
-		}
-		this.textureMissing = (Texture) textureMissing;
 	}
 
 	@EventListener(DisplayResizedEvent.class)
@@ -609,7 +599,7 @@ public final class TessellatorImpl implements Tessellator {
 		final float stopX = call.bounds.getMaxX();
 		final float stopY = call.bounds.getMaxY();
 		if (call.useTexture) {
-			if (call.texture == this.textureMissing) {
+			if (call.texture == StaticAssets.TEXTURE_MISSING) {
 				call.uMin = 1;
 				call.vMin = 1;
 				call.uMax = call.texture.getImageSize().getWidth() - 1;
@@ -692,6 +682,6 @@ public final class TessellatorImpl implements Tessellator {
 	@NotNull
 	public Texture getTexture(@NotNull final ResourceLocation resource) {
 		final IAsset asset = AssetRegistry.getAsset(resource);
-		return asset instanceof Texture ? (Texture) asset : this.textureMissing;
+		return asset instanceof Texture ? (Texture) asset : StaticAssets.TEXTURE_MISSING;
 	}
 }

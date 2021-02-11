@@ -4,38 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added basic GLFW setup">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Color.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/BufferBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Display.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/DisplayResizedEvent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/DrawCall.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLHelper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GeneralVertexFormats.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/MatrixUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Shader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Tessellator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/VertexArrayObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/VertexBufferObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/VertexFormat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/VertexFormatElement.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added Tessellator and dummy loading screen">
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/StaticAssets.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Localizer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/FontRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/FontRendererImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/StringData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/WriteCall.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/fonts/default.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/fonts/simple.ttf" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/language.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/shaders/fragment.glsl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/shaders/vertex.glsl" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/texture.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +104,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/assets/shattered/shaders" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/assets/shattered/fonts" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -126,11 +115,11 @@
       <recent name="shattered.lib.registry" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\fonts" />
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\gfx" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\shaders" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\gfx" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\textures" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered" />
@@ -338,7 +327,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613043528597</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Added Tessellator and dummy loading screen">
+      <created>1613046362644</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1613046362644</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -375,7 +371,8 @@
     <MESSAGE value="Updated README" />
     <MESSAGE value="Implemented Texture variant metadata" />
     <MESSAGE value="Added basic GLFW setup" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added basic GLFW setup" />
+    <MESSAGE value="Added Tessellator and dummy loading screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Tessellator and dummy loading screen" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

@@ -2,10 +2,9 @@ package shattered;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.jetbrains.annotations.NotNull;
-import shattered.core.event.MessageEvent;
-import shattered.lib.ResourceLocation;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.GLHelper;
+import shattered.lib.gfx.StringData;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
@@ -28,7 +27,6 @@ final class ThreadLoadingScreen implements Runnable {
 
 	public ThreadLoadingScreen(@NotNull final Shattered shattered) {
 		this.shattered = shattered;
-		Shattered.SYSTEM_BUS.post(new MessageEvent("create_texture_direct", new ResourceLocation("argon")));
 	}
 
 	public void start() {
@@ -58,10 +56,10 @@ final class ThreadLoadingScreen implements Runnable {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			this.shattered.tessellator.drawQuick(Display.getBounds(), new ResourceLocation("argon"));
-//			this.shattered.fontRenderer.setFontSize(48);
-//			this.shattered.fontRenderer.writeQuickCentered(Display.getBounds(), new StringData("LOADING").localize(false));
-//			this.shattered.fontRenderer.revertFontSize();
+			this.shattered.tessellator.drawQuick(Display.getBounds(), StaticAssets.RESOURCE_TEXTURE_ARGON);
+			this.shattered.fontRenderer.setFontSize(48);
+			this.shattered.fontRenderer.writeQuickCentered(Display.getBounds(), new StringData("LOADING").localize(false));
+			this.shattered.fontRenderer.revertFontSize();
 			glfwSwapBuffers(Display.getWindowId());
 			GLHelper.releaseContext();
 		}

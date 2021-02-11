@@ -11,9 +11,10 @@ import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.IEventBus;
 import shattered.core.event.MessageEvent;
 import shattered.lib.ReflectionHelper;
-import shattered.lib.ResourceLocation;
+import shattered.lib.asset.FontGroup;
 import shattered.lib.gfx.Display;
-import shattered.lib.gfx.Shader;
+import shattered.lib.gfx.FontRenderer;
+import shattered.lib.gfx.FontRendererImpl;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gfx.TessellatorImpl;
 import shattered.lib.registry.CreateRegistryEvent;
@@ -28,7 +29,7 @@ public final class Shattered {
 	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
 	private static Shattered instance;
 	public final Tessellator tessellator;
-	private final Shader shader;
+	public final FontRenderer fontRenderer;
 	private final ThreadLoadingScreen loadingScreen;
 
 	@SuppressWarnings("unused")
@@ -50,9 +51,20 @@ public final class Shattered {
 		this.initRegistries();
 
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_glfw"));
-		this.tessellator = ReflectionHelper.instantiate(TessellatorImpl.class);
-		//TODO FontRenderer
-		this.shader = new Shader(new ResourceLocation("vertex"), new ResourceLocation("fragment"));
+
+		StaticAssets.loadAssets();
+		final Tessellator tessellator = ReflectionHelper.instantiate(TessellatorImpl.class);
+		if (tessellator == null) {
+			Shattered.LOGGER.fatal("Could not initialize Tessellator!");
+			Runtime.getRuntime().halt(-1);
+		}
+		this.tessellator = tessellator;
+		final FontRenderer fontRenderer = ReflectionHelper.instantiate(FontRendererImpl.class, Tessellator.class, this.tessellator, FontGroup.class, StaticAssets.FONT_DEFAULT);
+		if (fontRenderer == null) {
+			Shattered.LOGGER.fatal("Could not initialize FontRenderer!");
+			Runtime.getRuntime().halt(-1);
+		}
+		this.fontRenderer = fontRenderer;
 
 		this.loadingScreen = new ThreadLoadingScreen(this);
 	}
@@ -64,8 +76,8 @@ public final class Shattered {
 	}
 
 	private void startLoadingScreen() {
-		((TessellatorImpl) this.tessellator).setShader(this.shader);
-		this.shader.bind();
+		((TessellatorImpl) this.tessellator).setShader(StaticAssets.SHADER);
+		StaticAssets.SHADER.bind();
 		Display.resetLogicalResolution();
 		this.loadingScreen.start();
 	}
@@ -75,6 +87,6 @@ public final class Shattered {
 	}
 
 	public static boolean isRunning() {
-		return false;
+		return true;
 	}
 }

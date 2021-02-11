@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 enum AssetTypes {
 
-	LANGUAGE("lang"),
+	LANGUAGE("languages"),
 	TEXTURE("textures"),
 	FONT("fonts"),
 	AUDIO_OGG("audio"),

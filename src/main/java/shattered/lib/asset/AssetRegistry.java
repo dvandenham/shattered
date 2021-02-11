@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import com.google.gson.reflect.TypeToken;
@@ -62,6 +63,9 @@ public final class AssetRegistry {
 		//Parsing json registries
 		Arrays.stream(AssetTypes.values()).forEach(type -> {
 			final List<ResourceLocation> list = registries.get(type);
+			if (list == null) {
+				return;
+			}
 			Consumer<ResourceLocation> action = null;
 			switch (type) {
 				//TODO languages
@@ -97,27 +101,31 @@ public final class AssetRegistry {
 	}
 
 	private static void loadTexture(@NotNull final ResourceLocation resource) {
-		final JsonTextureData data;
-		final JsonTextureData loadedData = TextureLoader.loadJsonData(resource);
-		if (loadedData != null) {
-			data = loadedData;
-		} else {
-			data = new JsonTextureData();
-			data.textureType = TextureType.DEFAULT;
-		}
+		final JsonTextureData data = Optional
+				.ofNullable(TextureLoader.loadJsonData(resource))
+				.orElseGet(() -> {
+					final JsonTextureData dummy = new JsonTextureData();
+					dummy.textureType = TextureType.DEFAULT;
+					return dummy;
+				});
 		if (data.variants == null) {
 			data.variants = new HashMap<>();
 			data.variants.put(ResourceLocation.DEFAULT_VARIANT, resource);
 		}
-		data.variants.forEach((variant, variantResource) -> {
-			final IAsset[] Textures = AssetRegistry.createTexture(data, resource);
+		data.variants.forEach((variant, variantTextureLocation) -> {
+			final ResourceLocation variantResource = resource.toVariant(variant);
+			JsonTextureData variantMetadata = TextureLoader.loadVariantJsonData(variantResource, variantTextureLocation);
+			if (variantMetadata == null) {
+				variantMetadata = data;
+			}
+			final IAsset[] Textures = AssetRegistry.createTexture(variantMetadata, variantResource);
 			if (Textures == null) {
-				AssetRegistry.registerInternal(resource, AssetTypes.TEXTURE, null);
-				AssetRegistry.LOGGER.error("Could not load texture: {}", resource);
+				AssetRegistry.registerInternal(variantResource, AssetTypes.TEXTURE, null);
+				AssetRegistry.LOGGER.error("Could not load texture: {}", variantResource);
 				return;
 			}
 			Arrays.stream(Textures).forEach(result -> AssetRegistry.registerInternal(result.getResource(), AssetTypes.TEXTURE, result));
-			AssetRegistry.LOGGER.debug("Registered texture: {}", resource);
+			AssetRegistry.LOGGER.debug("Registered texture: {}", variantResource);
 		});
 	}
 

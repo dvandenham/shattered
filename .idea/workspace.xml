@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added AssetRegistry (currently only texture loading)">
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Updated README">
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/language.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/texture.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/argon.json" afterDir="false" />
@@ -16,6 +16,9 @@
       <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/missing.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/JsonTextureData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/JsonTextureData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/MathTypeAdapters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/MathTypeAdapters.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +34,23 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Shattered" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -82,7 +102,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -263,7 +283,28 @@
       <option name="project" value="LOCAL" />
       <updated>1612996066906</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Implemented font/lua/binary asset loading">
+      <created>1612996644577</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1612996644577</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Implemented font/lua/binary asset loading">
+      <created>1612996698688</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1612996698688</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Updated README">
+      <created>1613040191203</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1613040191203</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -279,6 +320,7 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
     <MESSAGE value="Implemented class transforming" />
     <MESSAGE value="Added basic workings of the EventBus" />
     <MESSAGE value="Added ResourceLocation, an immutable identifier" />
@@ -295,7 +337,9 @@
     <MESSAGE value="Simplified developer mode logging" />
     <MESSAGE value="Added transformer to make all fields in an @Json class public" />
     <MESSAGE value="Added AssetRegistry (currently only texture loading)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added AssetRegistry (currently only texture loading)" />
+    <MESSAGE value="Implemented font/lua/binary asset loading" />
+    <MESSAGE value="Updated README" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated README" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

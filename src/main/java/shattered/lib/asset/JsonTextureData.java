@@ -4,6 +4,7 @@ import java.util.HashMap;
 import com.google.gson.annotations.SerializedName;
 import shattered.lib.ResourceLocation;
 import shattered.lib.json.Json;
+import shattered.lib.math.Rectangle;
 
 @Json
 public final class JsonTextureData {
@@ -45,7 +46,7 @@ public final class JsonTextureData {
 	@SerializedName("mapping")
 	@Json.TypeValue(type = "mapped")
 	@Json.Required
-	HashMap<String, Integer[]> mappedMapping;
+	HashMap<String, Rectangle> mappedMapping;
 
 	/* ANIMATIONS */
 	@SerializedName("fps")

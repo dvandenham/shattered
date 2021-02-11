@@ -60,14 +60,36 @@ final class TextureLoader {
 		}
 	}
 
+	@Nullable
+	public static JsonTextureData loadVariantJsonData(@NotNull final ResourceLocation variant, @NotNull final ResourceLocation resource) {
+		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.TEXTURE, "png.json");
+		final URL location = AssetRegistry.getPathUrl(path);
+		if (location == null) {
+			return null;
+		}
+		try (final InputStreamReader reader = new InputStreamReader(location.openStream())) {
+			return JsonUtils.deserialize(reader, JsonTextureData.class);
+		} catch (final IOException | JsonIOException | JsonSyntaxException e) {
+			AssetRegistry.LOGGER.error("Could not read texture variant metadata from texture \"{}\"", variant);
+			AssetRegistry.LOGGER.error(e);
+			AssetRegistry.LOGGER.error("\tIgnoring the variant metadata and using the parent metadata");
+			return null;
+		}
+	}
 
 	@NotNull
-	public static TextureAtlasDefault createTextureDefault(@NotNull final ResourceLocation resource, @NotNull final BufferedImage image) {
+	public static TextureAtlasDefault createTextureDefault(
+			@NotNull final ResourceLocation resource,
+			@NotNull final BufferedImage image) {
 		return AssetRegistry.ATLAS.addImage(resource, image);
 	}
 
 	@Nullable
-	public static TextureAtlasSub[] createTextureStitched(@NotNull final ResourceLocation resource, @NotNull final BufferedImage image, @NotNull final JsonTextureData data) {
+	public static TextureAtlasSub[] createTextureStitched(
+			@NotNull final ResourceLocation resource,
+			@NotNull final BufferedImage image,
+			@NotNull final JsonTextureData data
+	) {
 		final int usableWidth = data.stitchedUsableWidth != null ? data.stitchedUsableWidth : image.getWidth();
 		final int spriteWidth = data.stitchedSpriteWidth != null ? data.stitchedSpriteWidth : data.stitchedSpriteSize;
 		final int spriteHeight = data.stitchedSpriteHeight != null ? data.stitchedSpriteHeight : data.stitchedSpriteSize;
@@ -81,8 +103,12 @@ final class TextureLoader {
 	}
 
 	@Nullable
-	public static TextureAtlasSub[] createTextureMapped(@NotNull final ResourceLocation resource, @NotNull final BufferedImage image, @NotNull final JsonTextureData data) {
-		for (final Map.Entry<String, Integer[]> entry : data.mappedMapping.entrySet()) {
+	public static TextureAtlasSub[] createTextureMapped(
+			@NotNull final ResourceLocation resource,
+			@NotNull final BufferedImage image,
+			@NotNull final JsonTextureData data
+	) {
+		for (final Map.Entry<String, Rectangle> entry : data.mappedMapping.entrySet()) {
 			if (entry.getKey() == null) {
 				AssetRegistry.LOGGER.error("Registered texture \"{}\" has invalid metadata!", resource);
 				AssetRegistry.LOGGER.error("\tSub-texture mapping contains a \"null\" key");
@@ -91,21 +117,20 @@ final class TextureLoader {
 				AssetRegistry.LOGGER.error("Registered texture \"{}\" has invalid metadata!", resource);
 				AssetRegistry.LOGGER.error("\tSub-texture mapping \"{}\" contains a \"null\" value", entry.getKey());
 				return null;
-			} else if (entry.getValue().length != 4) {
-				AssetRegistry.LOGGER.error("Registered texture \"{}\" has invalid metadata!", resource);
-				AssetRegistry.LOGGER.error("\tSub-texture mapping \"{}\" contains an invalid value", entry.getKey());
-				AssetRegistry.LOGGER.error("\tSub-texture mapping values should be an array of numbers (Sprite-Xcoord, Sprite-Ycoord, Sprite-width, Sprite-height)");
-				return null;
 			}
 		}
 		final FastNamedObjectMap<Rectangle> mapping = new FastNamedObjectMap<>();
-		data.mappedMapping.forEach((key, bounds) -> mapping.put(key, Rectangle.create(bounds[0], bounds[1], bounds[2], bounds[3])));
+		mapping.putAll(data.mappedMapping);
 		final TextureAtlasMapped original = AssetRegistry.ATLAS.addImageMapped(resource, image, mapping);
 		return data.mappedMapping.keySet().stream().map(original::getSubTexture).toArray(TextureAtlasSub[]::new);
 	}
 
 	@Nullable
-	public static Texture createTextureAnimated(@NotNull final ResourceLocation resource, @NotNull final BufferedImage image, @NotNull final JsonTextureData data) {
+	public static Texture createTextureAnimated(
+			@NotNull final ResourceLocation resource,
+			@NotNull final BufferedImage image,
+			@NotNull final JsonTextureData data
+	) {
 		int type = -1;
 		if (image.getWidth() > image.getHeight()) {
 			if (image.getWidth() % image.getHeight() != 0) {

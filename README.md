@@ -27,8 +27,8 @@ behaviour packs.
     - Preboot is comparable to booting the kernel of an OS. Preboot code runs on a virtual lower level than the next boot step. Preboot is responsible
       for preparing the runtime environment for Shattered.
         1. Instantiating the PrebootClassLoader
-            - The PrebootClassLoader is a wrapper for the default ClassLoader that prevents Shattered from accessing the Preboot classes. It also has
-              other functionalities used by other preboot steps.
+            - The PrebootClassLoader is a wrapper for the default ClassLoader that prevents Shattered from accessing the Preboot classes.
+              It also has other functionalities used by other preboot steps.
         2. Loading the bytecode for every class used by Shattered and storing it in memory.
         3. Transforming classes based on predefined conditions using bytecode manipulation tools.
         4. Force-loading all transformed classes and caching them in memory using the PrebootClassLoader.
@@ -53,3 +53,134 @@ behaviour packs.
         13. Stopping the loading screen thread.
         14. Playing the boot animation and boot sound.
         15. Showing the main menu.
+
+## Registries
+| Name                      | Key type         | Value type | Freezable | Unique Keys |
+|---------------------------|------------------|------------|-----------|-------------|
+| ResourceSingletonRegistry | ResourceLocation | Object     | Yes       | Yes         |
+
+## Assets
+| Type           | Registry location                    | Asset root directory            | Extension |
+|----------------|--------------------------------------|---------------------------------|-----------|
+| Language Files | /assets/\<namespace\>/language.json  | /assets/\<namespace\>/language/ | .lang     |
+| Textures       | /textures/\<namespace\>/texture.json | /assets/\<namespace\>/textures/ | .json     |
+| Fonts          | /assets/\<namespace\>/font.json      | /assets/\<namespace\>/fonts/    | .ttf      |
+| Audio          | /assets/\<namespace\>/audio.json     | /assets/\<namespace\>/audio/    | .json     |
+| Lua Scripts    | /assets/\<namespace\>/scripts.json   | /assets/\<namespace\>/scripts/  | .lua      |
+| Binary Files   | /assets/\<namespace\>/binary.json    | /assets/\<namespace\>/          |           |
+
+### Language files
+Language files are regular text-files with unique key-value pairs:  
+```shattered.screen.main_menu.button.exit=Exit Shattered```  
+If a key is defined multiple times, the last occurence will be used.  
+If the localizer tries fails to localize a key, it will first try to localize it using the fallback "en_us" language file.  
+If localizing using the fallback language fails, the key itself will be registered as the localization for the key.
+
+**Registry mapping**  
+A registry mapping ```<namespace>:en_us``` will map to a language file located at ```/assets/<namespace>/language/en_us.lang```.
+
+### Textures
+Textues seem daunting at first but are quite easy once the metadata structure is understood.  
+Every texture requires at least the following properties in the metadata file:  
+```json
+{
+  "type": "default/stitched/mapped/animated",
+  "variants": {
+    "default": "<namespace>:<resource>"
+  }
+}
+```
+If no metadata file could be found, Shattered will try to load a texture at the same path but with the .png extension instead.  
+If the variants section is missing from the metadata file, the "default" variant will be registered with the same resource name as the metadata file. See the "Variant mapping" section below for more information.
+
+**Registry mapping**
+A registry mapping ```<namespace>:logo``` will map to a texture metadata file located at ```/assets/<namespace>/textures/logo.json```.  
+If the metadata file does not exist, the mapping will map to an image located at ```/assets/<namespace>/textures/logo.png```.
+
+**Variant mapping**  
+A variant mapping ```"default": "<namespace>:<resource>"```will map to an image file located at ```/assets/<namespace>/textures/<resource>.png```.  
+A variant can have metadata file for that variant. The name should be the same name as the image file with the ```.json``` extension added to it. This means that ```logo.png``` can have a metadata file named ```logo.png.json```.  
+These variant metadata files cannot have any variants themselves, they will be ignored if provided.  
+If the variant metadata file has a ```type``` definition, that type will be used instead of the type definition from the "parent" metadata file. This makes it possible to use multiple texture types for different variants.
+
+There are 4 types of textures:  
+  - Default
+  - Stitched
+  - Mapped
+  - Animated
+
+**Default**  
+The whole image file will be used as 1 single texture.  
+Default textures use the following metadata format:  
+```json
+{
+  "type": "default",
+  "variants": {
+    ...
+  }
+}
+```
+
+**Stitched**
+Stitched textures are used to store multiple sprites into a single image file. These stitched textures are indexed, starting at index 0, from left-to-right, top-to-bottom.  
+Stitched textures use the following metadata format:
+```json
+{
+  "type": "stitched",
+  "variants": {
+    ...
+  },
+  "sprite_count": 3, //The amount of sprites in the image file.
+  "usable_width": 500 //Optional, if stitched textures do not fit perfectly, they should be padded to a power of two, and the real boundary width should be provided here
+}
+```
+In addition, one of the following property groups must be present:
+```json
+{
+  "sprite_size": 230 //The width and height of a sprite
+}
+```
+```json
+{
+  "sprite_width": 230, //The width of a sprite
+  "sprite_height": 256 //The height of a sprite
+}
+```
+
+**Mapped**
+Mapped textures are used to store multiple images into a single image. These mapped textures are mapped using unique name-to-rectangle mappings inside the metadata file.  
+Mapped textures use the following metadata format:  
+```json
+{
+  "type": "mapped",
+  "variants": {
+    ...
+  },
+  mapping: {
+    "mytex1": {"x": 10, "y": 20, "width": 100, "height": 50}, //X, Y, Width and Height are the amount of pixels in the image
+    "mytex2": {"x": 10, "y": 20, "w": 100, "h": 50}, //Short form
+    "mytex3": "10x10x100x50" //Even shorter form
+  }
+}
+```
+
+**Animations**
+Animations are a series of still images inside a large image that get rendering based on the time.  
+While this sounds confusing, it's really easy to get working if the following requirements are met:  
+- The image width is used as the size for one animation frame
+- The image height should be **exactly** the width * the amount of frames
+  - Example: An animation with a width of 64px and 15 frames should be 64 * 15 = 960 pixels in height.  
+Note: the width and height can be swapped, meaning that an animation image can be either horizontal or vertical.  
+Animations use the following metadata format:
+```json
+{
+  "type": "animated",
+  "variants": {
+    ...
+  },
+  "fps": 10, //10 Frames per Second, can be fractions: fps: 0.5 = 2 seconds per frame
+  "frame_mapping": [ //Optional, manually specify the frames that get played, frames can occur multiple times
+    0, 1, 2, 3, 4, 5, 5, 4, 3, 2, 1, 0 //This animation will play backwards once frame 6 (index 5) has been reached.
+  ]
+}
+```

@@ -223,11 +223,15 @@ public final class Shattered {
 		private final RuntimeTimerExecutor tickAction;
 		private final RuntimeTimerExecutor renderAction;
 		private final RuntimeTimerExecutor catchupAction;
-		private long prevFrameCountStartTime = Shattered.getSystemTime();
-		private long prevIterationStartTime;
-		private double prevIterationLength;
-		private int internalFrameCount = 0;
-		private double accumulator = 0;
+
+		//Runtime loop
+		private long iterationStartTime;
+		private long iterationLength;
+		private double iterationAccumulator = 0;
+
+		//FPS counter
+		private long fpsCountStartTime = Shattered.getSystemTime();
+		private int fpsAccumulator = 0;
 		private int cachedFps = 0;
 
 		private RuntimeTimer(
@@ -242,29 +246,29 @@ public final class Shattered {
 
 		@Nullable
 		public Throwable execute() {
-			this.accumulator += this.calcAndHandleDelta();
+			this.iterationAccumulator += this.calcAndHandleDelta();
 			Throwable cachedError = this.tickAction.execute(this);
 			if (cachedError != null) {
 				return cachedError;
 			}
-			while (this.accumulator >= RuntimeTimer.SECONDS_PER_TICK) {
+			while (this.iterationAccumulator >= RuntimeTimer.SECONDS_PER_TICK) {
 				cachedError = this.catchupAction.execute(this);
 				if (cachedError != null) {
 					return cachedError;
 				}
-				this.accumulator -= RuntimeTimer.SECONDS_PER_TICK;
+				this.iterationAccumulator -= RuntimeTimer.SECONDS_PER_TICK;
 			}
 			cachedError = this.renderAction.execute(this);
 			if (cachedError != null) {
 				return cachedError;
 			}
-			++this.internalFrameCount;
-			if (Shattered.getSystemTime() - this.prevFrameCountStartTime >= 1000) {
-				this.cachedFps = this.internalFrameCount;
-				this.internalFrameCount = 0;
-				this.prevFrameCountStartTime = Shattered.getSystemTime();
+			++this.fpsAccumulator;
+			if (Shattered.getSystemTime() - this.fpsCountStartTime >= 1000) {
+				this.cachedFps = this.fpsAccumulator;
+				this.fpsAccumulator = 0;
+				this.fpsCountStartTime = Shattered.getSystemTime();
 			}
-			this.prevIterationLength = Shattered.getSystemTime() - this.prevIterationStartTime;
+			this.iterationLength = Shattered.getSystemTime() - this.iterationStartTime;
 			return null;
 		}
 
@@ -273,13 +277,13 @@ public final class Shattered {
 		}
 
 		public double getPrevIterationLength() {
-			return this.prevIterationLength;
+			return this.iterationLength;
 		}
 
 		private double calcAndHandleDelta() {
 			final long time = Shattered.getSystemTime();
-			final double delta = time - this.prevIterationStartTime;
-			this.prevIterationStartTime = time;
+			final double delta = time - this.iterationStartTime;
+			this.iterationStartTime = time;
 			return delta;
 		}
 

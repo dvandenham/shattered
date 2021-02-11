@@ -148,7 +148,9 @@ public final class AssetRegistry {
 		return null;
 	}
 
-	private static void loadTextureDirectly(@NotNull final ResourceLocation resource) {
+	@MessageListener("create_texture_direct")
+	private static void onCreateTextureDirectMessage(final MessageEvent event) {
+		final ResourceLocation resource = (ResourceLocation) event.getData()[0];
 		final TextureSimple result = AssetRegistry.createTextureDirect(resource);
 		if (result == null) {
 			AssetRegistry.registerInternal(resource, AssetTypes.TEXTURE, null);

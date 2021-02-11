@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import shattered.Shattered;
 
 public final class ReflectionHelper {
 
@@ -97,7 +98,10 @@ public final class ReflectionHelper {
 			final Constructor<T> constructor = clazz.getDeclaredConstructor(paramClasses);
 			constructor.setAccessible(true);
 			return constructor.newInstance(paramValues);
-		} catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException ignored) {
+		} catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			if (Shattered.DEVELOPER_MODE) {
+				Shattered.LOGGER.error("Error during instantiation of class " + clazz.getName(), e);
+			}
 			return null;
 		}
 	}

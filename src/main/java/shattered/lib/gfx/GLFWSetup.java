@@ -9,19 +9,23 @@ import java.util.function.Supplier;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.MemoryStack;
+import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
 import shattered.Shattered;
 import shattered.lib.math.Dimension;
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_BLUE_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MINOR;
@@ -39,6 +43,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
@@ -55,8 +60,9 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 final class GLFWSetup {
 
 	private static final Logger LOGGER = LogManager.getLogger("GLFW");
-	private static final Dimension DISPLAY_SIZE = Dimension.createMutable(800, 600);
-	private static long windowId;
+	static final Dimension DISPLAY_SIZE = Dimension.createMutable(800, 600);
+	static long windowId;
+	static double scale = 1;
 
 	private GLFWSetup() {
 	}
@@ -159,5 +165,27 @@ final class GLFWSetup {
 		} catch (final IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static void setScaledResolution(final int logicalWidth, final int logicalHeight, @NotNull final Shader shader) {
+		final double scaleX = (double) GLFWSetup.DISPLAY_SIZE.getWidth() / logicalWidth;
+		final double scaleY = (double) GLFWSetup.DISPLAY_SIZE.getHeight() / logicalHeight;
+		GLFWSetup.setScaledResolution(Math.min(scaleX, scaleY), shader);
+	}
+
+	public static void setScaledResolution(final double scale, @NotNull final Shader shader) {
+		GLFWSetup.scale = scale;
+		shader.setUniformMat4("matProj", MatrixUtils.ortho());
+	}
+
+	static void sendResizeEvent() {
+		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		TessellatorImpl.resize();
+		EventBus.post(new DisplayResizedEvent());
+	}
+
+	private static void destroyWindow(final long id) {
+		glfwFreeCallbacks(id);
+		glfwDestroyWindow(id);
 	}
 }

@@ -50,19 +50,24 @@ final class ThreadLoadingScreen implements Runnable {
 
 	@Override
 	public void run() {
-		while (this.RUNNING.get()) {
-			//We need to use the lock so the main thread can request the context
-			GLHelper.requestContext();
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			this.shattered.tessellator.drawQuick(Display.getBounds(), StaticAssets.RESOURCE_TEXTURE_ARGON);
-			this.shattered.fontRenderer.setFontSize(48);
-			this.shattered.fontRenderer.writeQuickCentered(Display.getBounds(), new StringData("LOADING").localize(false));
-			this.shattered.fontRenderer.revertFontSize();
-			glfwSwapBuffers(Display.getWindowId());
-			GLHelper.releaseContext();
+		try {
+			while (this.RUNNING.get()) {
+				//We need to use the lock so the main thread can request the context
+				GLHelper.requestContext();
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				this.shattered.tessellator.drawQuick(Display.getBounds(), StaticAssets.RESOURCE_TEXTURE_ARGON);
+				this.shattered.fontRenderer.setFontSize(48);
+				this.shattered.fontRenderer.writeQuickCentered(Display.getBounds(), new StringData("LOADING").localize(false));
+				this.shattered.fontRenderer.revertFontSize();
+				glfwSwapBuffers(Display.getWindowId());
+				GLHelper.releaseContext();
+			}
+			this.STOPPED.set(true);
+		} catch (final Throwable e) {
+			e.printStackTrace();
+			Runtime.getRuntime().halt(-1);
 		}
-		this.STOPPED.set(true);
 	}
 }

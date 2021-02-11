@@ -5,32 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added FontRenderer, completed core rendering process">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ITickable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Input.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/IRenderableLayered.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/DefaultLayout.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiPanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IComponentContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiComponent.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiElement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiScreen.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/Layout.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/fonts/simple.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/language.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/languages/en_us.lang" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/texture.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/textures/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/ScreenEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/StaticAssets.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/StaticAssets.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Localizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Localizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Callbacks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Callbacks.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/FontRendererImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/FontRendererImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ITickable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/BufferBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/BufferBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/IRenderableLayered.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/MatrixUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/MatrixUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiElement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +102,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/lib" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
@@ -390,16 +381,5 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added FontRenderer, completed core rendering process" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java</url>
-          <line>40</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

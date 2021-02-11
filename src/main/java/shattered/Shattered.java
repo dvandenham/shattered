@@ -23,10 +23,13 @@ import shattered.lib.asset.FontGroup;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.FontRendererImpl;
+import shattered.lib.gfx.GLHelper;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gfx.TessellatorImpl;
+import shattered.lib.gui.GuiManager;
 import shattered.lib.registry.CreateRegistryEvent;
+import shattered.screen.ScreenMainMenu;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerFrequency;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerValue;
 
@@ -66,6 +69,7 @@ public final class Shattered {
 		//This call will block the program until a shutdown was requested
 		Shattered.instance.startRuntime();
 		Shattered.instance.cleanup();
+		Shattered.LOGGER.info("Goodbye!");
 	}
 
 	private Shattered(final String[] args) {
@@ -107,12 +111,14 @@ public final class Shattered {
 		//Load assets
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
 		//TODO load config here
+		//Initialize GuiHandler and main menu screen
 		final MessageEvent eventSetupGui = new MessageEvent("init_gui");
 		Shattered.SYSTEM_BUS.post(eventSetupGui);
 		assert eventSetupGui.getResponse() != null;
 		this.delegateGuiManagerTick = (Runnable) ((Object[]) eventSetupGui.getResponse().get())[0];
 		//noinspection unchecked
 		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) ((Object[]) eventSetupGui.getResponse().get())[1];
+		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
 		//Setup input handlers
 		final MessageEvent handleInputSetupEvent = new MessageEvent("input_setup");
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
@@ -124,9 +130,7 @@ public final class Shattered {
 	private void startRuntime() {
 		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeCatchup);
 		while (Shattered.isRunning()) {
-			final long currentTime = RuntimeTimer.getTime();
 			final Throwable cachedError = timer.execute();
-			final long iterationLength = RuntimeTimer.getTime() - currentTime;
 			if (cachedError != null) {
 				Shattered.RUNNING.set(false);
 				Shattered.LOGGER.fatal("Fatal error during Runtime loop!", cachedError);
@@ -135,6 +139,8 @@ public final class Shattered {
 	}
 
 	private void cleanup() {
+		Shattered.LOGGER.debug("Cleaning up!");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown"));
 	}
 
 	@Nullable
@@ -160,6 +166,10 @@ public final class Shattered {
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
+			GLHelper.disableScissor();
+			//Render gui
+			GLHelper.resetScissor();
+			this.delegateGuiManagerRender.accept(this.tessellator, this.fontRenderer);
 
 			//Render runtime metrics
 			if (Shattered.DEVELOPER_MODE) {

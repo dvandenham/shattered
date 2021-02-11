@@ -7,6 +7,7 @@ import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Hashtable;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +55,8 @@ final class ImageLoader {
 		final int pixelBytes = ImageLoader.getPixelBytes(image);
 		final byte[] data = (byte[]) image.getRaster().getDataElements(0, 0, image.getWidth(), image.getHeight(), null);
 		final ByteBuffer buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getHeight() * pixelBytes);
-		buffer.put(data).flip();
+		//noinspection RedundantCast
+		((Buffer) buffer.put(data)).flip();
 		return new Object[]{image.getWidth(), image.getHeight(), buffer, pixelBytes};
 	}
 

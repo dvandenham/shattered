@@ -2,7 +2,6 @@ package shattered.lib.gfx;
 
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
-import shattered.lib.math.Dimension;
 
 public final class MatrixUtils {
 
@@ -18,8 +17,7 @@ public final class MatrixUtils {
 
 	@NotNull
 	public static Matrix4f ortho() {
-		final Dimension size = Display.getSize();
-		MatrixUtils.MATRIX_ORTHO.identity().ortho(0, size.getWidth(), size.getHeight(), 0, 1, -1);
+		MatrixUtils.MATRIX_ORTHO.identity().ortho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
 		return MatrixUtils.MATRIX_ORTHO;
 	}
 }

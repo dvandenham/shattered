@@ -1,5 +1,6 @@
 package shattered.lib.gfx;
 
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -10,13 +11,13 @@ import shattered.lib.Color;
 
 final class BufferBuilder {
 
-	private final VertexFormat      format;
-	private final int               drawMode;
+	private final VertexFormat format;
+	private final int drawMode;
 	private final VertexArrayObject vao;
-	private final int               size;
-	private final Runnable          callback;
-	private       ByteBuffer        buffer;
-	private       int               vertices = 0;
+	private final int size;
+	private final Runnable callback;
+	private ByteBuffer buffer;
+	private int vertices = 0;
 
 	public BufferBuilder(@NotNull final VertexFormat format, final int size, final int drawMode, final Runnable callback) {
 		this.format = format;
@@ -35,12 +36,15 @@ final class BufferBuilder {
 		if (this.buffer.remaining() > this.format.size) {
 			return;
 		}
-		final int        position  = this.buffer.position();
+		final int position = this.buffer.position();
 		final ByteBuffer newBuffer = MemoryUtil.memAlloc(this.buffer.capacity() + this.format.size * this.size);
-		this.buffer.position(0);
+		//noinspection RedundantCast
+		((Buffer) this.buffer).position(0);
 		newBuffer.put(this.buffer);
-		newBuffer.rewind();
-		newBuffer.position(position);
+		//noinspection RedundantCast
+		((Buffer) newBuffer).rewind();
+		//noinspection RedundantCast
+		((Buffer) newBuffer).position(position);
 		MemoryUtil.memFree(this.buffer);
 		this.buffer = newBuffer;
 	}
@@ -75,7 +79,8 @@ final class BufferBuilder {
 	}
 
 	public void draw() {
-		this.buffer.flip();
+		//noinspection RedundantCast
+		((Buffer) this.buffer).flip();
 		final VertexBufferObject vbo = new VertexBufferObject();
 		vbo.bind();
 		vbo.uploadData(this.buffer, GL15.GL_STREAM_DRAW);

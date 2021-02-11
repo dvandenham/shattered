@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Objects;
 import java.util.function.Supplier;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
@@ -53,6 +54,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowIcon;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -68,7 +70,7 @@ final class GLFWSetup {
 	}
 
 	@MessageListener("init_glfw")
-	private static void onMessageEvent(final MessageEvent event) {
+	private static void onInitializeGLFW(final MessageEvent event) {
 		GLFWSetup.LOGGER.debug("Initialing GLFW");
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -83,6 +85,17 @@ final class GLFWSetup {
 		GLFWSetup.applyWindowProperties();
 		GLFWSetup.LOGGER.debug("Registering callbacks");
 		Callbacks.register(GLFWSetup.windowId);
+	}
+
+	@MessageListener("shutdown")
+	private static void onSystemShutdown(final MessageEvent ignored) {
+		GLFWSetup.LOGGER.debug("Destroying root window");
+		GLFWSetup.destroyWindow(GLFWSetup.windowId);
+		GLFWSetup.LOGGER.debug("Releasing error and debug callbacks");
+		Objects.requireNonNull(glfwSetErrorCallback(null)).free();
+		Objects.requireNonNull(GLUtil.setupDebugMessageCallback()).free();
+		GLFWSetup.LOGGER.debug("Terminating GLFW");
+		glfwTerminate();
 	}
 
 	private static void applyWindowHints() {

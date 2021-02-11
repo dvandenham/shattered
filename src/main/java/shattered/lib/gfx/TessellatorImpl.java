@@ -42,11 +42,11 @@ public final class TessellatorImpl implements Tessellator {
 		TessellatorImpl.resize();
 		VertexArrayObject.get().bind();
 		this.matrices.offer(MatrixUtils.identity());
-		EventBus.register(this, "SYSTEM");
+		EventBus.register(this);
 	}
 
-	@EventListener(DisplayResizedEvent.class)
-	private void onDisplaySizeChanged(final DisplayResizedEvent ignored) {
+	@EventListener
+	private void onDisplayResized(final DisplayResizedEvent ignored) {
 		this.shader.setUniformMat4("matProj", MatrixUtils.ortho());
 	}
 

@@ -4,18 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added logo to main menu, enabled vsync by default">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/screen/AbstractScreen.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Changed how logging works, added jvm debug arguments to README">
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/LuaMachine.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/LuaScript.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/RuntimeScriptException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/ILuaConstant.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/ILuaLib.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaArrayIterator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaIterator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaSerializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaStringLib.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaTableIterator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/ReadOnlyLuaTable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/constant/LuaConstantStateContainer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaGlobalLibColor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaGlobalLibStringData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaLibFontRenderer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaLibTessellator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/shattered/languages/en_us.lang" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/shattered/languages/en_us.lang" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,7 +102,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/lib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/core" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -106,11 +113,11 @@
       <recent name="shattered.lib.registry" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core" />
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core\lua" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\gui" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\fonts" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\gfx" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\shaders" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered" />
@@ -361,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613080420871</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="Changed how logging works, added jvm debug arguments to README">
+      <created>1613081803699</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1613081803699</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -378,7 +392,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="Added basic workings of the EventBus" />
     <MESSAGE value="Added ResourceLocation, an immutable identifier" />
     <MESSAGE value="Started working on secondary boot process" />
     <MESSAGE value="Fixed Preboot ClassLoading (again!)" />
@@ -403,7 +416,8 @@
     <MESSAGE value="Added shutdown button to main menu, changed timer workings" />
     <MESSAGE value="Cleaned up the Runtime timer" />
     <MESSAGE value="Added logo to main menu, enabled vsync by default" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added logo to main menu, enabled vsync by default" />
+    <MESSAGE value="Changed how logging works, added jvm debug arguments to README" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed how logging works, added jvm debug arguments to README" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

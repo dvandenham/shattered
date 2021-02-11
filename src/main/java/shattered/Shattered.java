@@ -142,7 +142,8 @@ public final class Shattered {
 		GLHelper.requestContext();
 		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
 		GLHelper.releaseContext();
-		//TODO Boot LuaMachine
+		//Initialize LuaMachine
+		Shattered.SYSTEM_BUS.post(new MessageEvent("init_lua_machine"));
 		//Stop loading screen
 		this.loadingScreen.tryStop();
 	}

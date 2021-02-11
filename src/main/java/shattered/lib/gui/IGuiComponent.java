@@ -1,6 +1,7 @@
 package shattered.lib.gui;
 
 import org.jetbrains.annotations.NotNull;
+import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.math.Dimension;
@@ -105,6 +106,10 @@ public abstract class IGuiComponent {
 
 	public final int getMaximumWidth() {
 		return this.maximumWidth;
+	}
+
+	protected final boolean containsMouse() {
+		return Input.containsMouse(this.getBounds());
 	}
 
 	@NotNull

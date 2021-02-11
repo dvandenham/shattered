@@ -160,6 +160,12 @@ public abstract class IGuiScreen implements IComponentContainer {
 		this.boundsCached.setPosition(newBounds.getPosition()).setSize(newBounds.getSize());
 	}
 
+	@EventListener
+	private void onDisplayResized(final DisplayResizedEvent ignored) {
+		this.cacheBounds();
+		this.setupComponents(IGuiScreen.createDefaultLayout(this));
+	}
+
 	private static Rectangle getCorrectBounds(final Rectangle bounds) {
 		int width = bounds.getWidth();
 		if (width < 0) {
@@ -195,9 +201,8 @@ public abstract class IGuiScreen implements IComponentContainer {
 		return Rectangle.create(x, y, width, height);
 	}
 
-	@EventListener
-	private void onDisplayResized(final DisplayResizedEvent ignored) {
-		this.cacheBounds();
+	static Layout createDefaultLayout(@NotNull final IGuiScreen screen) {
+		return new DefaultLayout(48, 4, screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
 	}
 
 	private static class GuiScreenComponentPanel extends GuiPanel {

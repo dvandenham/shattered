@@ -39,6 +39,7 @@ public final class GuiManager {
 		}
 		this.screens.add(screen);
 		screen.cacheBounds();
+		this.setupComponents(screen);
 		EventBus.post(new ScreenEvent.Opened(screen));
 	}
 
@@ -70,7 +71,7 @@ public final class GuiManager {
 		if (screen == null) {
 			return;
 		}
-		screen.tick();
+		this.tickScreen(screen);
 	}
 
 	private void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
@@ -85,6 +86,7 @@ public final class GuiManager {
 
 	private void tickScreen(@NotNull final IGuiScreen screen) {
 		screen.tick();
+		screen.doForAll(IGuiComponent::tick);
 	}
 
 	private void renderScreen(@NotNull final IGuiScreen screen, @NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
@@ -92,6 +94,16 @@ public final class GuiManager {
 		screen.doForAll(component -> component.renderBackground(tessellator, fontRenderer));
 		screen.renderForeground(tessellator, fontRenderer);
 		screen.doForAll(component -> component.renderForeground(tessellator, fontRenderer));
+	}
+
+	private void setupComponents(@NotNull final IGuiScreen screen) {
+		final Layout layout = IGuiScreen.createDefaultLayout(screen);
+		screen.setupComponents(layout);
+		screen.doForAll(component -> {
+			if (component instanceof IComponentContainer) {
+				((IComponentContainer) component).setupComponents(layout);
+			}
+		});
 	}
 
 	@Nullable

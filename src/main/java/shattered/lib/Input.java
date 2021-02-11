@@ -10,6 +10,7 @@ import org.lwjgl.glfw.GLFW;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.Shattered;
 import shattered.lib.gfx.Display;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
@@ -17,6 +18,8 @@ import shattered.lib.math.Rectangle;
 @SuppressWarnings("unused")
 @EventBusSubscriber("SYSTEM")
 public final class Input {
+
+	private static final long MOUSE_CLICK_TIMEOUT_MS = 150;
 
 	private static final Vector2d MOUSE_POS_PREV = new Vector2d();
 	private static final Vector2d MOUSE_POS = new Vector2d();
@@ -30,6 +33,8 @@ public final class Input {
 	private static int mouseLeftDownY = -1;
 	private static int mouseRightDownX = -1;
 	private static int mouseRightDownY = -1;
+	private static long mouseLeftClickPressTime = -1;
+	private static long mouseRightClickPressTime = -1;
 
 	private static Rectangle mouseAccepted = null;
 	private static boolean mouseBlocked = false;
@@ -50,27 +55,37 @@ public final class Input {
 			}
 		}
 		Input.MOUSE_POS_PREV.set(Input.MOUSE_POS);
-		Input.mouseLeftRelease = !Input.mouseLeft && Input.mouseLeftDown && Input.checkClickValid(true);
-		Input.mouseRightRelease = !Input.mouseRight && Input.mouseRightDown && Input.checkClickValid(false);
+		Input.mouseLeftRelease = (Shattered.getSystemTime() - Input.mouseLeftClickPressTime <= Input.MOUSE_CLICK_TIMEOUT_MS) &&
+				!Input.mouseLeft && Input.mouseLeftDown && Input.checkClickValid(true);
+		Input.mouseRightRelease = (Shattered.getSystemTime() - Input.mouseRightClickPressTime <= Input.MOUSE_CLICK_TIMEOUT_MS) &&
+				!Input.mouseRight && Input.mouseRightDown && Input.checkClickValid(false);
 		if (Input.mouseLeft && !Input.mouseLeftRelease) {
 			Input.mouseLeftDown = true;
+			if (Input.mouseLeftClickPressTime == -1) {
+				Input.mouseLeftClickPressTime = Shattered.getSystemTime();
+			}
 			if (Input.isNotSetup(true)) {
 				Input.mouseLeftDownX = Input.getMouseX();
 				Input.mouseLeftDownY = Input.getMouseY();
 			}
 		} else {
 			Input.mouseLeftDown = false;
+			Input.mouseLeftClickPressTime = -1;
 			Input.mouseLeftDownX = -1;
 			Input.mouseLeftDownY = -1;
 		}
 		if (Input.mouseRight && !Input.mouseRightRelease) {
 			Input.mouseRightDown = true;
+			if (Input.mouseRightClickPressTime == -1) {
+				Input.mouseRightClickPressTime = Shattered.getSystemTime();
+			}
 			if (Input.isNotSetup(false)) {
 				Input.mouseRightDownX = Input.getMouseX();
 				Input.mouseRightDownY = Input.getMouseY();
 			}
 		} else {
 			Input.mouseRightDown = false;
+			Input.mouseRightClickPressTime = -1;
 			Input.mouseRightDownX = -1;
 			Input.mouseRightDownY = -1;
 		}

@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class EventBusImpl implements IEventBus {
 
-	private static final Logger                                  LOGGER    = LogManager.getLogger("EventBus");
-	private final        WeakHashMap<Object, List<EventHandler>> listeners = new WeakHashMap<>();
-	private final        String                                  name;
+	private static final Logger LOGGER = LogManager.getLogger("EventBus");
+	private final WeakHashMap<Object, List<EventHandler>> listeners = new WeakHashMap<>();
+	private final String name;
 
 	EventBusImpl(@NotNull final String name) {
 		this.name = name;
@@ -54,6 +54,7 @@ public final class EventBusImpl implements IEventBus {
 
 	@Override
 	public boolean post(@NotNull final Event<?> event) {
+		EventBusImpl.LOGGER.trace("[{}]Posting event: {}", this.name, event.getClass().getName());
 		for (final List<EventHandler> listeners : new HashSet<>(this.listeners.values())) {
 			for (final EventHandler listener : listeners) {
 				if (EventBusImpl.canAcceptEvent(listener, event)) {
@@ -69,7 +70,7 @@ public final class EventBusImpl implements IEventBus {
 
 	@NotNull
 	private Set<Method> getListenerMethods(@NotNull final Object listener) {
-		final Class<?>        clazz  = listener instanceof Class ? (Class<?>) listener : listener.getClass();
+		final Class<?> clazz = listener instanceof Class ? (Class<?>) listener : listener.getClass();
 		final HashSet<Method> result = new HashSet<>();
 
 		Arrays.stream(clazz.getMethods()).filter(this::isValidListenerMethod).forEach(result::add);
@@ -79,7 +80,7 @@ public final class EventBusImpl implements IEventBus {
 	}
 
 	private boolean isValidListenerMethod(@NotNull final Method method) {
-		final boolean hasEventListener   = method.isAnnotationPresent(EventListener.class);
+		final boolean hasEventListener = method.isAnnotationPresent(EventListener.class);
 		final boolean hasMessageListener = method.isAnnotationPresent(MessageListener.class);
 		if (!hasEventListener && !hasMessageListener) {
 			return false;

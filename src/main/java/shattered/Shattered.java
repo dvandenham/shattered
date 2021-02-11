@@ -211,17 +211,19 @@ public final class Shattered {
 		return Shattered.RUNNING.get();
 	}
 
+	public static long getSystemTime() {
+		return glfwGetTimerValue() * 1000 / glfwGetTimerFrequency();
+	}
+
 	private static final class RuntimeTimer {
 
-		private static final double TIMER_FREQUENCY = glfwGetTimerFrequency();
-		private static final double TIMER_FREQUENCY_MILLI = RuntimeTimer.TIMER_FREQUENCY * 1000.0;
 		private static final int TICK_RATE = 60;
 		private static final double SECONDS_PER_TICK = 1.0 / RuntimeTimer.TICK_RATE;
 
 		private final RuntimeTimerExecutor tickAction;
 		private final RuntimeTimerExecutor renderAction;
 		private final RuntimeTimerExecutor catchupAction;
-		private long prevFrameCountStartTime = RuntimeTimer.getTime();
+		private long prevFrameCountStartTime = Shattered.getSystemTime();
 		private long prevIterationStartTime;
 		private double prevIterationLength;
 		private int internalFrameCount = 0;
@@ -257,12 +259,12 @@ public final class Shattered {
 				return cachedError;
 			}
 			++this.internalFrameCount;
-			if (RuntimeTimer.getTime() - this.prevFrameCountStartTime >= RuntimeTimer.TIMER_FREQUENCY) {
+			if (Shattered.getSystemTime() - this.prevFrameCountStartTime >= 1000) {
 				this.cachedFps = this.internalFrameCount;
 				this.internalFrameCount = 0;
-				this.prevFrameCountStartTime = RuntimeTimer.getTime();
+				this.prevFrameCountStartTime = Shattered.getSystemTime();
 			}
-			this.prevIterationLength = (RuntimeTimer.getTime() - this.prevIterationStartTime) / RuntimeTimer.TIMER_FREQUENCY_MILLI;
+			this.prevIterationLength = Shattered.getSystemTime() - this.prevIterationStartTime;
 			return null;
 		}
 
@@ -275,14 +277,10 @@ public final class Shattered {
 		}
 
 		private double calcAndHandleDelta() {
-			final long time = RuntimeTimer.getTime();
-			final double delta = (time - this.prevIterationStartTime) / RuntimeTimer.TIMER_FREQUENCY;
+			final long time = Shattered.getSystemTime();
+			final double delta = time - this.prevIterationStartTime;
 			this.prevIterationStartTime = time;
 			return delta;
-		}
-
-		private static long getTime() {
-			return glfwGetTimerValue();
 		}
 
 		@FunctionalInterface

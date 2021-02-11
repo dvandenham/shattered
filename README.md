@@ -3,7 +3,7 @@
 Shattered is a platformer style game engine written in Java with almost all logic handled through lua scripts that can be customized by mods and/or
 behaviour packs.
 
-## Boot process
+# Boot process
 
 1. (**Unimplemented**) Launcher Bootstrap
     - Also known as the launcher-launcher, the Launcher bootstrap has only one job: making sure the newest launcher is downloaded and started.
@@ -53,3 +53,195 @@ behaviour packs.
         13. Stopping the loading screen thread.
         14. Playing the boot animation and boot sound.
         15. Showing the main menu.
+
+# Registries
+
+| Name                      | Key type         | Value type | Freezable | Unique Keys |
+|---------------------------|------------------|------------|-----------|-------------|
+| ResourceSingletonRegistry | ResourceLocation | Object     | Yes       | Yes         |
+
+# Assets
+
+| Type           | Registry location                    | Asset root directory            | Extension |
+|----------------|--------------------------------------|---------------------------------|-----------|
+| Language Files | /assets/\<namespace\>/language.json  | /assets/\<namespace\>/language/ | .lang     |
+| Textures       | /textures/\<namespace\>/texture.json | /assets/\<namespace\>/textures/ | .json     |
+| Fonts          | /assets/\<namespace\>/font.json      | /assets/\<namespace\>/fonts/    | .ttf      |
+| Audio          | /assets/\<namespace\>/audio.json     | /assets/\<namespace\>/audio/    | .json     |
+| Lua Scripts    | /assets/\<namespace\>/scripts.json   | /assets/\<namespace\>/scripts/  | .lua      |
+| Binary Files   | /assets/\<namespace\>/binary.json    | /assets/\<namespace\>/          |           |
+
+## Language files
+
+Language files are regular text-files with unique key-value pairs: ```shattered.screen.main_menu.button.exit=Exit Shattered```. If a key is defined
+multiple times, the last occurence will be used.  
+If the localizer tries fails to localize a key, it will first try to localize it using the fallback "en_us" language file. If localizing using the
+fallback language fails, the key itself will be registered as the localization for the key.
+
+**Registry mapping**  
+A registry mapping ```<namespace>:en_us``` will map to a language file located at ```/assets/<namespace>/language/en_us.lang```.
+
+## Textures
+
+Textues seem daunting at first but are quite easy once the metadata structure is understood.  
+Every texture requires at least the following properties in the metadata file:
+
+```json
+{
+    "type": "default/stitched/mapped/animated",
+    "variants": {
+        "default": "<namespace>:<resource>"
+    }
+}
+```
+
+If no metadata file could be found, Shattered will try to load a texture at the same path but with the .png extension instead.  
+If the variants section is missing from the metadata file, the "default" variant will be registered with the same resource name as the metadata file.
+See the "Variant mapping" section below for more information.
+
+### Registry mapping
+
+A registry mapping ```<namespace>:logo``` will map to a texture metadata file located at ```/assets/<namespace>/textures/logo.json```.  
+If the metadata file does not exist, the mapping will map to an image located at ```/assets/<namespace>/textures/logo.png```.
+
+### Variant mapping
+
+A variant mapping ```"default": "<namespace>:<resource>"```will map to an image file located at ```/assets/<namespace>/textures/<resource>.png```.  
+A variant can have metadata file for that variant. The name should be the same name as the image file with the ```.json``` extension added to it. This
+means that ```logo.png``` can have a metadata file named ```logo.png.json```.  
+These variant metadata files cannot have any variants themselves, they will be ignored if provided.  
+If the variant metadata file has a ```type``` definition, that type will be used instead of the type definition from the "parent" metadata file. This
+makes it possible to use multiple texture types for different variants.
+
+There are 4 types of textures:
+
+- Default
+- Stitched
+- Mapped
+- Animated
+
+### Default Textures
+
+The whole image file will be used as 1 single texture.
+
+**Metadata**
+
+```json
+{
+    "type": "default",
+    "variants": {
+        ...
+    }
+}
+```
+
+### Stitched Textures
+
+Stitched textures are used to store multiple sprites into a single image file. These stitched textures are indexed, starting at index 0, from
+left-to-right, top-to-bottom.
+
+**Metadata**
+
+```json
+{
+    "type": "stitched",
+    "variants": {
+        ...
+    },
+    "sprite_count": 3,
+    //The amount of sprites in the image file.
+    "usable_width": 500
+    //Optional, if stitched textures do not fit perfectly, they should be padded to a power of two, and the real boundary width should be provided here
+}
+```
+
+In addition, one of the following property groups must be present:
+
+```json
+{
+    "sprite_size": 230
+    //The width and height of a sprite
+}
+```
+
+```json
+{
+    "sprite_width": 230,
+    //The width of a sprite
+    "sprite_height": 256
+    //The height of a sprite
+}
+```
+
+### Mapped Textures
+
+Mapped textures are used to store multiple images into a single image. These mapped textures are mapped using unique name-to-rectangle mappings inside
+the metadata file.
+
+**Metadata**
+
+```json
+{
+    "type": "mapped",
+    "variants": {
+        ...
+    },
+    mapping: {
+        "mytex1": {
+            "x": 10,
+            "y": 20,
+            "width": 100,
+            "height": 50
+        },
+        //X, Y, Width and Height are the amount of pixels in the image
+        "mytex2": {
+            "x": 10,
+            "y": 20,
+            "w": 100,
+            "h": 50
+        },
+        //Short form
+        "mytex3": "10x10x100x50"
+        //Even shorter form
+    }
+}
+```
+
+### Animated Textures
+
+Animations are a series of still images inside a large image that get rendering based on the time. Animation images have the following requirements:
+
+- The image width is used as the size for one animation frame
+- The image height should be **exactly** the width * the amount of frames
+    - Example: An animation with a width of 64px and 15 frames should be 64 * 15 = 960 pixels in height.
+
+**Note**: the width and height can be swapped, meaning that an animation image can be either horizontal or vertical.
+
+**Metadata**
+
+```json
+{
+    "type": "animated",
+    "variants": {
+        ...
+    },
+    "fps": 10,
+    //10 Frames per Second, can be fractions: fps: 0.5 = 2 seconds per frame
+    "frame_mapping": [
+        //Optional, manually specify the frames that get played, frames can occur multiple times
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0
+        //This animation will play backwards once frame 6 (index 5) has been reached.
+    ]
+}
+```

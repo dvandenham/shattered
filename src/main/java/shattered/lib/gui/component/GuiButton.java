@@ -24,7 +24,7 @@ public class GuiButton extends IGuiComponent {
 
 	private ButtonState state = ButtonState.DEFAULT;
 	private ButtonState prevState = this.state;
-	
+
 	@NotNull
 	private String text;
 	@NotNull
@@ -43,6 +43,7 @@ public class GuiButton extends IGuiComponent {
 	@Override
 	protected void tick() {
 		if (this.state != this.prevState) {
+			this.prevState = this.state;
 			final ButtonEvent event;
 			if (!this.isEnabled()) {
 				event = new ButtonEvent.Disabled(this);
@@ -74,7 +75,6 @@ public class GuiButton extends IGuiComponent {
 			if (event != null) {
 				EventBus.post(event);
 			}
-			this.prevState = this.state;
 		}
 		if (!this.isEnabled()) {
 			this.state = ButtonState.DISABLED;

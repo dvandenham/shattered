@@ -211,18 +211,30 @@ public final class AssetRegistry {
 	}
 
 	private static void loadLua(@NotNull final ResourceLocation resource) {
+		AssetRegistry.loadLua(resource, false);
+	}
+
+	@ReflectionHelper.Reflectable
+	private static LuaAsset loadLua(@NotNull final ResourceLocation resource, final boolean customHandling) {
 		if (AssetRegistry.ASSETS.contains(resource)) {
-			return;
+			return (LuaAsset) AssetRegistry.ASSETS.get(resource);
 		}
-		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.LUA, "lua");
-		final URL location = AssetRegistry.getPathUrl(path);
-		if (location == null) {
+		final String path = AssetRegistry.getResourcePath(
+				resource,
+				!customHandling ? AssetTypes.LUA : AssetTypes.BINARY,
+				"lua"
+		);
+		if (AssetRegistry.getPathUrl(path) == null) {
 			AssetRegistry.LOGGER.error("Registered script \"{}\" does not exist!", resource);
 			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
 			AssetRegistry.registerInternal(resource, AssetTypes.LUA, null);
-			return;
+			return null;
 		}
-		AssetRegistry.registerInternal(resource, AssetTypes.LUA, new LuaAsset(resource, path));
+		final LuaAsset result = new LuaAsset(resource, path);
+		if (!customHandling) {
+			AssetRegistry.registerInternal(resource, AssetTypes.LUA, result);
+		}
+		return result;
 	}
 
 	private static void loadBinary(@NotNull final ResourceLocation resource) {

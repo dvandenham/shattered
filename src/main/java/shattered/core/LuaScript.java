@@ -61,7 +61,8 @@ public final class LuaScript {
 		}
 	}
 
-	public void executeScript() {
+	@NotNull
+	public LuaValue executeScript() {
 		if (this.scriptTessellator != null) {
 			this.scriptTessellator.startCaching();
 		}
@@ -80,13 +81,14 @@ public final class LuaScript {
 			final String message = result.checkjstring(2);
 			if (message.equals(LuaScript.SCRIPT_DESTROY_MESSAGE)) {
 				LuaMachine.LOGGER.fatal(message);
-				return;
+				return LuaValue.NIL;
 			}
 			throw new RuntimeScriptException(this.asset.getResource(), message);
 		}
 		if (this.scriptTessellator != null) {
 			this.scriptTessellator.drawCached();
 		}
+		return result.optvalue(2, LuaValue.NIL);
 	}
 
 	@NotNull

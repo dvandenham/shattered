@@ -33,7 +33,8 @@ public final class ScreenMainMenu extends AbstractScreen {
 
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)
 	private void onButtonClicked(final GuiButton.ButtonEvent.LeftClick event) {
-		if (event.get() == this.buttonShutdown) {
+		final GuiButton button = event.get();
+		if (button == this.buttonShutdown) {
 			Shattered.getInstance().stop();
 		}
 	}

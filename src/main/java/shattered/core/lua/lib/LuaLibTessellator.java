@@ -76,9 +76,11 @@ public final class LuaLibTessellator extends ILuaLib {
 				// String means ResourceLocation
 				final String resource = arg5.checkjstring();
 				LuaLibTessellator.this.tessellator.drawQuick(posX, posY, width, height, new ResourceLocation(resource));
+				return LuaValue.NIL;
 			} else if (arg5.istable()) {
 				// Table means color
 				LuaLibTessellator.this.tessellator.drawQuick(posX, posY, width, height, LuaLibTessellator.checkColor(arg5.checktable()));
+				return LuaValue.NIL;
 			}
 			return LuaValue.argerror(5, "Only Strings and Colors are accepted!");
 		}
@@ -105,11 +107,14 @@ public final class LuaLibTessellator extends ILuaLib {
 				// String means ResourceLocation
 				final String Resource = args.checkjstring(5);
 				LuaLibTessellator.this.tessellator.set(posX, posY, width, height, new ResourceLocation(Resource));
+				return LuaValue.NIL;
 			} else if (args.arg(5).istable()) {
 				//Table means color
 				LuaLibTessellator.this.tessellator.set(posX, posY, width, height, LuaLibTessellator.checkColor(args.checktable(5)));
+				return LuaValue.NIL;
+			} else {
+				return LuaValue.argerror(5, "Only Strings and Colors are accepted!");
 			}
-			return LuaValue.argerror(5, "Only Strings and Colors are accepted!");
 		}
 	}
 

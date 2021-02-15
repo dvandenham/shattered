@@ -3,6 +3,7 @@ package shattered.core;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaString;
@@ -16,6 +17,13 @@ import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
 import shattered.core.lua.LuaStringLib;
 import shattered.core.lua.ReadOnlyLuaTable;
+import shattered.core.lua.lib.LuaGlobalLibStringData;
+import shattered.core.lua.lib.LuaLibFontRenderer;
+import shattered.core.lua.lib.LuaLibTessellator;
+import shattered.lib.ResourceLocation;
+import shattered.lib.asset.AssetRegistry;
+import shattered.lib.asset.IAsset;
+import shattered.lib.asset.LuaAsset;
 
 @EventBusSubscriber("SYSTEM")
 public final class LuaMachine {
@@ -46,7 +54,45 @@ public final class LuaMachine {
 	}
 
 	@NotNull
-	public LuaValue parseScript(@NotNull final String script, @NotNull final Globals sandbox) {
+	LuaValue parseScript(@NotNull final String script, @NotNull final Globals sandbox) {
 		return this.globals.load(script, "main", sandbox);
+	}
+
+	@Nullable
+	public static LuaScript loadScript(@NotNull final ResourceLocation resource) {
+		final IAsset asset = AssetRegistry.getAsset(resource);
+		if (!(asset instanceof LuaAsset)) {
+			return null;
+		}
+		return LuaMachine.registerLibs(new LuaScript((LuaAsset) asset, false), false);
+	}
+
+	@Nullable
+	public static LuaScript loadRenderScript(@NotNull final ResourceLocation resource) {
+		final IAsset asset = AssetRegistry.getAsset(resource);
+		if (!(asset instanceof LuaAsset)) {
+			return null;
+		}
+		return LuaMachine.registerLibs(new LuaScript((LuaAsset) asset, true), true);
+	}
+
+	@NotNull
+	public static LuaScript loadScript(@NotNull final LuaAsset asset) {
+		return LuaMachine.registerLibs(new LuaScript(asset, false), false);
+	}
+
+	@NotNull
+	public static LuaScript loadRenderScript(@NotNull final LuaAsset asset) {
+		return LuaMachine.registerLibs(new LuaScript(asset, true), true);
+	}
+
+	@NotNull
+	private static LuaScript registerLibs(@NotNull final LuaScript script, final boolean canUseRenderUtils) {
+		if (canUseRenderUtils) {
+			script.register(new LuaLibTessellator());
+			script.register(new LuaGlobalLibStringData());
+			script.register(new LuaLibFontRenderer());
+		}
+		return script;
 	}
 }

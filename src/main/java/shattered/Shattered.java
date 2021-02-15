@@ -135,14 +135,17 @@ public final class Shattered {
 		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) ((Object[]) eventSetupGui.getResponse().get())[1];
 		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
 		//Setup input handlers
+		LOGGER.debug("Initializing InputHandler");
 		final MessageEvent handleInputSetupEvent = new MessageEvent("input_setup");
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
 		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
 		//Stitching textures
 		GLHelper.requestContext();
+		LOGGER.debug("Stitching all TextureAtlas subscribers");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
 		GLHelper.releaseContext();
 		//Initialize LuaMachine
+		LOGGER.debug("Initializing LuaMachine");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_lua_machine"));
 		//Stop loading screen
 		this.loadingScreen.tryStop();
@@ -246,7 +249,7 @@ public final class Shattered {
 		private final RuntimeTimerExecutor catchupAction;
 
 		//Runtime loop
-		private long iterationStartTime;
+		private long iterationStartTime = Shattered.getSystemTime();
 		private long iterationLength;
 		private double iterationAccumulator = 0;
 

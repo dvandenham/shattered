@@ -5,24 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Changed how logging works, added jvm debug arguments to README">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/LuaMachine.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/LuaScript.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/RuntimeScriptException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/ILuaConstant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/ILuaLib.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaArrayIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaSerializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaStringLib.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/LuaTableIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/ReadOnlyLuaTable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/constant/LuaConstantStateContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaGlobalLibColor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaGlobalLibStringData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaLibFontRenderer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/core/lua/lib/LuaLibTessellator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,11 +89,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/shattered/core" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -420,5 +407,16 @@
     <option name="LAST_COMMIT_MESSAGE" value="Changed how logging works, added jvm debug arguments to README" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/shattered/Shattered.java</url>
+          <line>172</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

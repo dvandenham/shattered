@@ -21,7 +21,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 final class ThreadLoadingScreen implements Runnable {
 
 	private final AtomicBoolean RUNNING = new AtomicBoolean(false);
-	private final AtomicBoolean STOPPED = new AtomicBoolean(false);
 	private final Shattered shattered;
 	private Thread thread;
 
@@ -39,11 +38,9 @@ final class ThreadLoadingScreen implements Runnable {
 
 	public void tryStop() {
 		this.RUNNING.set(false);
-		while (!this.STOPPED.get()) {
-			try {
-				this.thread.join(100);
-			} catch (final InterruptedException ignored) {
-			}
+		try {
+			this.thread.join();
+		} catch (InterruptedException ignored) {
 		}
 		glfwMakeContextCurrent(Display.getWindowId());
 	}
@@ -64,7 +61,6 @@ final class ThreadLoadingScreen implements Runnable {
 				glfwSwapBuffers(Display.getWindowId());
 				GLHelper.releaseContext();
 			}
-			this.STOPPED.set(true);
 		} catch (final Throwable e) {
 			e.printStackTrace();
 			Runtime.getRuntime().halt(-1);

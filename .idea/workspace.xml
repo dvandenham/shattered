@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Changed how logging works, added jvm debug arguments to README">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Small fixes to some lua libs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLHelper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +57,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="SET_USER_NAME_GLOBALLY" value="false" />
   </component>
   <component name="GitRewordedCommitMessages">
     <option name="commitMessagesMapping">
@@ -93,7 +96,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -107,6 +110,7 @@
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\fonts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/assets/shattered/gui/screen/test" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -362,7 +366,28 @@
       <option name="project" value="LOCAL" />
       <updated>1613081803699</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Fixed shattered freezing on linux">
+      <created>1613422782519</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1613422782519</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Fixed buttons hanging shattered">
+      <created>1613426762844</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1613426762844</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Small fixes to some lua libs">
+      <created>1613427980039</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1613427980039</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -379,9 +404,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="Added ResourceLocation, an immutable identifier" />
-    <MESSAGE value="Started working on secondary boot process" />
-    <MESSAGE value="Fixed Preboot ClassLoading (again!)" />
     <MESSAGE value="AnnotationRegistry access fix" />
     <MESSAGE value="Fixed Class transforming" />
     <MESSAGE value="Fixed EventBus class cast exception" />
@@ -404,19 +426,14 @@
     <MESSAGE value="Cleaned up the Runtime timer" />
     <MESSAGE value="Added logo to main menu, enabled vsync by default" />
     <MESSAGE value="Changed how logging works, added jvm debug arguments to README" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed how logging works, added jvm debug arguments to README" />
+    <MESSAGE value="Fixed shattered freezing on linux" />
+    <MESSAGE value="Fixed buttons hanging shattered" />
+    <MESSAGE value="Small fixes to some lua libs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Small fixes to some lua libs" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/shattered/Shattered.java</url>
-          <line>172</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Shattered$Main.ic" NAME="Main Coverage Results" MODIFIED="1613428484523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

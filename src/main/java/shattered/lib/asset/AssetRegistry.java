@@ -232,6 +232,7 @@ public final class AssetRegistry {
 		}
 		final LuaAsset result = new LuaAsset(resource, path);
 		if (!customHandling) {
+
 			AssetRegistry.registerInternal(resource, AssetTypes.LUA, result);
 		}
 		return result;

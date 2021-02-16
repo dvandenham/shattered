@@ -50,8 +50,8 @@ behaviour packs.
         10. Initializing the GuiManager (init_gui)
         11. Instantiating the main menu screen and registering it into the GuiManager.
         12. Initializing the keyboard/mouse input handler (input_setup).
-        13. Let the Atlas work it's magic (atlas_stitch)
-        14. Configure the LuaMachine (init_lua_machine)
+        13. Configure the LuaMachine (init_lua_machine)
+        14. Let the Atlas work it's magic (atlas_stitch)
         15. Stopping the loading screen thread.
         16. Starting the core runtime.
         17. Playing the boot animation and boot sound.

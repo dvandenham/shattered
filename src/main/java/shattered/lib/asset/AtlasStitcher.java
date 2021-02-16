@@ -80,6 +80,7 @@ public final class AtlasStitcher {
 		if (this.complete || this.nextAtlasId <= 0) {
 			return;
 		}
+		final long startTime = Shattered.getSystemTime();
 		final Dimension atlasSize = Dimension.createMutable(64, 64);
 		int tries = 0;
 		while (!this.complete) {
@@ -110,7 +111,8 @@ public final class AtlasStitcher {
 			}
 		}
 		this.dataList.clear();
-		Shattered.LOGGER.debug("Created a {}x{} atlas", atlasSize.getWidth(), atlasSize.getHeight());
+		final long duration = Shattered.getSystemTime() - startTime;
+		Shattered.LOGGER.debug("Created a {}x{} atlas (stitching took {} milliseconds)", atlasSize.getWidth(), atlasSize.getHeight(), duration);
 	}
 
 	@Nullable

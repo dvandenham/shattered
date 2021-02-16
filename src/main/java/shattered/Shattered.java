@@ -74,6 +74,7 @@ public final class Shattered {
 		}
 		Shattered.LOGGER.info("Starting {} (version: {})!", Shattered.NAME, Shattered.VERSION);
 		//Register all automatic EventBus subscribers
+		Shattered.LOGGER.debug("Registering automatic EventBus subscribers");
 		AnnotationRegistry.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener ->
 				EventBus.register(listener, listener.getDeclaredAnnotation(EventBusSubscriber.class).value())
 		);
@@ -88,11 +89,17 @@ public final class Shattered {
 	}
 
 	private Shattered(final String[] args) {
-		this.initRegistries();
+		Shattered.LOGGER.debug("Notifying registry holders for registry creation");
+		final CreateRegistryEvent event = ReflectionHelper.instantiate(CreateRegistryEvent.class);
+		assert event != null;
+		Shattered.SYSTEM_BUS.post(event);
 
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_glfw"));
 
+		Shattered.LOGGER.debug("Loading static assets");
 		StaticAssets.loadAssets();
+
+		Shattered.LOGGER.debug("Initializing rendering system");
 		final Tessellator tessellator = ReflectionHelper.instantiate(TessellatorImpl.class);
 		if (tessellator == null) {
 			Shattered.LOGGER.fatal("Could not initialize Tessellator!");
@@ -109,12 +116,6 @@ public final class Shattered {
 		this.loadingScreen = new ThreadLoadingScreen(this);
 	}
 
-	private void initRegistries() {
-		final CreateRegistryEvent event = ReflectionHelper.instantiate(CreateRegistryEvent.class);
-		assert event != null;
-		Shattered.SYSTEM_BUS.post(event);
-	}
-
 	private void startLoadingScreen() {
 		((TessellatorImpl) this.tessellator).setShader(StaticAssets.SHADER);
 		StaticAssets.SHADER.bind();
@@ -124,9 +125,13 @@ public final class Shattered {
 
 	private void startLoading() {
 		//Load assets
+		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
+
 		//TODO load config here
+
 		//Initialize GuiHandler and main menu screen
+		Shattered.LOGGER.debug("Initializing gui system");
 		final MessageEvent eventSetupGui = new MessageEvent("init_gui");
 		Shattered.SYSTEM_BUS.post(eventSetupGui);
 		assert eventSetupGui.getResponse() != null;
@@ -134,21 +139,23 @@ public final class Shattered {
 		//noinspection unchecked
 		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) ((Object[]) eventSetupGui.getResponse().get())[1];
 		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
+
 		//Setup input handlers
-		LOGGER.debug("Initializing InputHandler");
+		Shattered.LOGGER.debug("Initializing keyboard/mouse input handler");
 		final MessageEvent handleInputSetupEvent = new MessageEvent("input_setup");
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
 		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
-		//Stitching textures
-		GLHelper.requestContext();
-		LOGGER.debug("Stitching all TextureAtlas subscribers");
-		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
-		GLHelper.releaseContext();
+
 		//Initialize LuaMachine
-		LOGGER.debug("Initializing LuaMachine");
+		Shattered.LOGGER.debug("Initializing LuaMachine");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_lua_machine"));
+
 		//Stop loading screen
 		this.loadingScreen.tryStop();
+
+		//Stitching textures
+		Shattered.LOGGER.debug("Stitching all TextureAtlas subscribers");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
 	}
 
 	private void startRuntime() {

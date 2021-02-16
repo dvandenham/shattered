@@ -1,11 +1,8 @@
 package shattered.lib.gfx;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4f;
-import org.lwjgl.opengl.GL;
 import shattered.lib.math.Rectangle;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
@@ -15,11 +12,9 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL11.glScissor;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public final class GLHelper {
 
-	private static final ReentrantReadWriteLock LOCK = new ReentrantReadWriteLock(false);
 	private static final Vector4f SCISSOR_TRANSFORM = new Vector4f(0, 0, 1, 1);
 	private static boolean isSmoothing = false;
 
@@ -80,22 +75,5 @@ public final class GLHelper {
 
 	public static void disableScissor() {
 		glScissor(0, 0, Display.getWidth(), Display.getHeight());
-	}
-
-	public static void requestContext() {
-		GLHelper.LOCK.writeLock().lock();
-		glfwMakeContextCurrent(Display.getWindowId());
-		GL.createCapabilities();
-	}
-
-	public static void releaseContext() {
-		final ReentrantReadWriteLock.ReadLock lock = GLHelper.LOCK.readLock();
-		lock.lock();
-		GLHelper.LOCK.writeLock().unlock();
-		try {
-			glfwMakeContextCurrent(NULL);
-		} finally {
-			lock.unlock();
-		}
 	}
 }

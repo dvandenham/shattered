@@ -1,6 +1,7 @@
 package shattered.lib.json;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,6 +26,9 @@ final class JsonValidator {
 	public static void validate(@NotNull final JsonObject object, @NotNull final Class<?> type, @Nullable final String path) {
 		//Collect all non-ignored fields
 		final Field[] allFields = ReflectionHelper.collectFields(type, field -> {
+			if (Modifier.isStatic(field.getModifiers())) {
+				return false;
+			}
 			if (field.isAnnotationPresent(Json.Ignore.class)) {
 				return false;
 			}
@@ -37,7 +41,7 @@ final class JsonValidator {
 		//Collect all required fields that do not belong to a typed relationship
 		final Field[] requiredFields = ReflectionHelper.filterFields(allFields, field -> field.isAnnotationPresent(Json.Required.class) && !field.isAnnotationPresent(Json.TypeValue.class));
 		for (final Field field : requiredFields) {
-			final String        name     = JsonValidator.getFieldName(field);
+			final String name = JsonValidator.getFieldName(field);
 			final Json.Required required = field.getAnnotation(Json.Required.class);
 			if (required.group().length == 0 && JsonUtils.isNull(object, name)) {
 				throw JsonValidator.createException("Missing (or invalid) required attribute '%s'", path, name);
@@ -95,7 +99,7 @@ final class JsonValidator {
 
 	private static void throwGroupRequirementException(@NotNull final String prefix, @NotNull final Map<String, List<Field>> fields, @Nullable final String path) {
 		final StringBuilder builder = new StringBuilder(prefix);
-		boolean             first   = true;
+		boolean first = true;
 		for (final List<Field> allFields : fields.values()) {
 			builder.append(Arrays.toString(allFields.stream().map(JsonValidator::getFieldName).toArray(String[]::new)));
 			if (first) {

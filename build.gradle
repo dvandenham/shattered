@@ -2,7 +2,7 @@ plugins {
     id "java"
 }
 
-targetCompatibility = sourceCompatibility  = "1.8"
+targetCompatibility = sourceCompatibility = "1.8"
 
 def NAME = rootProject.name
 def VERSION = "0.0.1"

@@ -59,6 +59,8 @@ interface IKeyValueStore {
 
 	boolean hasKey(@NotNull final String name, @NotNull JDBKeyTypes type);
 
+	boolean hasKey(@NotNull final String name);
+
 	boolean getBoolean(@NotNull String name);
 
 	byte getByte(@NotNull String name);
@@ -92,6 +94,8 @@ interface IKeyValueStore {
 
 	@Nullable
 	Object getKey(@NotNull String name);
+
+	void remove(@NotNull String name);
 
 	String[] getKeyNames();
 

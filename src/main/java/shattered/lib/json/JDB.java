@@ -165,6 +165,11 @@ public final class JDB implements IKeyValueStore {
 	}
 
 	@Override
+	public boolean hasKey(@NotNull final String name) {
+		return this.data.hasKey(name);
+	}
+
+	@Override
 	public boolean getBoolean(@NotNull final String name) {
 		return this.data.getBoolean(name);
 	}
@@ -238,6 +243,11 @@ public final class JDB implements IKeyValueStore {
 	@Nullable
 	public Object getKey(@NotNull final String name) {
 		return this.data.getKey(name);
+	}
+
+	@Override
+	public void remove(@NotNull final String name) {
+		this.data.remove(name);
 	}
 
 	@Override

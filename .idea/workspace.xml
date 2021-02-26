@@ -4,14 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Small fixes to some lua libs">
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added more logging during boot process">
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/ThreadLoadingScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLHelper.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -387,7 +384,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613427980039</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Added more logging during boot process">
+      <created>1613470928454</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1613470928454</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -404,7 +408,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="AnnotationRegistry access fix" />
     <MESSAGE value="Fixed Class transforming" />
     <MESSAGE value="Fixed EventBus class cast exception" />
     <MESSAGE value="Fixed RegistryFrozenException name" />
@@ -429,7 +432,8 @@
     <MESSAGE value="Fixed shattered freezing on linux" />
     <MESSAGE value="Fixed buttons hanging shattered" />
     <MESSAGE value="Small fixes to some lua libs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Small fixes to some lua libs" />
+    <MESSAGE value="Added more logging during boot process" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added more logging during boot process" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

@@ -1,6 +1,7 @@
 package shattered;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
@@ -25,6 +26,7 @@ import shattered.core.event.IEventBus;
 import shattered.core.event.MessageEvent;
 import shattered.lib.Color;
 import shattered.lib.ReflectionHelper;
+import shattered.lib.Workspace;
 import shattered.lib.asset.FontGroup;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
@@ -50,6 +52,7 @@ public final class Shattered {
 	public static final Logger LOGGER = LogManager.getLogger(Shattered.NAME);
 	public static final String SYSTEM_BUS_NAME = "SYSTEM";
 	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
+	public static final Workspace WORKSPACE = ReflectionHelper.instantiate(Workspace.class, String.class, Shattered.NAME.toLowerCase(Locale.ROOT));
 
 	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
 

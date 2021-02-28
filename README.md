@@ -40,13 +40,13 @@ behaviour packs.
       (text between parentheses is a system message event):
         1. Creating the system EventBus.
         2. Automatically registering all classes annotated with the @EventBusSubscriber annotation into their respective EventBus.
-        3. Posting the CreateRegistryEvent, causing all registries to be created and registered into a master registry.
-        4. Initializing GLFW (init_glfw) and the rendering system.
-        5. Loading initial assets for the loading screen.
-        6. Booting up the rendering system and starting the loading screen thread.
-        7. Loading, parsing and validating the json-based registries for every asset type (init_assets).
-        8. Loading all assets defined into these registries into real registries, one asset type at a time.
-        9. Loading the configuration database.
+        3. Loading the configuration database (load_config).
+        4. Posting the CreateRegistryEvent, causing all registries to be created and registered into a master registry.
+        5. Initializing GLFW (init_glfw) and the rendering system.
+        6. Loading initial assets for the loading screen.
+        7. Booting up the rendering system and starting the loading screen thread.
+        8. Loading, parsing and validating the json-based registries for every asset type (init_assets).
+        9. Loading all assets defined into these registries into real registries, one asset type at a time.
         10. Initializing the GuiManager (init_gui)
         11. Instantiating the main menu screen and registering it into the GuiManager.
         12. Initializing the keyboard/mouse input handler (input_setup).

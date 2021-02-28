@@ -1,6 +1,7 @@
 package shattered.lib.json;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,9 @@ final class StringTypeValidator {
 
 			//Validate nested objects
 			for (final Field field : clazz.getDeclaredFields()) {
+				if (Modifier.isStatic(field.getModifiers())) {
+					continue;
+				}
 				final Class<?> fieldType = field.getType();
 				//Validate nested objects
 				if (JsonUtils.GSON.getAdapter(fieldType) instanceof ReflectiveTypeAdapterFactory.Adapter) {
@@ -91,7 +95,7 @@ final class StringTypeValidator {
 		for (final Field field : controllers) {
 			if (field.isAnnotationPresent(Json.TypeControllerString.class)) {
 				final Json.TypeControllerString annotation = field.getAnnotation(Json.TypeControllerString.class);
-				final String                    value      = (String) field.get(instance);
+				final String value = (String) field.get(instance);
 				if (value == null && !field.isAnnotationPresent(Json.Required.class)) {
 					continue;
 				}
@@ -101,7 +105,7 @@ final class StringTypeValidator {
 				controllerValues.put(annotation.controller(), value);
 			} else if (field.isAnnotationPresent(Json.TypeControllerEnum.class)) {
 				final Json.TypeControllerEnum annotation = field.getAnnotation(Json.TypeControllerEnum.class);
-				final Enum<?>                 value      = (Enum<?>) field.get(instance);
+				final Enum<?> value = (Enum<?>) field.get(instance);
 				if (value == null) {
 					if (!field.isAnnotationPresent(Json.Required.class)) {
 						continue;
@@ -116,8 +120,8 @@ final class StringTypeValidator {
 
 	private static void validateParsed(@NotNull final JsonObject object, @NotNull final List<Field> values, @NotNull final Object instance, final HashMap<String, String> controllerValues, @Nullable final String path) throws IllegalAccessException {
 		for (final Field field : values) {
-			final Json.TypeValue annotation      = field.getAnnotation(Json.TypeValue.class);
-			final String         controllerValue = controllerValues.get(annotation.controller());
+			final Json.TypeValue annotation = field.getAnnotation(Json.TypeValue.class);
+			final String controllerValue = controllerValues.get(annotation.controller());
 			if (field.isAnnotationPresent(Json.Required.class) && field.getAnnotation(Json.Required.class).group().length == 0 && controllerValue.equalsIgnoreCase(annotation.type())) {
 				throw JsonValidator.createException("Field(%s=%s) was marked required but controller was not defined!", path, JsonValidator.getFieldName(field), annotation.type());
 			}
@@ -155,8 +159,8 @@ final class StringTypeValidator {
 			if (!field.isAnnotationPresent(Json.Required.class)) {
 				return false;
 			}
-			final Json.TypeValue annotation      = field.getAnnotation(Json.TypeValue.class);
-			final String         controllerValue = controllerValues.get(annotation.controller());
+			final Json.TypeValue annotation = field.getAnnotation(Json.TypeValue.class);
+			final String controllerValue = controllerValues.get(annotation.controller());
 			return controllerValue.equals(annotation.type());
 		}).toArray(Field[]::new), path);
 	}

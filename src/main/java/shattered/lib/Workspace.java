@@ -66,7 +66,7 @@ public final class Workspace {
 
 	private File createDir(@NotNull final File parent, final String name) {
 		final File result = new File(parent, name);
-		if (!result.mkdirs()) {
+		if (!result.exists() && !result.mkdirs()) {
 			throw new RuntimeException("Could not create workspace sub-directory! (path: " + result.getAbsolutePath() + ")");
 		}
 		return result;

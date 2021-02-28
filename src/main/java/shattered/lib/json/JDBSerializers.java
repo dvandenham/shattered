@@ -25,6 +25,7 @@ public final class JDBSerializers {
 		writer.write(JDB.HEADER);
 		writer.write('\n');
 		writer.write(JDBSerializers.GSON.toJson(data.data, JDBTable.class));
+		writer.flush();
 	}
 
 	public static JDB deserialize(@NotNull final Reader reader) throws IOException {

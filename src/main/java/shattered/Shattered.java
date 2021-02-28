@@ -52,7 +52,9 @@ public final class Shattered {
 	public static final Logger LOGGER = LogManager.getLogger(Shattered.NAME);
 	public static final String SYSTEM_BUS_NAME = "SYSTEM";
 	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
-	public static final Workspace WORKSPACE = ReflectionHelper.instantiate(Workspace.class, String.class, Shattered.NAME.toLowerCase(Locale.ROOT));
+	public static final Workspace WORKSPACE = Objects.requireNonNull(
+			ReflectionHelper.instantiate(Workspace.class, String.class, Shattered.NAME.toLowerCase(Locale.ROOT))
+	);
 
 	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
 
@@ -81,6 +83,10 @@ public final class Shattered {
 		AnnotationRegistry.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener ->
 				EventBus.register(listener, listener.getDeclaredAnnotation(EventBusSubscriber.class).value())
 		);
+		//Load config database
+		Shattered.LOGGER.info("Loading config database!");
+		Config.load();
+//		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
 		//Create all registry instances
 		Shattered.instance = new Shattered(args);
 		Shattered.instance.startLoadingScreen();

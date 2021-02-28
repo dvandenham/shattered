@@ -24,6 +24,7 @@ import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.Config;
 import shattered.Shattered;
 import shattered.lib.math.Dimension;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -63,7 +64,10 @@ final class GLFWSetup {
 
 	private static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer.glfw");
 	private static final Logger LOGGER = LogManager.getLogger("GLFW");
-	static final Dimension DISPLAY_SIZE = Dimension.createMutable(800, 600);
+	static final Dimension DISPLAY_SIZE = Dimension.createMutable(
+			Config.getInstance().display.size.getWidth(),
+			Config.getInstance().display.size.getHeight()
+	);
 	static long windowId;
 	static double scale = 1;
 
@@ -145,8 +149,7 @@ final class GLFWSetup {
 		glfwMakeContextCurrent(GLFWSetup.windowId);
 		GL.createCapabilities();
 
-		//TODO make this configurable
-		glfwSwapInterval(1);
+		glfwSwapInterval(Config.getInstance().display.vsync ? 1 : 0);
 
 		if (GLFWSetup.DEVELOPER_MODE) {
 			GLUtil.setupDebugMessageCallback(System.err);
@@ -195,6 +198,8 @@ final class GLFWSetup {
 	}
 
 	static void sendResizeEvent() {
+		Config.getInstance().display.size = GLFWSetup.DISPLAY_SIZE.toImmutable();
+		Config.save();
 		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		TessellatorImpl.resize();
 		EventBus.post(new DisplayResizedEvent());

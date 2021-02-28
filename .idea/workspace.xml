@@ -4,11 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Added more logging during boot process">
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/Config.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/config/ConfigManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/config/IOption.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/IKeyValueStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/IKeyValueStore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBKeyTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBKeyTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBSerializers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBSerializers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/StringTypeValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/StringTypeValidator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +109,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
@@ -436,6 +452,17 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added more logging during boot process" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonValidator.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Shattered$Main.ic" NAME="Main Coverage Results" MODIFIED="1613428484523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

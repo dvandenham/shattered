@@ -3,7 +3,7 @@ package shattered.lib.json;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
-enum JDBKeyTypes {
+public enum JDBKeyTypes {
 
 	BOOLEAN(obj -> obj instanceof Boolean),
 	BYTE(obj -> obj instanceof Number),
@@ -26,5 +26,4 @@ enum JDBKeyTypes {
 	public boolean matchesObject(@NotNull final Object object) {
 		return this.predicate.test(object);
 	}
-
 }

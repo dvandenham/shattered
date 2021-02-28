@@ -151,6 +151,11 @@ public final class JDBTable extends JDBCollection implements IKeyValueStore {
 	}
 
 	@Override
+	public boolean hasKey(@NotNull final String name) {
+		return this.data.get(name) != null;
+	}
+
+	@Override
 	public boolean hasKey(@NotNull final String name, @NotNull final JDBKeyTypes type) {
 		final Object result = this.data.get(name);
 		return result != null && type.matchesObject(result);
@@ -240,6 +245,11 @@ public final class JDBTable extends JDBCollection implements IKeyValueStore {
 	@Nullable
 	public Object getKey(@NotNull final String name) {
 		return this.data.get(name);
+	}
+
+	@Override
+	public void remove(@NotNull final String name) {
+		this.data.remove(name);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import nl.appelgebakje22.preboot.PrebootRegistry;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import preboot.AnnotationRegistry;
 import preboot.BootManager;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
@@ -69,7 +69,7 @@ public final class Shattered {
 	private Runnable delegateInputPoller;
 
 	@SuppressWarnings("unused")
-	public static void start(final String[] args) {
+	public static void start(final PrebootRegistry booter, final String[] args) {
 		if (Shattered.DEVELOPER_MODE) {
 			final LoggerContext context = (LoggerContext) LogManager.getContext(false);
 			final Configuration configuration = context.getConfiguration();
@@ -80,7 +80,7 @@ public final class Shattered {
 		Shattered.LOGGER.info("Starting {} (version: {})!", Shattered.NAME, Shattered.VERSION);
 		//Register all automatic EventBus subscribers
 		Shattered.LOGGER.debug("Registering automatic EventBus subscribers");
-		AnnotationRegistry.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener ->
+		booter.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener ->
 				EventBus.register(listener, listener.getDeclaredAnnotation(EventBusSubscriber.class).value())
 		);
 		//Load config database

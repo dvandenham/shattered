@@ -1,6 +1,6 @@
-package preboot;
+package nl.appelgebakje22.preboot;
 
-interface ITransformer {
+public interface ITransformer {
 
 	byte[] transform(String className, byte[] bytes);
 

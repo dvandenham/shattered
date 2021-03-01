@@ -4,27 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/config/ConfigManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/config/IOption.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Started working on config, persist display size">
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/PrebootRegistry.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/PrebootRegistryImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/pack/PluginPackDetector.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/AnnotationRegistry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/ClassCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ClassCollector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/ITransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ITransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/PrebootClassLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventBusSubscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventBusSubscriber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerJson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerMessageListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/IKeyValueStore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/IKeyValueStore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBKeyTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBKeyTypes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBSerializers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBSerializers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JDBTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/JsonValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/json/StringTypeValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/json/StringTypeValidator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +58,8 @@
       <list>
         <option value="AnnotationType" />
         <option value="Enum" />
-        <option value="Interface" />
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -105,7 +100,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -116,15 +111,18 @@
       <recent name="shattered.lib.registry" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\nl\appelgebakje22\preboot" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core\lua" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\gui" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered\fonts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/assets/shattered/gui/screen/test" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="nl.appelgebakje22.preboot" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="shattered.lib.gui" />
@@ -135,7 +133,7 @@
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Shattered.main" />
-      <option name="VM_PARAMETERS" value="-Dshattered.developer=true" />
+      <option name="VM_PARAMETERS" value="-Dshattered.developer=true -Dpreboot.developer=true" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -407,7 +405,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613470928454</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Started working on config, persist display size">
+      <created>1614547140249</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1614547140249</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -424,7 +429,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="Fixed Class transforming" />
     <MESSAGE value="Fixed EventBus class cast exception" />
     <MESSAGE value="Fixed RegistryFrozenException name" />
     <MESSAGE value="Fixed Preboot not finding resources" />
@@ -449,7 +453,8 @@
     <MESSAGE value="Fixed buttons hanging shattered" />
     <MESSAGE value="Small fixes to some lua libs" />
     <MESSAGE value="Added more logging during boot process" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added more logging during boot process" />
+    <MESSAGE value="Started working on config, persist display size" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started working on config, persist display size" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

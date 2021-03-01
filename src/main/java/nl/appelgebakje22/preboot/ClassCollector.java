@@ -1,4 +1,4 @@
-package preboot;
+package nl.appelgebakje22.preboot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

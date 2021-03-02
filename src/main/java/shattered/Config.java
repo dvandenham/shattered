@@ -29,7 +29,7 @@ public final class Config {
 		try {
 			Config.INSTANCE = JsonUtils.deserialize(Shattered.WORKSPACE.getDataFile("config.db"), Config.class);
 		} catch (final FileNotFoundException e) {
-			e.printStackTrace();
+			Shattered.LOGGER.warn("Could not find config database, loading defaults");
 		}
 	}
 
@@ -37,7 +37,10 @@ public final class Config {
 		try (final FileWriter writer = new FileWriter(Shattered.WORKSPACE.getDataFile("config.db"))) {
 			JsonUtils.GSON.toJson(Config.getInstance(), writer);
 		} catch (final IOException e) {
-			e.printStackTrace();
+			Shattered.LOGGER.warn("Could not save config database");
+			if (Shattered.DEVELOPER_MODE) {
+				Shattered.LOGGER.warn(e);
+			}
 		}
 	}
 }

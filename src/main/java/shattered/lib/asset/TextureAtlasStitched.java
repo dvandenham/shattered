@@ -7,7 +7,7 @@ import shattered.lib.math.Rectangle;
 
 final class TextureAtlasStitched extends TextureAtlasDefault {
 
-	private final int       usableWidth;
+	private final int usableWidth;
 	private final Dimension spriteSize;
 
 	public TextureAtlasStitched(

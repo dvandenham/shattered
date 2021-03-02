@@ -1,8 +1,8 @@
 package shattered.lib.registry;
 
 import org.jetbrains.annotations.NotNull;
-import shattered.core.event.Event;
 import shattered.lib.ResourceLocation;
+import shattered.lib.event.Event;
 
 public final class CreateRegistryEvent extends Event<Void> {
 

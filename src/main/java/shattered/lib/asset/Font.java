@@ -7,10 +7,10 @@ import shattered.lib.math.Rectangle;
 
 public final class Font {
 
-	final         ConcurrentHashMap<Character, Integer>           charMap      = new ConcurrentHashMap<>();
-	final         ConcurrentHashMap<Integer, TextureAtlasDefault> charTextures = new ConcurrentHashMap<>();
-	private final int                                             size;
-	final         AtlasStitcher                                   atlas;
+	final ConcurrentHashMap<Character, Integer> charMap = new ConcurrentHashMap<>();
+	final ConcurrentHashMap<Integer, TextureAtlasDefault> charTextures = new ConcurrentHashMap<>();
+	private final int size;
+	final AtlasStitcher atlas;
 
 	Font(@NotNull final AtlasStitcher atlas, final int size) {
 		this.atlas = atlas;

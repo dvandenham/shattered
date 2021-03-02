@@ -1,4 +1,4 @@
-package shattered.core.event;
+package shattered.lib.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

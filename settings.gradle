@@ -1,1 +1,3 @@
 rootProject.name = "Shattered"
+
+include "plugin_lib"

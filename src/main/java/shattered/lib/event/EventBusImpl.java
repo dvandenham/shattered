@@ -1,4 +1,4 @@
-package shattered.core.event;
+package shattered.lib.event;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,7 +22,7 @@ public final class EventBusImpl implements IEventBus {
 
 	EventBusImpl(@NotNull final String name) {
 		this.name = name;
-		EventBus.BUS_REGISTRY.put(name, this);
+		EventBusHandler.BUS_REGISTRY.put(name, this);
 	}
 
 	@Override

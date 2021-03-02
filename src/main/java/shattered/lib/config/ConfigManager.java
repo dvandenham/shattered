@@ -4,19 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
 import shattered.Shattered;
 import shattered.lib.Color;
 import shattered.lib.FastNamedObjectMap;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
 import shattered.lib.json.JDB;
 import shattered.lib.json.JDBKeyTypes;
 import shattered.lib.json.JDBTable;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfigManager {
 
@@ -102,8 +102,8 @@ public class ConfigManager {
 					ConfigManager.save();
 				}
 			} catch (final IOException e) {
-				Shattered.LOGGER.fatal("Could not read config!", e);
-				Runtime.getRuntime().halt(-1);
+				Shattered.LOGGER.warn("Could not read config!", e);
+				ConfigManager.save();
 			}
 		}
 	}

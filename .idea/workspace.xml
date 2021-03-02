@@ -4,22 +4,88 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Started working on config, persist display size">
-      <change afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/PrebootRegistry.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/PrebootRegistryImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/pack/PluginPackDetector.java" afterDir="false" />
+    <list default="true" id="8d6596a5-a083-41fe-b6f0-b1e661a8846e" name="Default Changelist" comment="Changed how Preboot works">
+      <change afterPath="$PROJECT_DIR$/plugin_lib/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin_lib/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/IInput.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/Input.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/ShatteredLibrary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/EventBus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/plugin/Plugin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerPrivateStaticFinal.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/pack/PluginContainer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/pack/PluginLoader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/shattered/pack/PluginManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/AnnotationRegistry.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/ClassCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ClassCollector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/ITransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ITransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ClassCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ClassCollector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ITransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/ITransformer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/Preboot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/PrebootClassLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot/PrebootClassLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformationRegistry.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventBusSubscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventBusSubscriber.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerJson.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/preboot/TransformerMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/preboot/TransformerMessageListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Config.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/Shattered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/LuaMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/core/LuaMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/event/EventBusHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/event/EventBusImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventBusSubscriber.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/EventBusSubscriber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/event/EventHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/EventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/EventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/IEventBus.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/IEventBus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/IEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/IEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/MessageEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/MessageEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/core/event/MessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/event/MessageListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Color.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/Color.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/InputImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/InvalidResourceLocationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/InvalidResourceLocationException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Localizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Localizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/ReflectionHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/ResourceLocation.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/ResourceLocation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/Workspace.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AssetRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/AtlasStitcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/Font.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/Font.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImageLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImagePacker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/ImagePacker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasAnimated.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasAnimated.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasDefault.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasDefault.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasMapped.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasMapped.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasStitched.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureAtlasStitched.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureSimple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/asset/TextureSimple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/config/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/config/ConfigManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Callbacks.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Callbacks.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/DisplayResizedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gfx/DisplayResizedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/FontRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gfx/FontRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/GLFWSetup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/StringData.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gfx/StringData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/Tessellator.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gfx/Tessellator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/TessellatorImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gfx/WriteCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gfx/WriteCall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/DefaultLayout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/DefaultLayout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/GuiPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gui/GuiPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IComponentContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gui/IComponentContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gui/IGuiComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/IGuiScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gui/IGuiScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/Layout.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gui/Layout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/ScreenEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/gui/ScreenEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/component/GuiButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/gui/component/GuiButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/math/Dimension.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/math/Dimension.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/math/MathHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/math/MathHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/math/Point.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/math/Point.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/math/Rectangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/plugin_lib/src/main/java/shattered/lib/math/Rectangle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/BaseRegistry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/BaseRegistry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/CreateRegistryEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/lib/registry/CreateRegistryEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/pack/PluginPackDetector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/shattered/screen/ScreenMainMenu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,10 +122,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="AnnotationType" />
         <option value="Enum" />
-        <option value="Class" />
+        <option value="AnnotationType" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -70,12 +136,12 @@
   <component name="GitRewordedCommitMessages">
     <option name="commitMessagesMapping">
       <RewordedCommitMessageMapping>
-        <option name="originalMessage" value="Added basic workings of the EventBus" />
-        <option name="rewordedMessage" value="Added basic workings of the EventBus" />
+        <option name="originalMessage" value="Temp" />
+        <option name="rewordedMessage" value="Started working on config, persist display size" />
       </RewordedCommitMessageMapping>
     </option>
     <option name="currentCommit" value="1" />
-    <option name="onto" value="6643dfb412c4360b008ccdabc582209b94d609e6" />
+    <option name="onto" value="7269b121a560c44c349b05610e56b19ba7cb9b56" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -100,9 +166,9 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/nl/appelgebakje22/preboot" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/plugin_lib" />
     <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
@@ -111,20 +177,25 @@
       <recent name="shattered.lib.registry" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Satan\Desktop\Shattered\plugin_lib" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\nl\appelgebakje22\preboot" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\core\lua" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib" />
-      <recent name="C:\Users\Satan\Desktop\Shattered\src\main\java\shattered\lib\gui" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/assets/shattered/gui/screen/test" />
       <recent name="C:\Users\Satan\Desktop\Shattered\src\main\resources\assets\shattered" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="shattered.lib" />
       <recent name="nl.appelgebakje22.preboot" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="shattered.lib" />
       <recent name="shattered.lib.gui" />
       <recent name="preboot" />
     </key>
@@ -412,7 +483,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614547140249</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Changed how Preboot works">
+      <created>1614633583056</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1614633583056</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -429,7 +507,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="SHOW_DIRTY_RECURSIVELY" value="true" />
-    <MESSAGE value="Fixed EventBus class cast exception" />
     <MESSAGE value="Fixed RegistryFrozenException name" />
     <MESSAGE value="Fixed Preboot not finding resources" />
     <MESSAGE value="Added JSON and math utils" />
@@ -454,7 +531,8 @@
     <MESSAGE value="Small fixes to some lua libs" />
     <MESSAGE value="Added more logging during boot process" />
     <MESSAGE value="Started working on config, persist display size" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started working on config, persist display size" />
+    <MESSAGE value="Changed how Preboot works" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed how Preboot works" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="true" />
   </component>

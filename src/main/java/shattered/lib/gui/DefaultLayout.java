@@ -191,4 +191,8 @@ public final class DefaultLayout extends Layout {
 	public Layout recreate() {
 		return this.recreate(this.componentHeight, this.componentSpacing);
 	}
+
+	static DefaultLayout create(@NotNull final IGuiScreen screen) {
+		return new DefaultLayout(48, 4, screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
+	}
 }

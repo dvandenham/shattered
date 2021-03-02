@@ -11,7 +11,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.CheckClassAdapter;
-import shattered.core.event.EventListener;
+import shattered.lib.event.EventListener;
 
 final class TransformerEventListener implements ITransformer {
 
@@ -32,7 +32,7 @@ final class TransformerEventListener implements ITransformer {
 		}
 		final ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		final CheckClassAdapter adapter = new CheckClassAdapter(writer);
-		node.accept(new ClassVisitor(Opcodes.ASM5, adapter) {
+		node.accept(new ClassVisitor(ITransformer.ASM_VERSION, adapter) {
 
 			@Override
 			public MethodVisitor visitMethod(final int access, final String name, final String descriptor, final String signature, final String[] exceptions) {

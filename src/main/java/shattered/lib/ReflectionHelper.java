@@ -8,7 +8,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
@@ -70,23 +69,15 @@ public final class ReflectionHelper {
 
 	public static void setField(@NotNull final Field field, @Nullable final Object instance, @Nullable final Object newValue) {
 		try {
-			final boolean accessible = field.isAccessible();
+			@SuppressWarnings("deprecation") final boolean accessible = field.isAccessible();
 			field.setAccessible(true);
-			final boolean isFinal = Modifier.isFinal(field.getModifiers());
-
-			Field modifiersField = null;
-			if (isFinal) {
-				modifiersField = Field.class.getDeclaredField("modifiers");
-				modifiersField.setAccessible(true);
-				modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-			}
 			field.set(instance, newValue);
-			if (isFinal) {
-				modifiersField.setInt(field, field.getModifiers() & Modifier.FINAL);
-				modifiersField.setAccessible(false);
-			}
 			field.setAccessible(accessible);
-		} catch (final Throwable ignored) {
+		} catch (final Throwable e) {
+			if (Shattered.DEVELOPER_MODE) {
+				Shattered.LOGGER.fatal(e);
+				Shattered.crash("Error during reflective modification");
+			}
 		}
 	}
 

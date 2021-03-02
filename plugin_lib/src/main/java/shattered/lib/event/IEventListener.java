@@ -1,4 +1,4 @@
-package shattered.core.event;
+package shattered.lib.event;
 
 public interface IEventListener {
 

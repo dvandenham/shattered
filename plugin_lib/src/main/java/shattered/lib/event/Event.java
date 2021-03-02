@@ -1,11 +1,11 @@
-package shattered.core.event;
+package shattered.lib.event;
 
 import org.jetbrains.annotations.Nullable;
 
 public abstract class Event<T> {
 
-	private final T       data;
-	private       boolean cancelled = false;
+	private final T data;
+	private boolean cancelled = false;
 
 	public Event() {
 		this.data = null;

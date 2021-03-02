@@ -21,7 +21,7 @@ final class TextureAtlasMapped extends TextureAtlasDefault {
 		super(resource, atlas, atlasId, imageSize);
 		this.mapping = mapping;
 	}
-	
+
 	@Nullable
 	public TextureAtlasSub getSubTexture(@NotNull final String name) {
 		final Rectangle bounds = this.mapping.get(name);

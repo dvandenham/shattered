@@ -93,7 +93,10 @@ final class ClassCollector {
 		protected List<String> getEntries() {
 			final ArrayList<File> result = new ArrayList<>();
 			CollectorDirectory.collectFiles(CollectorDirectory.createDirIterator(this.directory), result);
-			return result.stream().map(File::getAbsolutePath).collect(Collectors.toList());
+			return result.stream()
+					.filter(file -> file.getName().endsWith(".class"))
+					.map(File::getAbsolutePath)
+					.collect(Collectors.toList());
 		}
 
 		@Override
@@ -174,7 +177,10 @@ final class ClassCollector {
 			final ArrayList<String> result = new ArrayList<>();
 			for (final Enumeration<JarEntry> entries = this.jar.entries(); entries.hasMoreElements(); ) {
 				final JarEntry entry = entries.nextElement();
-				result.add(entry.getName());
+				final String name = entry.getName();
+				if (name.endsWith(".class")) {
+					result.add(name);
+				}
 			}
 			return result;
 		}

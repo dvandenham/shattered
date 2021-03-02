@@ -2,7 +2,7 @@ package shattered.lib.gui;
 
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
-import shattered.core.event.EventListener;
+import shattered.lib.event.EventListener;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.DisplayResizedEvent;
 import shattered.lib.gfx.FontRenderer;
@@ -209,10 +209,6 @@ public abstract class IGuiScreen implements IComponentContainer {
 		}
 
 		return Rectangle.create(x, y, width, height);
-	}
-
-	static Layout createDefaultLayout(@NotNull final IGuiScreen screen) {
-		return new DefaultLayout(48, 4, screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
 	}
 
 	private static class GuiScreenComponentPanel extends GuiPanel {

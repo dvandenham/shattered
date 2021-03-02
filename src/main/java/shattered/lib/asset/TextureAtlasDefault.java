@@ -8,10 +8,10 @@ import shattered.lib.math.Rectangle;
 
 class TextureAtlasDefault extends Texture implements TextureAtlas {
 
-	private final Dimension     imageSize;
-	private final Rectangle     uv;
-	final         AtlasStitcher atlas;
-	final         int           atlasId;
+	private final Dimension imageSize;
+	private final Rectangle uv;
+	final AtlasStitcher atlas;
+	final int atlasId;
 
 	public TextureAtlasDefault(@NotNull final ResourceLocation resource, @NotNull final AtlasStitcher atlas, final int atlasId, @NotNull final Dimension imageSize, @Nullable final Rectangle uv) {
 		super(resource);

@@ -1,13 +1,13 @@
 package shattered.screen;
 
-import org.jetbrains.annotations.NotNull;
-import shattered.core.event.EventListener;
 import shattered.Assets;
 import shattered.Shattered;
+import shattered.lib.event.EventListener;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScreenMainMenu extends AbstractScreen {
 

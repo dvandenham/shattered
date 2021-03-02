@@ -12,8 +12,8 @@ import shattered.lib.math.Rectangle;
 final class ImagePacker {
 
 	private final HashMap<ResourceLocation, Rectangle> bounds = new HashMap<>();
-	private final Node                                 rootNode;
-	private final BufferedImage                        image;
+	private final Node rootNode;
+	private final BufferedImage image;
 
 	ImagePacker(final int width, final int height) {
 		this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -24,8 +24,8 @@ final class ImagePacker {
 		if (this.bounds.containsKey(resource)) {
 			throw new RuntimeException("Key with ResourceLocation '" + resource + "' is already in map");
 		}
-		Rectangle  bounds = Rectangle.createMutable(0, 0, image.getWidth(), image.getHeight());
-		final Node node   = this.insert(this.rootNode, bounds);
+		Rectangle bounds = Rectangle.createMutable(0, 0, image.getWidth(), image.getHeight());
+		final Node node = this.insert(this.rootNode, bounds);
 		if (node == null) {
 			throw new RuntimeException("Image didn't fit");
 		}
@@ -81,7 +81,7 @@ final class ImagePacker {
 	private static final class Node {
 
 		private Node childLeft = null, childRight = null;
-		private Rectangle        bounds;
+		private Rectangle bounds;
 		private ResourceLocation resource = null;
 
 		private Node(final int width, final int height) {

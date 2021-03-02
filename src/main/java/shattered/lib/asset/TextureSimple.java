@@ -7,7 +7,7 @@ import shattered.lib.math.Rectangle;
 
 final class TextureSimple extends Texture {
 
-	private final int       textureId;
+	private final int textureId;
 	private final Dimension imageSize, textureSize;
 	private final Rectangle uv;
 

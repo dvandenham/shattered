@@ -3,17 +3,17 @@ package shattered.lib.asset;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.opengl.GL11;
-import shattered.core.event.EventListener;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
 import shattered.Shattered;
 import shattered.lib.FastNamedObjectMap;
 import shattered.lib.ResourceLocation;
+import shattered.lib.event.EventListener;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 
 public final class AtlasStitcher {
 

@@ -4,8 +4,8 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import org.lwjgl.glfw.GLFW;
-import shattered.core.event.MessageEvent;
 import shattered.Shattered;
+import shattered.lib.event.MessageEvent;
 
 final class Callbacks {
 

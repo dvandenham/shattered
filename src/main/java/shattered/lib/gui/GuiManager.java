@@ -4,11 +4,11 @@ import java.util.function.BiConsumer;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.core.event.EventBus;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
 import shattered.Shattered;
+import shattered.lib.event.EventBus;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 
@@ -97,7 +97,7 @@ public final class GuiManager {
 	}
 
 	private void setupComponents(@NotNull final IGuiScreen screen) {
-		final Layout layout = IGuiScreen.createDefaultLayout(screen);
+		final Layout layout = DefaultLayout.create(screen);
 		screen.setupComponents(layout);
 		screen.doForAll(component -> {
 			if (component instanceof IComponentContainer) {

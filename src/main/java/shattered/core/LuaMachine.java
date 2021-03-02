@@ -12,9 +12,6 @@ import org.luaj.vm2.compiler.LuaC;
 import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
 import shattered.core.lua.LuaStringLib;
 import shattered.core.lua.ReadOnlyLuaTable;
 import shattered.core.lua.lib.LuaGlobalLibStringData;
@@ -24,6 +21,9 @@ import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.IAsset;
 import shattered.lib.asset.LuaAsset;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
 
 @EventBusSubscriber("SYSTEM")
 public final class LuaMachine {

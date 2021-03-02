@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
+import shattered.lib.ShatteredLibrary;
 
 public final class Preboot {
 
@@ -30,8 +31,10 @@ public final class Preboot {
 
 		final PrebootRegistryImpl booter = new PrebootRegistryImpl(new URL[]{
 				Preboot.class.getProtectionDomain().getCodeSource().getLocation(),
+				ShatteredLibrary.class.getProtectionDomain().getCodeSource().getLocation(),
 		}, new Class[]{BootManager.class}, className -> !className.startsWith(Preboot.PREBOOT_PACKAGE_NAME));
 
+		booter.registerTransformer(new TransformerPrivateStaticFinal());
 		booter.registerTransformer(new TransformerEventBusSubscriber());
 		booter.registerTransformer(new TransformerEventListener());
 		booter.registerTransformer(new TransformerMessageListener());

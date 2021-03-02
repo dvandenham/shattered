@@ -1,4 +1,4 @@
-package shattered.core.event;
+package shattered.lib.event;
 
 import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class MessageEvent extends Event<String> {
 
-	private final Object[]    data;
-	private       Supplier<?> response = null;
+	private final Object[] data;
+	private Supplier<?> response = null;
 
 	public MessageEvent(@NotNull final String message, final Object... data) {
 		super(message);

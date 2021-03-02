@@ -20,12 +20,12 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.MemoryStack;
-import shattered.core.event.EventBus;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
 import shattered.Config;
 import shattered.Shattered;
+import shattered.lib.event.EventBus;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
 import shattered.lib.math.Dimension;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_BLUE_BITS;
@@ -65,8 +65,8 @@ final class GLFWSetup {
 	private static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer.glfw");
 	private static final Logger LOGGER = LogManager.getLogger("GLFW");
 	static final Dimension DISPLAY_SIZE = Dimension.createMutable(
-			Config.getInstance().display.size.getWidth(),
-			Config.getInstance().display.size.getHeight()
+			Config.DISPLAY_SIZE.get().getWidth(),
+			Config.DISPLAY_SIZE.get().getHeight()
 	);
 	static long windowId;
 	static double scale = 1;
@@ -149,7 +149,7 @@ final class GLFWSetup {
 		glfwMakeContextCurrent(GLFWSetup.windowId);
 		GL.createCapabilities();
 
-		glfwSwapInterval(Config.getInstance().display.vsync ? 1 : 0);
+		glfwSwapInterval(Config.DISPLAY_VSYNC.get() ? 1 : 0);
 
 		if (GLFWSetup.DEVELOPER_MODE) {
 			GLUtil.setupDebugMessageCallback(System.err);
@@ -198,8 +198,7 @@ final class GLFWSetup {
 	}
 
 	static void sendResizeEvent() {
-		Config.getInstance().display.size = GLFWSetup.DISPLAY_SIZE.toImmutable();
-		Config.save();
+		Config.DISPLAY_SIZE.set(GLFWSetup.DISPLAY_SIZE);
 		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
 		TessellatorImpl.resize();
 		EventBus.post(new DisplayResizedEvent());

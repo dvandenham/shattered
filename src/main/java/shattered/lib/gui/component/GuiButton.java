@@ -1,10 +1,10 @@
 package shattered.lib.gui.component;
 
 import org.jetbrains.annotations.NotNull;
-import shattered.core.event.Event;
-import shattered.core.event.EventBus;
 import shattered.lib.Color;
 import shattered.lib.Input;
+import shattered.lib.event.Event;
+import shattered.lib.event.EventBus;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;

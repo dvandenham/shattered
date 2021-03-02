@@ -2,13 +2,13 @@ package shattered.lib.registry;
 
 import java.util.Iterator;
 import java.util.Map;
+import shattered.lib.ResourceLocation;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
-import shattered.lib.ResourceLocation;
 
 abstract class BaseRegistry<K, V> implements Iterable<Map.Entry<K, V>> {
 

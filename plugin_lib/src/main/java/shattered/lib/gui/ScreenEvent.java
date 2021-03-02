@@ -1,7 +1,7 @@
 package shattered.lib.gui;
 
 import org.jetbrains.annotations.NotNull;
-import shattered.core.event.Event;
+import shattered.lib.event.Event;
 
 public abstract class ScreenEvent extends Event<IGuiScreen> {
 

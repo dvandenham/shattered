@@ -14,25 +14,25 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import shattered.Shattered;
+import shattered.lib.Localizer;
+import shattered.lib.ReflectionHelper;
+import shattered.lib.ResourceLocation;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.EventListener;
+import shattered.lib.event.MessageEvent;
+import shattered.lib.event.MessageListener;
+import shattered.lib.json.JsonUtils;
+import shattered.lib.math.Dimension;
+import shattered.lib.math.Rectangle;
+import shattered.lib.registry.CreateRegistryEvent;
+import shattered.lib.registry.ResourceSingletonRegistry;
 import com.google.gson.reflect.TypeToken;
 import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.EventListener;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
-import shattered.Shattered;
-import shattered.lib.Localizer;
-import shattered.lib.ReflectionHelper;
-import shattered.lib.ResourceLocation;
-import shattered.lib.json.JsonUtils;
-import shattered.lib.math.Dimension;
-import shattered.lib.math.Rectangle;
-import shattered.lib.registry.CreateRegistryEvent;
-import shattered.lib.registry.ResourceSingletonRegistry;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 public final class AssetRegistry {

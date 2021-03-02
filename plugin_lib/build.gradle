@@ -12,16 +12,13 @@ repositories {
 }
 
 def lwjglVersion = "3.2.3"
-def asmVersion = "9.1"
 def gsonVersion = "2.8.6"
 def fastutilVersion = "8.5.2"
 def log4jVersion = "2.14.0"
 def jomlVersion = "1.10.0"
 def annotationsVersion = "20.1.0"
-def luajVersion = "3.0.1"
 
 dependencies {
-    implementation project(":plugin_lib")
     implementation("org.lwjgl:lwjgl:${lwjglVersion}")
     implementation("org.lwjgl:lwjgl-glfw:${lwjglVersion}")
     implementation("org.lwjgl:lwjgl-opengl:${lwjglVersion}")
@@ -43,15 +40,10 @@ dependencies {
     implementation("org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-linux")
     implementation("org.lwjgl:lwjgl-openal:${lwjglVersion}:natives-macos")
     implementation("com.google.code.gson:gson:${gsonVersion}")
-    implementation("org.ow2.asm:asm:${asmVersion}")
-    implementation("org.ow2.asm:asm-commons:${asmVersion}")
-    implementation("org.ow2.asm:asm-tree:${asmVersion}")
-    implementation("org.ow2.asm:asm-util:${asmVersion}")
     implementation("it.unimi.dsi:fastutil:${fastutilVersion}")
     implementation("org.apache.logging.log4j:log4j-core:${log4jVersion}")
     implementation("org.joml:joml:${jomlVersion}")
     implementation("org.jetbrains:annotations:${annotationsVersion}")
-    implementation("org.luaj:luaj-jse:${luajVersion}")
 }
 
 sourceSets {

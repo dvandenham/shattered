@@ -1,4 +1,4 @@
-package shattered.core.event;
+package shattered.lib.event;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface EventBusSubscriber {
 
-	String value() default EventBus.DEFAULT_BUS;
+	String value() default EventBus.DEFAULT_BUS_NAME;
 }

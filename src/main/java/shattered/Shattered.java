@@ -5,6 +5,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -20,14 +22,17 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import preboot.BootManager;
-import shattered.core.event.EventBus;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.IEventBus;
-import shattered.core.event.MessageEvent;
 import shattered.lib.Color;
+import shattered.lib.IInput;
+import shattered.lib.Input;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.Workspace;
 import shattered.lib.asset.FontGroup;
+import shattered.lib.event.EventBus;
+import shattered.lib.event.EventBusHandler;
+import shattered.lib.event.EventBusSubscriber;
+import shattered.lib.event.IEventBus;
+import shattered.lib.event.MessageEvent;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.FontRendererImpl;
@@ -37,6 +42,7 @@ import shattered.lib.gfx.Tessellator;
 import shattered.lib.gfx.TessellatorImpl;
 import shattered.lib.gui.GuiManager;
 import shattered.lib.registry.CreateRegistryEvent;
+import shattered.pack.PluginManager;
 import shattered.screen.ScreenMainMenu;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerFrequency;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerValue;
@@ -51,10 +57,11 @@ public final class Shattered {
 
 	public static final Logger LOGGER = LogManager.getLogger(Shattered.NAME);
 	public static final String SYSTEM_BUS_NAME = "SYSTEM";
-	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
+	public static final IEventBus SYSTEM_BUS = EventBusHandler.createBus(Shattered.SYSTEM_BUS_NAME);
 	public static final Workspace WORKSPACE = Objects.requireNonNull(
 			ReflectionHelper.instantiate(Workspace.class, String.class, Shattered.NAME.toLowerCase(Locale.ROOT))
 	);
+	public static final PluginManager PLUGINS = new PluginManager(Shattered.WORKSPACE.getDataDir());
 
 	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
 
@@ -78,6 +85,22 @@ public final class Shattered {
 			context.updateLoggers();
 		}
 		Shattered.LOGGER.info("Starting {} (version: {})!", Shattered.NAME, Shattered.VERSION);
+		//Setup EventBus
+		try {
+			Shattered.LOGGER.debug("Setting up EventBus");
+			final IEventBus defaultBus = ReflectionHelper.getField(EventBusHandler.class, null, IEventBus.class, ignored -> true);
+			//noinspection ConstantConditions
+			ReflectionHelper.setField(ReflectionHelper.findField(EventBus.class, IEventBus.class), null, defaultBus);
+			//noinspection ConstantConditions
+			ReflectionHelper.setField(ReflectionHelper.findField(EventBus.class, Function.class), null, (Function<String, IEventBus>) EventBusHandler::createBus);
+			//noinspection ConstantConditions
+			ReflectionHelper.setField(ReflectionHelper.findField(EventBus.class, BiConsumer.class), null, (BiConsumer<Object, String>) EventBusHandler::register);
+		} catch (final Throwable e) {
+			if (Shattered.DEVELOPER_MODE) {
+				Shattered.LOGGER.fatal(e);
+			}
+			Shattered.crash("Could not setup EventBus!");
+		}
 		//Register all automatic EventBus subscribers
 		Shattered.LOGGER.debug("Registering automatic EventBus subscribers");
 		booter.getAnnotatedClasses(EventBusSubscriber.class).forEach(listener ->
@@ -85,8 +108,8 @@ public final class Shattered {
 		);
 		//Load config database
 		Shattered.LOGGER.info("Loading config database!");
-		Config.load();
-//		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
+		Config.DISPLAY_SIZE.get(); //Force load to register all config options
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
 		//Create all registry instances
 		Shattered.instance = new Shattered(args);
 		Shattered.instance.startLoadingScreen();
@@ -98,6 +121,9 @@ public final class Shattered {
 	}
 
 	private Shattered(final String[] args) {
+		Shattered.LOGGER.debug("Loading plugins");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_plugins"));
+
 		Shattered.LOGGER.debug("Notifying registry holders for registry creation");
 		final CreateRegistryEvent event = ReflectionHelper.instantiate(CreateRegistryEvent.class);
 		assert event != null;
@@ -136,9 +162,6 @@ public final class Shattered {
 		//Load assets
 		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
-
-		//TODO load config here
-
 		//Initialize GuiHandler and main menu screen
 		Shattered.LOGGER.debug("Initializing gui system");
 		final MessageEvent eventSetupGui = new MessageEvent("init_gui");
@@ -153,7 +176,19 @@ public final class Shattered {
 		Shattered.LOGGER.debug("Initializing keyboard/mouse input handler");
 		final MessageEvent handleInputSetupEvent = new MessageEvent("input_setup");
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
-		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
+		try {
+			final Supplier<?> responseSupplier = handleInputSetupEvent.getResponse();
+			assert responseSupplier != null;
+			final Object[] response = (Object[]) responseSupplier.get();
+			//noinspection ConstantConditions
+			ReflectionHelper.setField(ReflectionHelper.findField(Input.class, IInput.class), null, response[0]);
+			this.delegateInputPoller = (Runnable) response[1];
+		} catch (final Throwable e) {
+			if (Shattered.DEVELOPER_MODE) {
+				Shattered.LOGGER.fatal(e);
+			}
+			Shattered.crash("Could not setup input handlers!");
+		}
 
 		//Initialize LuaMachine
 		Shattered.LOGGER.debug("Initializing LuaMachine");
@@ -253,6 +288,11 @@ public final class Shattered {
 
 	public static long getSystemTime() {
 		return glfwGetTimerValue() * 1000 / glfwGetTimerFrequency();
+	}
+
+	public static void crash(@NotNull final String reason) {
+		Shattered.LOGGER.fatal(reason);
+		Runtime.getRuntime().halt(-1);
 	}
 
 	private static final class RuntimeTimer {

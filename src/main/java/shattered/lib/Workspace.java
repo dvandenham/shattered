@@ -3,6 +3,7 @@ package shattered.lib;
 import java.io.File;
 import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
+import shattered.Shattered;
 
 public final class Workspace {
 
@@ -18,7 +19,7 @@ public final class Workspace {
 	private Workspace(final String name) {
 		this.rootDir = Workspace.createRootDir(name);
 		if (!this.rootDir.exists() && !this.rootDir.mkdirs()) {
-			throw new RuntimeException("Could not create workspace root directory! (path: " + this.rootDir.getAbsolutePath() + ")");
+			Shattered.crash("Could not create workspace root directory! (path: " + this.rootDir.getAbsolutePath() + ")");
 		}
 		this.dataDir = this.createDir(this.rootDir, "data");
 		this.tempDir = this.createDir(this.rootDir, "temp");

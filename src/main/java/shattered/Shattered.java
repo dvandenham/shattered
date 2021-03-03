@@ -25,8 +25,10 @@ import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.IEventBus;
 import shattered.core.event.MessageEvent;
 import shattered.lib.Color;
+import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.Workspace;
+import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.FontGroup;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
@@ -115,7 +117,11 @@ public final class Shattered {
 			Runtime.getRuntime().halt(-1);
 		}
 		this.tessellator = tessellator;
-		final FontRenderer fontRenderer = ReflectionHelper.instantiate(FontRendererImpl.class, Tessellator.class, this.tessellator, FontGroup.class, StaticAssets.FONT_DEFAULT);
+		final FontRenderer fontRenderer = ReflectionHelper.instantiate(
+				FontRendererImpl.class,
+				Tessellator.class, this.tessellator,
+				Lazy.class, Lazy.of(() -> (FontGroup) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
+		);
 		if (fontRenderer == null) {
 			Shattered.LOGGER.fatal("Could not initialize FontRenderer!");
 			Runtime.getRuntime().halt(-1);
@@ -219,7 +225,7 @@ public final class Shattered {
 						"FPS: " + timer.getCachedFps() + " TickLength (ms): " + String.format("%.2f", timer.getPrevIterationLength()),
 						Color.YELLOW
 				).localize(false);
-				this.fontRenderer.setFont(StaticAssets.RESOURCE_FONT_SIMPLE);
+				this.fontRenderer.setFont(Assets.FONT_SIMPLE);
 				this.fontRenderer.setFontSize(24);
 				final int width = this.fontRenderer.getWidth(metrics);
 				final int height = this.fontRenderer.getHeight(metrics);

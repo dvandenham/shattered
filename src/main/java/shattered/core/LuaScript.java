@@ -18,8 +18,11 @@ import shattered.core.lua.lib.LuaGlobalLibColor;
 import shattered.core.lua.lib.LuaGlobalLibStringData;
 import shattered.core.lua.lib.LuaLibFontRenderer;
 import shattered.core.lua.lib.LuaLibTessellator;
+import shattered.Assets;
 import shattered.StaticAssets;
+import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
+import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.FontGroup;
 import shattered.lib.asset.LuaAsset;
 import shattered.lib.gfx.FontRendererImpl;
@@ -45,7 +48,11 @@ public final class LuaScript {
 			tessellator.setShader(StaticAssets.SHADER);
 			StaticAssets.SHADER.bind();
 			this.scriptTessellator = tessellator;
-			this.scriptFontRenderer = ReflectionHelper.instantiate(FontRendererImpl.class, Tessellator.class, this.scriptTessellator, FontGroup.class, StaticAssets.FONT_DEFAULT);
+			this.scriptFontRenderer = ReflectionHelper.instantiate(
+					FontRendererImpl.class,
+					Tessellator.class, this.scriptTessellator,
+					Lazy.class, Lazy.of(() -> (FontGroup) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
+			);
 		} else {
 			this.scriptTessellator = null;
 			this.scriptFontRenderer = null;

@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import shattered.lib.Color;
+import shattered.lib.Lazy;
 import shattered.lib.Localizer;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
@@ -22,12 +23,15 @@ public final class FontRendererImpl implements FontRenderer {
 
 	private final ConcurrentLinkedQueue<WriteCall> queue = new ConcurrentLinkedQueue<>();
 	private final ConcurrentLinkedDeque<Integer> fontSizeStack = new ConcurrentLinkedDeque<>();
+	@NotNull
 	private final Tessellator tessellator;
-	private final FontGroup fontDefault;
+	@NotNull
+	private final Lazy<FontGroup> fontDefault;
+	@Nullable
 	private FontGroup fontCurrent;
 	private boolean writing = false;
 
-	private FontRendererImpl(@NotNull final Tessellator tessellator, @NotNull final FontGroup fontDefault) {
+	private FontRendererImpl(@NotNull final Tessellator tessellator, @NotNull final Lazy<FontGroup> fontDefault) {
 		this.tessellator = tessellator;
 		this.fontDefault = fontDefault;
 		this.fontSizeStack.offerLast(FontGroup.DEFAULT_SIZES[FontGroup.DEFAULT_SIZE_INDEX]);
@@ -36,7 +40,7 @@ public final class FontRendererImpl implements FontRenderer {
 	@Override
 	public void setFont(@NotNull final ResourceLocation font) {
 		final IAsset asset = AssetRegistry.getAsset(font);
-		this.fontCurrent = asset instanceof FontGroup ? (FontGroup) asset : this.fontDefault;
+		this.fontCurrent = asset instanceof FontGroup ? (FontGroup) asset : this.fontDefault.get();
 	}
 
 	@Override
@@ -382,7 +386,7 @@ public final class FontRendererImpl implements FontRenderer {
 	private Font getFont() {
 		FontGroup current = this.fontCurrent;
 		if (current == null) {
-			current = this.fontDefault;
+			current = this.fontDefault.get();
 		}
 		assert !this.fontSizeStack.isEmpty();
 		return current.getFont(this.fontSizeStack.peekLast());

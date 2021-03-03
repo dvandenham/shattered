@@ -14,6 +14,8 @@ public final class Workspace {
 	private final File tempDir;
 	@NotNull
 	private final File logsDir;
+	@NotNull
+	private final File debugDir;
 
 	private Workspace(final String name) {
 		this.rootDir = Workspace.createRootDir(name);
@@ -23,6 +25,7 @@ public final class Workspace {
 		this.dataDir = this.createDir(this.rootDir, "data");
 		this.tempDir = this.createDir(this.rootDir, "temp");
 		this.logsDir = this.createDir(this.tempDir, "logs");
+		this.debugDir = new File(this.rootDir, "debug");
 	}
 
 	@NotNull
@@ -62,6 +65,15 @@ public final class Workspace {
 	@NotNull
 	public File getLogsDir() {
 		return this.logsDir;
+	}
+
+	@NotNull
+	public File getDebugDir(@NotNull final String name) {
+		final File result = new File(this.debugDir, name);
+		if (!result.exists() && !result.mkdirs()) {
+			throw new RuntimeException("Could not create workspace sub-directory! (path: " + result.getAbsolutePath() + ")");
+		}
+		return result;
 	}
 
 	private File createDir(@NotNull final File parent, final String name) {

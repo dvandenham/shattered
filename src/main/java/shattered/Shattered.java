@@ -106,6 +106,7 @@ public final class Shattered {
 
 		Shattered.LOGGER.debug("Loading static assets");
 		StaticAssets.loadAssets();
+		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
 
 		Shattered.LOGGER.debug("Initializing rendering system");
 		final Tessellator tessellator = ReflectionHelper.instantiate(TessellatorImpl.class);
@@ -132,6 +133,8 @@ public final class Shattered {
 	}
 
 	private void startLoading() {
+		final long startTime = Shattered.getSystemTime();
+
 		//Load assets
 		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
@@ -162,6 +165,8 @@ public final class Shattered {
 		//Stitching textures
 		Shattered.LOGGER.debug("Stitching all TextureAtlas subscribers");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
+
+		Shattered.LOGGER.debug("Loading took {} milliseconds!", Shattered.getSystemTime() - startTime);
 	}
 
 	private void startRuntime() {

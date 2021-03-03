@@ -41,6 +41,20 @@ public final class StringData {
 	}
 
 	@NotNull
+	public StringData withColor(@NotNull final Color color) {
+		final StringData result = new StringData(this.text, color);
+		result.doCenterX = this.doCenterX;
+		result.doCenterY = this.doCenterY;
+		result.centerX = this.centerX;
+		result.centerY = this.centerY;
+		result.doWrapText = this.doWrapText;
+		result.doWrapTextStop = this.doWrapTextStop;
+		result.wrapText = this.wrapText;
+		result.doLocalize = this.doLocalize;
+		return result;
+	}
+
+	@NotNull
 	public StringData centerX(final int centerWidth) {
 		if (centerWidth > 0) {
 			this.doCenterX = true;

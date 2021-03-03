@@ -1,12 +1,14 @@
 package shattered.lib.asset;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.imageio.ImageIO;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-import shattered.core.event.EventListener;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
 import shattered.Shattered;
@@ -17,6 +19,7 @@ import shattered.lib.math.Rectangle;
 
 public final class AtlasStitcher {
 
+	private static final boolean DUMP_ATLAS = Boolean.getBoolean("shattered.dump_atlas");
 	private final HashMap<Integer, Rectangle> uvMapping = new HashMap<>();
 	private final ArrayList<AtlasData> dataList = new ArrayList<>();
 	private boolean complete = false;
@@ -40,7 +43,7 @@ public final class AtlasStitcher {
 		this.textureId = -1;
 	}
 
-	@MessageListener(value = "atlas_stitch", listenerInfo = @EventListener(bus = "SYSTEM"))
+	@MessageListener(value = "atlas_stitch")
 	private void listenToSystemEvent(final MessageEvent event) {
 		this.stitch();
 	}
@@ -98,6 +101,9 @@ public final class AtlasStitcher {
 				this.texWidth = texData[1];
 				this.texHeight = texData[2];
 				this.complete = true;
+				if (AtlasStitcher.DUMP_ATLAS) {
+					this.dumpAtlas();
+				}
 			} catch (final RuntimeException ignored) {
 				if (tries % 2 == 0) {
 					atlasSize.addWidth(atlasSize.getWidth());
@@ -126,5 +132,13 @@ public final class AtlasStitcher {
 
 	public int getTexHeight() {
 		return this.texHeight;
+	}
+
+	private void dumpAtlas() {
+		try {
+			final File outputFile = new File(Shattered.WORKSPACE.getDebugDir("atlas_dump"), this.textureId + ".png");
+			ImageIO.write(this.image, "png", outputFile);
+		} catch (final IOException ignored) {
+		}
 	}
 }

@@ -27,6 +27,7 @@ public final class ScreenMainMenu extends AbstractScreen {
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		tessellator.start();
 		tessellator.set(this.getPosition(), Assets.TEXTURE_LOGO);
+		tessellator.scale(1.5F, 1.5F);
 		tessellator.center(this.getWidth(), this.getHeight() / 4);
 		tessellator.draw();
 	}

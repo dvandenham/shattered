@@ -9,20 +9,12 @@ import shattered.lib.gfx.Shader;
 public final class StaticAssets {
 
 	public static Shader SHADER;
-	public static Texture TEXTURE_MISSING;
 
 	private StaticAssets() {
 	}
 
 	static void loadAssets() {
 		StaticAssets.SHADER = new Shader(Assets.SHADER_VERTEX, Assets.SHADER_FRAGMENT);
-		StaticAssets.TEXTURE_MISSING = ReflectionHelper.invokeMethod(
-				AssetRegistry.class,
-				null,
-				Texture.class,
-				ResourceLocation.class,
-				new ResourceLocation("missing")
-		);
 		ReflectionHelper.invokeMethod(
 				AssetRegistry.class,
 				null,

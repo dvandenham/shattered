@@ -14,7 +14,7 @@ import shattered.lib.ResourceLocation;
 
 final class FontLoader {
 
-	private final AtlasStitcher atlas = new AtlasStitcher();
+	private final AtlasStitcher atlas = new AtlasStitcher(true);
 	private final java.awt.Font font;
 	private final int size;
 

@@ -161,6 +161,9 @@ public final class Shattered {
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
 		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
 
+		//Setup SoundSystem
+		Shattered.SYSTEM_BUS.post(new MessageEvent("init_sound_system"));
+
 		//Initialize LuaMachine
 		Shattered.LOGGER.debug("Initializing LuaMachine");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_lua_machine"));
@@ -189,6 +192,7 @@ public final class Shattered {
 	private void cleanup() {
 		Shattered.LOGGER.debug("Cleaning up!");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown"));
+		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown_glfw"));
 	}
 
 	@Nullable

@@ -9,13 +9,16 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import shattered.core.event.EventBus;
+import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.EventListener;
-import shattered.StaticAssets;
+import shattered.Shattered;
 import shattered.lib.Color;
+import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.AtlasStitcher;
 import shattered.lib.asset.IAsset;
+import shattered.lib.asset.ResourceReloadEvent;
 import shattered.lib.asset.Texture;
 import shattered.lib.asset.TextureAnimated;
 import shattered.lib.asset.TextureAtlas;
@@ -31,6 +34,7 @@ import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 @SuppressWarnings("unused")
 public final class TessellatorImpl implements Tessellator {
 
+	public static Texture TEXTURE_MISSING;
 	private final ConcurrentLinkedQueue<DrawCall> stack = new ConcurrentLinkedQueue<>();
 	private final ConcurrentLinkedDeque<Matrix4f> matrices = new ConcurrentLinkedDeque<>();
 	private DrawCall currentCall = null;
@@ -599,7 +603,7 @@ public final class TessellatorImpl implements Tessellator {
 		final float stopX = call.bounds.getMaxX();
 		final float stopY = call.bounds.getMaxY();
 		if (call.useTexture) {
-			if (call.texture == StaticAssets.TEXTURE_MISSING) {
+			if (call.texture == TessellatorImpl.TEXTURE_MISSING) {
 				call.uMin = 1;
 				call.vMin = 1;
 				call.uMax = call.texture.getImageSize().getWidth() - 1;
@@ -682,6 +686,21 @@ public final class TessellatorImpl implements Tessellator {
 	@NotNull
 	public Texture getTexture(@NotNull final ResourceLocation resource) {
 		final IAsset asset = AssetRegistry.getAsset(resource);
-		return asset instanceof Texture ? (Texture) asset : StaticAssets.TEXTURE_MISSING;
+		return asset instanceof Texture ? (Texture) asset : TessellatorImpl.TEXTURE_MISSING;
+	}
+
+	@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
+	private static class EventHandler {
+
+		@EventListener(ResourceReloadEvent.class)
+		public static void onResourceReload(final ResourceReloadEvent ignored) {
+			TessellatorImpl.TEXTURE_MISSING = ReflectionHelper.invokeMethod(
+					AssetRegistry.class,
+					null,
+					Texture.class,
+					ResourceLocation.class,
+					new ResourceLocation("missing")
+			);
+		}
 	}
 }

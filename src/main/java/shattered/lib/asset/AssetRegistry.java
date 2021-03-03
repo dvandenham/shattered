@@ -41,7 +41,7 @@ public final class AssetRegistry {
 	private static ResourceSingletonRegistry<AssetTypes> TYPES;
 
 	static final Logger LOGGER = LogManager.getLogger("Assets");
-	static final AtlasStitcher ATLAS = new AtlasStitcher();
+	static final AtlasStitcher ATLAS = new AtlasStitcher(false);
 
 	@MessageListener("init_assets")
 	private static void onInitAssets(final MessageEvent ignored) {
@@ -76,6 +76,9 @@ public final class AssetRegistry {
 				case TEXTURE:
 					action = AssetRegistry::loadTexture;
 					break;
+				case AUDIO:
+					action = AssetRegistry::loadAudio;
+					break;
 				case FONT:
 					action = AssetRegistry::loadFont;
 					break;
@@ -85,7 +88,6 @@ public final class AssetRegistry {
 				case BINARY:
 					action = AssetRegistry::loadBinary;
 					break;
-				//TODO audio
 			}
 			if (action != null) {
 				list.forEach(action);
@@ -182,6 +184,24 @@ public final class AssetRegistry {
 		final int[] data = ImageLoader.loadTexture(image);
 		final Dimension size = Dimension.create(image.getWidth(), image.getHeight());
 		return new TextureSimple(resource, data[0], size, Dimension.create(data[1], data[2]), Rectangle.create(0, 0, size));
+	}
+
+	private static void loadAudio(@NotNull final ResourceLocation resource) {
+		final JsonAudioData data = Optional
+				.ofNullable(AudioLoader.loadJsonData(resource))
+				.orElseGet(() -> {
+					final JsonAudioData dummy = new JsonAudioData();
+					dummy.audioType = AudioLoader.AudioType.OGG;
+					return dummy;
+				});
+		final Audio result = AudioLoader.createAudio(resource, data);
+		if (result == null) {
+			AssetRegistry.registerInternal(resource, AssetTypes.AUDIO, null);
+			AssetRegistry.LOGGER.error("Could not load audio.json: {}", resource);
+			return;
+		}
+		AssetRegistry.registerInternal(resource, AssetTypes.AUDIO, result);
+		AssetRegistry.LOGGER.error("Could not load audio.json: {}", resource);
 	}
 
 	@ReflectionHelper.Reflectable

@@ -9,8 +9,7 @@ enum AssetTypes {
 	LANGUAGE("languages"),
 	TEXTURE("textures"),
 	FONT("fonts"),
-	AUDIO_OGG("audio"),
-	AUDIO_WAV("audio"),
+	AUDIO("audio"),
 	LUA("scripts"),
 	BINARY(null);
 

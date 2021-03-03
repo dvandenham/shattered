@@ -22,13 +22,15 @@ public final class AtlasStitcher {
 	private static final boolean DUMP_ATLAS = Boolean.getBoolean("shattered.dump_atlas");
 	private final HashMap<Integer, Rectangle> uvMapping = new HashMap<>();
 	private final ArrayList<AtlasData> dataList = new ArrayList<>();
+	private final boolean unregister;
 	private boolean complete = false;
 	private int nextAtlasId = 0;
 	private int texWidth = 0, texHeight = 0;
 	BufferedImage image = null;
 	int textureId = -1;
 
-	AtlasStitcher() {
+	AtlasStitcher(final boolean unregister) {
+		this.unregister = unregister;
 		Shattered.SYSTEM_BUS.register(this);
 	}
 
@@ -103,6 +105,9 @@ public final class AtlasStitcher {
 				this.complete = true;
 				if (AtlasStitcher.DUMP_ATLAS) {
 					this.dumpAtlas();
+				}
+				if (this.unregister) {
+					Shattered.SYSTEM_BUS.unregister(this);
 				}
 			} catch (final RuntimeException ignored) {
 				if (tries % 2 == 0) {

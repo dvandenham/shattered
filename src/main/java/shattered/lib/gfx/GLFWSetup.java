@@ -92,7 +92,7 @@ final class GLFWSetup {
 		Callbacks.register(GLFWSetup.windowId);
 	}
 
-	@MessageListener("shutdown")
+	@MessageListener("shutdown_glfw")
 	private static void onSystemShutdown(final MessageEvent ignored) {
 		GLFWSetup.LOGGER.debug("Destroying root window");
 		GLFWSetup.destroyWindow(GLFWSetup.windowId);

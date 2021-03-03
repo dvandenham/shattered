@@ -99,15 +99,32 @@ public class GuiButton extends IGuiComponent {
 
 	@Override
 	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+		final Color bgColor;
+		switch (this.state) {
+			case ROLLOVER:
+				bgColor = Color.RED.withAlpha(0.5F);
+				break;
+			case LEFT_PRESS:
+			case RIGHT_PRESS:
+			case LEFT_CLICK:
+			case RIGHT_CLICK:
+				bgColor = Color.XEROS.withAlpha(0.5F);
+				break;
+			default:
+				bgColor = Color.WHITE.withAlpha(0.5F);
+				break;
+		}
+		tessellator.drawQuick(this.getBounds(), bgColor);
 	}
 
 	@Override
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		fontRenderer.setFontSize(Math.min(this.getHeight() / 4 * 3, 48));
+		final int yOffset = 2;
 		if (this.textColor != null) {
-			fontRenderer.writeQuickCentered(this.getBounds(), new StringData(this.text, this.textColor).localize(this.localize));
+			fontRenderer.writeQuickCentered(this.getBounds().moveY(yOffset), new StringData(this.text, this.textColor).localize(this.localize));
 		} else {
-			RenderHelper.writeGlitchedCentered(fontRenderer, this.getBounds(), new StringData(this.text).localize(this.localize));
+			RenderHelper.writeGlitchedCentered(fontRenderer, this.getBounds().moveY(yOffset), new StringData(this.text).localize(this.localize));
 		}
 		fontRenderer.revertFontSize();
 	}

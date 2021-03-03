@@ -16,6 +16,7 @@ public abstract class IGuiScreen implements IComponentContainer {
 	private final GuiPanel components = new GuiScreenComponentPanel();
 	private final Rectangle bounds = Rectangle.createMutable(0, 0, -1, -1);
 	private final Rectangle boundsCached = Rectangle.createMutable(0, 0, 0, 0);
+	private final Rectangle internalBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
 
 	protected void tick() {
 	}
@@ -161,6 +162,37 @@ public abstract class IGuiScreen implements IComponentContainer {
 		return this.boundsCached.toImmutable();
 	}
 
+	public final int getInternalX() {
+		return this.internalBoundsCached.getX();
+	}
+
+	public final int getInternalY() {
+		return this.internalBoundsCached.getY();
+	}
+
+	@NotNull
+	public final Point getInternalPosition() {
+		return this.internalBoundsCached.getPosition().toImmutable();
+	}
+
+	public final int getInternalWidth() {
+		return this.internalBoundsCached.getWidth();
+	}
+
+	public final int getInternalHeight() {
+		return this.internalBoundsCached.getHeight();
+	}
+
+	@NotNull
+	public final Dimension getInternalSize() {
+		return this.internalBoundsCached.getSize().toImmutable();
+	}
+
+	@NotNull
+	public final Rectangle getInternalBounds() {
+		return this.internalBoundsCached.toImmutable();
+	}
+
 	public final boolean isFullscreen() {
 		return this.boundsCached.equals(Display.getBounds());
 	}
@@ -168,6 +200,9 @@ public abstract class IGuiScreen implements IComponentContainer {
 	void cacheBounds() {
 		final Rectangle newBounds = IGuiScreen.getCorrectBounds(this.bounds);
 		this.boundsCached.setPosition(newBounds.getPosition()).setSize(newBounds.getSize());
+		this.internalBoundsCached
+				.setPosition(newBounds.getPosition().move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE))
+				.setSize(newBounds.getSize().grow(-(GuiProperties.BORDER_SIZE * 2), -(GuiProperties.BORDER_SIZE * 2)));
 	}
 
 	@EventListener
@@ -212,7 +247,7 @@ public abstract class IGuiScreen implements IComponentContainer {
 	}
 
 	static Layout createDefaultLayout(@NotNull final IGuiScreen screen) {
-		return new DefaultLayout(48, 4, screen.getX(), screen.getY(), screen.getWidth(), screen.getHeight());
+		return new DefaultLayout(GuiProperties.COMPONENT_HEIGHT, GuiProperties.COMPONENT_SPACING, screen.getInternalBounds());
 	}
 
 	private static class GuiScreenComponentPanel extends GuiPanel {

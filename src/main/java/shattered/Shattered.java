@@ -1,6 +1,8 @@
 package shattered;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -25,6 +27,7 @@ import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.IEventBus;
 import shattered.core.event.MessageEvent;
 import shattered.lib.Color;
+import shattered.lib.ITimerListener;
 import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.Workspace;
@@ -59,11 +62,13 @@ public final class Shattered {
 	);
 
 	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
+	private static final HashSet<Timer> TIMERS = new HashSet<>();
 
 	private static Shattered instance;
 	public final Tessellator tessellator;
 	public final FontRenderer fontRenderer;
 	private final ThreadLoadingScreen loadingScreen;
+	private final BootAnimation bootAnimation = new BootAnimation();
 
 	//Delegate methods
 	private Runnable delegateGuiManagerTick;
@@ -138,6 +143,7 @@ public final class Shattered {
 		this.loadingScreen.start();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void startLoading() {
 		final long startTime = Shattered.getSystemTime();
 
@@ -151,7 +157,6 @@ public final class Shattered {
 		Shattered.SYSTEM_BUS.post(eventSetupGui);
 		assert eventSetupGui.getResponse() != null;
 		this.delegateGuiManagerTick = (Runnable) ((Object[]) eventSetupGui.getResponse().get())[0];
-		//noinspection unchecked
 		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) ((Object[]) eventSetupGui.getResponse().get())[1];
 
 		//Setup input handlers
@@ -185,6 +190,7 @@ public final class Shattered {
 	private void startRuntime() {
 		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
 		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeCatchup);
+		this.bootAnimation.start();
 		while (Shattered.isRunning()) {
 			final Throwable cachedError = timer.execute();
 			if (cachedError != null) {
@@ -203,14 +209,34 @@ public final class Shattered {
 	@Nullable
 	private Throwable runtimeTick(@NotNull final RuntimeTimer timer) {
 		try {
+			//Handle input events
 			GLFW.glfwPollEvents();
 			this.delegateInputPoller.run();
 
+			//Update timers and animations
+			this.tickTimers();
+			//TODO animations
+
+			if (!this.bootAnimation.isFinished()) {
+				return null;
+			}
+
+			//Update gui
 			this.delegateGuiManagerTick.run();
 
 			return null;
 		} catch (final Throwable e) {
 			return e;
+		}
+	}
+
+	private void tickTimers() {
+		for (final Timer timer : new ArrayList<>(Shattered.TIMERS)) {
+			if (timer.isDone()) {
+				Shattered.TIMERS.remove(timer);
+			} else {
+				timer.tick();
+			}
 		}
 	}
 
@@ -224,9 +250,15 @@ public final class Shattered {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			GLHelper.disableScissor();
+
 			//Render gui
 			GLHelper.resetScissor();
 			this.delegateGuiManagerRender.accept(this.tessellator, this.fontRenderer);
+
+			//Render boot animation
+			if (!this.bootAnimation.isFinished()) {
+				this.bootAnimation.render(this.tessellator);
+			}
 
 			//Render runtime metrics
 			if (Shattered.DEVELOPER_MODE) {
@@ -270,6 +302,37 @@ public final class Shattered {
 
 	public static long getSystemTime() {
 		return glfwGetTimerValue() * 1000 / glfwGetTimerFrequency();
+	}
+
+	@NotNull
+	public static Timer addTimer(final int tickRate, @NotNull final ITimerListener listener) {
+		return Shattered.addTimer(tickRate, 1, listener);
+	}
+
+	@NotNull
+	public static Timer addTimer(final int tickRate, final int maxTicks, @NotNull final ITimerListener listener) {
+		return Shattered.addTimerInternal(tickRate, maxTicks, listener, false);
+	}
+
+	@NotNull
+	public static Timer addTimerRepeating(final int tickRate, @NotNull final ITimerListener listener) {
+		return Shattered.addTimerInternal(tickRate, 1, listener, true);
+	}
+
+	private static Timer addTimerInternal(final int tickRate, final int maxTicks, @NotNull final ITimerListener listener, final boolean repeating) {
+		if (tickRate <= 0) {
+			throw new IllegalArgumentException("TickRate should be > 0");
+		}
+		if (!repeating && maxTicks <= 0) {
+			throw new IllegalArgumentException("MaxTicks should be > 0 or Repeating should be true");
+		}
+		final Timer result = new Timer(listener, tickRate, repeating ? 1 : maxTicks, repeating);
+		Shattered.TIMERS.add(result);
+		return result;
+	}
+
+	public static void removeTimer(@NotNull final Timer timer) {
+		Shattered.TIMERS.remove(timer);
 	}
 
 	private static final class RuntimeTimer {

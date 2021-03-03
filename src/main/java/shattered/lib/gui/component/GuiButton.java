@@ -97,7 +97,7 @@ public class GuiButton extends IGuiComponent {
 
 	@Override
 	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-
+		tessellator.drawQuick(this.getBounds().shrink(20, 8), Color.XEROS);
 	}
 
 	@Override

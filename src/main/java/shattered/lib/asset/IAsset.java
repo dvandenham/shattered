@@ -28,7 +28,7 @@ public abstract class IAsset {
 			while (clazz != Object.class) {
 				for (final Field field : clazz.getDeclaredFields()) {
 					//Open field for changes
-					final boolean accessible = field.isAccessible();
+					@SuppressWarnings("deprecation") final boolean accessible = field.isAccessible();
 					field.setAccessible(true);
 					final boolean isFinal = Modifier.isFinal(field.getModifiers());
 					if (isFinal) {

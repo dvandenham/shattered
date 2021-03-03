@@ -14,8 +14,10 @@ final class PrebootClassLoader extends ClassLoader {
 
 	@Override
 	public Class<?> loadClass(final String name, final boolean resolve) throws ClassNotFoundException {
-		if (name.startsWith("java.") || name.startsWith("javax.") || name.startsWith("sun.")) {
+		if (name.startsWith("java.")) {
 			return super.loadClass(name, resolve);
+		} else if (name.startsWith("javax.") || name.startsWith("sun.")) {
+			return this.parentLoader.loadClass(name);
 		} else if (name.startsWith(Preboot.PREBOOT_PACKAGE_NAME)) {
 			if (name.equals(BootManager.class.getName())) {
 				return BootManager.class;

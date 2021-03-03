@@ -102,8 +102,7 @@ public class ConfigManager {
 					ConfigManager.save();
 				}
 			} catch (final IOException e) {
-				Shattered.LOGGER.fatal("Could not read config!", e);
-				Runtime.getRuntime().halt(-1);
+				Shattered.LOGGER.fatal("Could not read config, loading defaults!", e);
 			}
 		}
 	}

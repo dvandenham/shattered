@@ -85,8 +85,7 @@ public final class Shattered {
 		);
 		//Load config database
 		Shattered.LOGGER.info("Loading config database!");
-		Config.load();
-//		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
 		//Create all registry instances
 		Shattered.instance = new Shattered(args);
 		Shattered.instance.startLoadingScreen();
@@ -136,8 +135,6 @@ public final class Shattered {
 		//Load assets
 		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
-
-		//TODO load config here
 
 		//Initialize GuiHandler and main menu screen
 		Shattered.LOGGER.debug("Initializing gui system");

@@ -64,10 +64,7 @@ final class GLFWSetup {
 
 	private static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer.glfw");
 	private static final Logger LOGGER = LogManager.getLogger("GLFW");
-	static final Dimension DISPLAY_SIZE = Dimension.createMutable(
-			Config.DISPLAY_SIZE.get().getWidth(),
-			Config.DISPLAY_SIZE.get().getHeight()
-	);
+	static final Dimension DISPLAY_SIZE = Dimension.createMutable(0, 0);
 	static long windowId;
 	static double scale = 1;
 
@@ -77,6 +74,8 @@ final class GLFWSetup {
 	@MessageListener("init_glfw")
 	private static void onInitializeGLFW(final MessageEvent event) {
 		GLFWSetup.LOGGER.debug("Initialing GLFW");
+		GLFWSetup.DISPLAY_SIZE.setWidth(Config.DISPLAY_SIZE.get().getWidth());
+		GLFWSetup.DISPLAY_SIZE.setHeight(Config.DISPLAY_SIZE.get().getHeight());
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		if (!glfwInit()) {

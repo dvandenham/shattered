@@ -92,6 +92,7 @@ public final class Shattered {
 		);
 		//Load config database
 		Shattered.LOGGER.info("Loading config database!");
+		Config.DISPLAY_SIZE.get(); //Force load class
 		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
 		//Create all registry instances
 		Shattered.instance = new Shattered(args);

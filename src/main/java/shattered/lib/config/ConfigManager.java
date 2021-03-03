@@ -104,6 +104,7 @@ public class ConfigManager {
 				}
 			} catch (final IOException e) {
 				Shattered.LOGGER.fatal("Could not read config, loading defaults!", e);
+				ConfigManager.save();
 			}
 		}
 	}

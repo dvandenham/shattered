@@ -9,7 +9,6 @@ import shattered.lib.asset.Audio;
 @SuppressWarnings("unused")
 public final class AudioPlayer {
 
-	private final CopyOnWriteArrayList<Audio> audios = new CopyOnWriteArrayList<>();
 	final CopyOnWriteArrayList<Audio> nowPlaying = new CopyOnWriteArrayList<>();
 	private float volume = 1.0F;
 
@@ -68,11 +67,6 @@ public final class AudioPlayer {
 	}
 
 	public void destroy() {
-		for (final Audio data : this.audios) {
-			AL10.alDeleteSources(data.getSourcePointer());
-			AL10.alDeleteBuffers(data.getBufferPointer());
-		}
-		this.audios.clear();
 		this.nowPlaying.clear();
 	}
 }

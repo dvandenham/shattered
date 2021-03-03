@@ -83,6 +83,7 @@ public class ConfigManager {
 		return result;
 	}
 
+	@SuppressWarnings({"RedundantCast", "unchecked"})
 	private static void load() {
 		if (!ConfigManager.FILE.exists()) {
 			ConfigManager.save();
@@ -91,11 +92,11 @@ public class ConfigManager {
 				final JDB store = JDB.read(ConfigManager.FILE);
 				boolean dirty = !Arrays.asList(store.getKeyNames()).containsAll(ConfigManager.PREFERENCES.keySet());
 				for (final String key : store.getKeyNames()) {
-					@SuppressWarnings("rawtypes") final IOption option = ConfigManager.PREFERENCES.get(key);
+					final IOption<?> option = ConfigManager.PREFERENCES.get(key);
 					if (option == null) {
 						dirty = true;
 					} else {
-						option.value = option.deserialize(store);
+						((IOption<Object>) option).value = option.deserialize(store);
 					}
 				}
 				if (dirty) {

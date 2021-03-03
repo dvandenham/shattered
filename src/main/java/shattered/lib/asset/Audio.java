@@ -3,37 +3,47 @@ package shattered.lib.asset;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.openal.AL10;
+import shattered.core.event.MessageEvent;
+import shattered.core.event.MessageListener;
+import shattered.Shattered;
 import shattered.lib.ResourceLocation;
 
 public final class Audio extends IAsset {
 
-	private final int[] data;
-	private final int length;
+	private final JsonAudioData data;
+	private int[] audioData;
+	private int length;
 
-	Audio(@NotNull final ResourceLocation resource, final int[] data, final int length) {
+	Audio(@NotNull final ResourceLocation resource, @NotNull final JsonAudioData data) {
 		super(resource);
 		this.data = data;
-		this.length = length;
+		Shattered.SYSTEM_BUS.register(this);
+	}
+
+	@MessageListener("load_audio")
+	private void onLoadAudio(final MessageEvent ignored) {
+		this.load();
+		Shattered.SYSTEM_BUS.unregister(this);
 	}
 
 	public int getChannels() {
-		return this.data[AudioLoader.INDEX_CHANNELS];
+		return this.audioData[AudioLoader.INDEX_CHANNELS];
 	}
 
 	public int getSampleRate() {
-		return this.data[AudioLoader.INDEX_SAMPLE_RATE];
+		return this.audioData[AudioLoader.INDEX_SAMPLE_RATE];
 	}
 
 	public int getFormat() {
-		return this.data[AudioLoader.INDEX_FORMAT];
+		return this.audioData[AudioLoader.INDEX_FORMAT];
 	}
 
 	public int getBufferPointer() {
-		return this.data[AudioLoader.INDEX_POINTER_BUFFER];
+		return this.audioData[AudioLoader.INDEX_POINTER_BUFFER];
 	}
 
 	public int getSourcePointer() {
-		return this.data[AudioLoader.INDEX_POINTER_SOURCE];
+		return this.audioData[AudioLoader.INDEX_POINTER_SOURCE];
 	}
 
 	public int getLengthMillis() {
@@ -45,5 +55,16 @@ public final class Audio extends IAsset {
 		AL10.alDeleteBuffers(this.getBufferPointer());
 		AL10.alDeleteSources(this.getSourcePointer());
 		super.recreate(newAsset);
+	}
+
+	private void load() {
+		final int[] audioData = AudioLoader.load(this.getResource(), this.data);
+		if (audioData.length == 0) {
+			AssetRegistry.LOGGER.error("Could not load audio data: {}", this.getResource());
+			return;
+		}
+		AssetRegistry.LOGGER.debug("Registered audio: {} ({})", this.getResource(), this.data.audioType);
+		this.audioData = audioData;
+		this.length = this.audioData[AudioLoader.INDEX_AUDIO_LENGTH];
 	}
 }

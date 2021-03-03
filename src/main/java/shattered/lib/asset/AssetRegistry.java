@@ -194,14 +194,17 @@ public final class AssetRegistry {
 					dummy.audioType = AudioLoader.AudioType.OGG;
 					return dummy;
 				});
-		final Audio result = AudioLoader.createAudio(resource, data);
-		if (result == null) {
+		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.AUDIO, data.audioType.toString());
+		final URL location = AssetRegistry.getPathUrl(path);
+		if (location == null) {
+			AssetRegistry.LOGGER.error("Registered audio.json \"{}\" does not exist!", resource);
+			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
 			AssetRegistry.registerInternal(resource, AssetTypes.AUDIO, null);
-			AssetRegistry.LOGGER.error("Could not load audio.json: {}", resource);
 			return;
 		}
+		final Audio result = new Audio(resource, data);
 		AssetRegistry.registerInternal(resource, AssetTypes.AUDIO, result);
-		AssetRegistry.LOGGER.error("Could not load audio.json: {}", resource);
+		AssetRegistry.LOGGER.error("Registered audio: {}", resource);
 	}
 
 	@ReflectionHelper.Reflectable

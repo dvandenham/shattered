@@ -47,6 +47,7 @@ final class AudioLoader {
 	static final int INDEX_FORMAT = AudioLoader.nextIndex++;
 	static final int INDEX_POINTER_BUFFER = AudioLoader.nextIndex++;
 	static final int INDEX_POINTER_SOURCE = AudioLoader.nextIndex++;
+	static final int INDEX_AUDIO_LENGTH = AudioLoader.nextIndex++;
 	private static final int ARRAY_SIZE = AudioLoader.nextIndex++;
 
 	@Nullable
@@ -56,51 +57,40 @@ final class AudioLoader {
 		if (location == null) {
 			AssetRegistry.LOGGER.error("Registered audio.json \"{}\" has no matching metadata file!", resource);
 			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
-			AssetRegistry.LOGGER.error("\tAssuming it's an OGG audio.json resource");
+			AssetRegistry.LOGGER.error("\tAssuming it's an OGG audio resource");
 			return null;
 		}
 		try (final InputStreamReader reader = new InputStreamReader(location.openStream())) {
 			return JsonUtils.deserialize(reader, JsonAudioData.class);
 		} catch (final IOException | JsonIOException | JsonSyntaxException e) {
-			AssetRegistry.LOGGER.error("Could not read audio.json metadata from audio.json \"{}\"", resource);
+			AssetRegistry.LOGGER.error("Could not read audio metadata from audio.json \"{}\"", resource);
 			AssetRegistry.LOGGER.error(e);
-			AssetRegistry.LOGGER.error("\tIgnoring the metadata and loading as a default off audio.json resource without variants");
+			AssetRegistry.LOGGER.error("\tIgnoring the metadata and loading as a default off audio resource without variants");
 			return null;
 		}
 	}
 
-	@Nullable
-	static Audio createAudio(@NotNull final ResourceLocation resource, @NotNull final JsonAudioData data) {
+	static int[] load(@NotNull final ResourceLocation resource, @NotNull final JsonAudioData data) {
 		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.AUDIO, data.audioType.toString());
-		final URL location = AssetRegistry.getPathUrl(path);
-		if (location == null) {
-			AssetRegistry.LOGGER.error("Registered audio.json \"{}\" does not exist!", resource);
-			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
-			return null;
-		}
 		try {
-			final int[] audioData = AudioLoader.load(location, data.audioType);
-			if (audioData.length == 0) {
-				AssetRegistry.LOGGER.error("Could not load audio.json from location: {}", path);
-				return null;
+			final URL location = AssetRegistry.getPathUrl(path);
+			final int[] result;
+			switch (data.audioType) {
+				case OGG:
+					result = AudioLoader.loadOgg(location);
+					break;
+				case WAV:
+					result = AudioLoader.loadWav(location);
+					break;
+				default:
+					AssetRegistry.LOGGER.error("Could not read audio from location: {}. reason: unsupported audio format", path);
+					return new int[0];
 			}
-			AssetRegistry.LOGGER.debug("Registered audio.json: {} ({})", resource, data.audioType);
-			final int audioLength = AudioLoader.calculateLength(audioData[AudioLoader.INDEX_POINTER_BUFFER]);
-			return new Audio(resource, audioData, audioLength);
-		} catch (final IOException e) {
-			AssetRegistry.LOGGER.error("Could not read audio.json from location: " + path, e);
-			return null;
-		}
-	}
-
-	private static int[] load(@NotNull final URL location, @NotNull final AudioType type) throws IOException {
-		switch (type) {
-			case OGG:
-				return AudioLoader.loadOgg(location);
-			case WAV:
-				return AudioLoader.loadWav(location);
-			default:
-				return new int[0];
+			result[AudioLoader.INDEX_AUDIO_LENGTH] = AudioLoader.calculateLength(result[AudioLoader.INDEX_POINTER_BUFFER]);
+			return result;
+		} catch (final Throwable e) {
+			AssetRegistry.LOGGER.error("Could not read audio from location: " + path, e);
+			return new int[0];
 		}
 	}
 

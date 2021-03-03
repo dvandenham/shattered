@@ -55,6 +55,7 @@ dependencies {
 
 compileJava {
     options.compilerArgs << "-Xlint:deprecation"
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
 sourceSets {

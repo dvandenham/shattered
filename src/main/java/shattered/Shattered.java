@@ -153,7 +153,6 @@ public final class Shattered {
 		this.delegateGuiManagerTick = (Runnable) ((Object[]) eventSetupGui.getResponse().get())[0];
 		//noinspection unchecked
 		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) ((Object[]) eventSetupGui.getResponse().get())[1];
-		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
 
 		//Setup input handlers
 		Shattered.LOGGER.debug("Initializing keyboard/mouse input handler");
@@ -162,6 +161,7 @@ public final class Shattered {
 		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
 
 		//Setup SoundSystem
+		Shattered.LOGGER.debug("Initializing SoundSystem");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_sound_system"));
 
 		//Initialize LuaMachine
@@ -175,10 +175,15 @@ public final class Shattered {
 		Shattered.LOGGER.debug("Stitching all TextureAtlas subscribers");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
 
+		//Loading audio
+		Shattered.LOGGER.debug("Loading all audio into memory");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_audio"));
+
 		Shattered.LOGGER.debug("Loading took {} milliseconds!", Shattered.getSystemTime() - startTime);
 	}
 
 	private void startRuntime() {
+		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
 		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeCatchup);
 		while (Shattered.isRunning()) {
 			final Throwable cachedError = timer.execute();

@@ -53,10 +53,11 @@ behaviour packs.
         13. Initialize SoundSystem (init_sound_system)
         14. Configure the LuaMachine (init_lua_machine)
         15. Let the Atlas work it's magic (atlas_stitch)
-        16. Stopping the loading screen thread.
-        17. Starting the core runtime.
-        18. Playing the boot animation and boot sound.
-        19. Showing the main menu.
+        16. Load all audio data into memory (load_audio)
+        17. Stopping the loading screen thread.
+        18. Starting the core runtime.
+        19. Playing the boot animation and boot sound.
+        20. Showing the main menu.
 
 # Registries
 

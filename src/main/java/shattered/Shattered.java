@@ -1,5 +1,7 @@
 package shattered;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +30,7 @@ import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.IEventBus;
 import shattered.core.event.MessageEvent;
+import shattered.game.GameManager;
 import shattered.lib.Color;
 import shattered.lib.ITimerListener;
 import shattered.lib.Lazy;
@@ -70,6 +73,7 @@ public final class Shattered {
 	private static Shattered INSTANCE;
 	public final Tessellator tessellator;
 	public final FontRenderer fontRenderer;
+	public final GameManager gameManager;
 	private final ThreadLoadingScreen loadingScreen;
 	private final BootAnimation bootAnimation = new BootAnimation();
 
@@ -140,6 +144,12 @@ public final class Shattered {
 		assert this.fontRenderer != null;
 
 		this.loadingScreen = new ThreadLoadingScreen(this);
+
+		final MessageEvent initGameManagerEvent = new MessageEvent("init_game_manager");
+		Shattered.SYSTEM_BUS.post(initGameManagerEvent);
+		final Supplier<?> initGameManagerResponse = initGameManagerEvent.getResponse();
+		assert initGameManagerResponse != null;
+		this.gameManager = (GameManager) initGameManagerResponse.get();
 	}
 
 	private void startLoadingScreen() {
@@ -204,7 +214,7 @@ public final class Shattered {
 
 	private void startRuntime() {
 		this.guiManager.openScreen(new ScreenMainMenu());
-		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeCatchup);
+		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeTickBound);
 		this.bootAnimation.start();
 		while (Shattered.isRunning()) {
 			final Throwable cachedError = timer.execute();
@@ -300,8 +310,15 @@ public final class Shattered {
 	}
 
 	@Nullable
-	private Throwable runtimeCatchup(@NotNull final RuntimeTimer timer) {
-		return null;
+	private Throwable runtimeTickBound(@NotNull final RuntimeTimer timer) {
+		try {
+			if (this.gameManager.isRunning()) {
+				this.gameManager.tick();
+			}
+			return null;
+		} catch (final Throwable e) {
+			return e;
+		}
 	}
 
 	public void stop() {

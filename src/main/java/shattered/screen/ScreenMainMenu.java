@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import shattered.core.event.EventListener;
 import shattered.Assets;
 import shattered.Shattered;
+import shattered.lib.ResourceLocation;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
@@ -45,7 +46,10 @@ public final class ScreenMainMenu extends AbstractScreen {
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)
 	private void onButtonClicked(final GuiButton.ButtonEvent.LeftClick event) {
 		final GuiButton button = event.get();
-		if (button == this.buttonShutdown) {
+		if (button == this.buttonContinue) {
+			//TODO temporary
+			Shattered.getInstance().gameManager.loadWorld(new ResourceLocation("1-1"));
+		} else if (button == this.buttonShutdown) {
 			Shattered.getInstance().stop();
 		}
 	}

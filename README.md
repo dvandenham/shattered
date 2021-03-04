@@ -45,28 +45,30 @@ behaviour packs.
         5. Posting the CreateRegistryEvent, causing all registries to be created and registered into a master registry.
         6. Initializing GLFW (init_glfw) and the rendering system.
         7. Loading initial assets for the loading screen.
-        8. Booting up the rendering system and starting the loading screen thread.
-        9. Loading all json-based registries for the registries that were created during step ```e``` (load_registries).
-        10. Loading, parsing and validating the json-based registries for every asset type (init_assets).
-        11. Loading all assets defined into these registries into real registries, one asset type at a time.
-        12. Initializing the GuiManager (init_gui)
-        13. Instantiating the main menu screen and registering it into the GuiManager.
-        14. Initializing the keyboard/mouse input handler (input_setup).
-        15. Initialize SoundSystem (init_sound_system)
-        16. Configure the LuaMachine (init_lua_machine)
-        17. Let the Atlas work it's magic (atlas_stitch)
-        18. Load all audio data into memory (load_audio)
-        19. Freezing all registries, making them immutable from now on (freeze_registries).
-        20. Stopping the loading screen thread.
-        21. Starting the core runtime.
-        22. Playing the boot animation and boot sound.
-        23. Showing the main menu.
+        8. Booting up the rendering system.
+        9. Initializing the GameManager (init_game_manager).
+        10. Starting the loading screen thread.
+        11. Loading all json-based registries for the registries that were created during step ```e``` (load_registries).
+        12. Loading, parsing and validating the json-based registries for every asset type (init_assets).
+        13. Loading all assets defined into these registries into real registries, one asset type at a time.
+        14. Initializing the GuiManager (init_gui).
+        15. Instantiating the main menu screen and registering it into the GuiManager.
+        16. Initializing the keyboard/mouse input handler (input_setup).
+        17. Initialize SoundSystem (init_sound_system).
+        18. Configure the LuaMachine (init_lua_machine).
+        19. Let the Atlas work it's magic (atlas_stitch).
+        20. Load all audio data into memory (load_audio).
+        21. Freezing all registries, making them immutable from now on (freeze_registries).
+        22. Stopping the loading screen thread.
+        23. Starting the core runtime.
+        24. Playing the boot animation and boot sound.
+        25. Showing the main menu.
 
 # Registries
 
-| Name                      | Key type         | Value type | Freezable | Unique Keys |
-|---------------------------|------------------|------------|-----------|-------------|
-| ResourceSingletonRegistry | ResourceLocation | Object     | Yes       | Yes         |
+Registries are a core component of Shattered. A registry is a unique one-to-one mapping using ResourceLocation's as keys. All registries are mapped to
+json files inside the root of namespace directories.  
+Registries themselves are bound to a unique ResourceLocation.
 
 # Assets
 

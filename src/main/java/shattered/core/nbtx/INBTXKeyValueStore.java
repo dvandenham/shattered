@@ -1,9 +1,13 @@
-package shattered.lib.json;
+package shattered.core.nbtx;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import shattered.lib.math.Dimension;
+import shattered.lib.math.Point;
+import shattered.lib.math.Rectangle;
 
-interface IKeyValueStore {
+@SuppressWarnings("unused")
+interface INBTXKeyValueStore {
 
 	void set(@NotNull String name, boolean value);
 
@@ -13,25 +17,29 @@ interface IKeyValueStore {
 
 	void set(@NotNull String name, int value);
 
+	void set(@NotNull String name, long value);
+
 	void set(@NotNull String name, float value);
 
 	void set(@NotNull String name, double value);
-
-	void set(@NotNull String name, long value);
 
 	void set(@NotNull String name, char value);
 
 	void set(@NotNull String name, @NotNull String value);
 
-	void set(@NotNull String name, @NotNull JDBTable value);
+	void set(@NotNull String name, @NotNull Point value);
 
-	void set(@NotNull String name, @NotNull JDBArray value);
+	void set(@NotNull String name, @NotNull Dimension value);
 
-	void set(@NotNull String name, @NotNull JDBCollection value);
+	void set(@NotNull String name, @NotNull Rectangle value);
 
-	JDBTable newTable(@NotNull String name);
+	@NotNull
+	NBTXTagArray newArray(@NotNull String name);
 
-	JDBArray newArray(@NotNull String name);
+	@NotNull
+	NBTXTagTable newTable(@NotNull String name);
+
+	void setTag(@NotNull String name, @NotNull NBTXTag tag);
 
 	boolean hasBoolean(@NotNull String name);
 
@@ -41,25 +49,29 @@ interface IKeyValueStore {
 
 	boolean hasInteger(@NotNull String name);
 
+	boolean hasLong(@NotNull String name);
+
 	boolean hasFloat(@NotNull String name);
 
 	boolean hasDouble(@NotNull String name);
-
-	boolean hasLong(@NotNull String name);
 
 	boolean hasCharacter(@NotNull String name);
 
 	boolean hasString(@NotNull String name);
 
-	boolean hasTable(@NotNull String name);
+	boolean hasPoint(@NotNull String name);
+
+	boolean hasDimension(@NotNull String name);
+
+	boolean hasRectangle(@NotNull String name);
 
 	boolean hasArray(@NotNull String name);
 
-	boolean hasCollection(@NotNull String name);
+	boolean hasTable(@NotNull String name);
 
-	boolean hasKey(@NotNull final String name, @NotNull JDBKeyTypes type);
+	boolean hasTag(@NotNull String name);
 
-	boolean hasKey(@NotNull final String name);
+	boolean hasTag(@NotNull String name, @NotNull NBTXTypes type);
 
 	boolean getBoolean(@NotNull String name);
 
@@ -69,11 +81,11 @@ interface IKeyValueStore {
 
 	int getInteger(@NotNull String name);
 
+	long getLong(@NotNull String name);
+
 	float getFloat(@NotNull String name);
 
 	double getDouble(@NotNull String name);
-
-	long getLong(@NotNull String name);
 
 	char getCharacter(@NotNull String name);
 
@@ -81,22 +93,26 @@ interface IKeyValueStore {
 	String getString(@NotNull String name);
 
 	@Nullable
-	JDBTable getTable(@NotNull String name);
+	Point getPoint(@NotNull String name);
 
 	@Nullable
-	JDBArray getArray(@NotNull String name);
+	Dimension getDimension(@NotNull String name);
 
 	@Nullable
-	JDBCollection getCollection(@NotNull String name);
+	Rectangle getRectangle(@NotNull String name);
 
 	@Nullable
-	Object getKey(@NotNull String name, @NotNull JDBKeyTypes type);
+	NBTXTagArray getArray(@NotNull String name);
 
 	@Nullable
-	Object getKey(@NotNull String name);
+	NBTXTagTable getTable(@NotNull String name);
 
-	void remove(@NotNull String name);
+	@Nullable
+	NBTXTag getTag(@NotNull String name);
 
+	void removeKey(@NotNull String name);
+
+	@NotNull
 	String[] getKeyNames();
 
 	void clear();

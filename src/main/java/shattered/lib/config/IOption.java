@@ -1,7 +1,7 @@
 package shattered.lib.config;
 
 import org.jetbrains.annotations.NotNull;
-import shattered.lib.json.JDB;
+import shattered.core.nbtx.NBTX;
 
 abstract class IOption<T> {
 
@@ -16,10 +16,10 @@ abstract class IOption<T> {
 		this.value = defaultValue;
 	}
 
-	abstract void serialize(@NotNull JDB store);
+	abstract void serialize(@NotNull NBTX store);
 
 	@NotNull
-	abstract T deserialize(@NotNull JDB store);
+	abstract T deserialize(@NotNull NBTX store);
 
 	public void reset() {
 		this.set(this.defaultValue);

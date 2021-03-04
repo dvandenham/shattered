@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -23,7 +22,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import preboot.AnnotationRegistry;
 import preboot.BootManager;
-import shattered.core.db.Database;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.IEventBus;
@@ -69,7 +67,6 @@ public final class Shattered {
 	private static Shattered instance;
 	public final Tessellator tessellator;
 	public final FontRenderer fontRenderer;
-	public final Database database;
 	private final ThreadLoadingScreen loadingScreen;
 	private final BootAnimation bootAnimation = new BootAnimation();
 
@@ -108,19 +105,6 @@ public final class Shattered {
 	}
 
 	private Shattered(final String[] args) {
-		Shattered.LOGGER.debug("Initializing database");
-		final MessageEvent initDatabaseEvent = new MessageEvent("init_database", Shattered.WORKSPACE.getDataFile("store"));
-		Shattered.SYSTEM_BUS.post(initDatabaseEvent);
-		final Supplier<?> databaseSupplier = initDatabaseEvent.getResponse();
-		if (databaseSupplier == null) {
-			Shattered.crash("Could not initialize database!");
-		}
-		this.database = (Database) initDatabaseEvent.getResponse().get();
-		if (this.database == null) {
-			Shattered.crash("Could not initialize database!");
-		}
-		assert this.database != null;
-
 		Shattered.LOGGER.debug("Notifying registry holders for registry creation");
 		final CreateRegistryEvent createRegistryEvent = ReflectionHelper.instantiate(CreateRegistryEvent.class);
 		assert createRegistryEvent != null;

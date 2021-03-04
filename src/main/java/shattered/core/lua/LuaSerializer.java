@@ -10,10 +10,10 @@ import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
+import shattered.core.nbtx.NBTXTag;
+import shattered.core.nbtx.NBTXTagArray;
+import shattered.core.nbtx.NBTXTagTable;
 import shattered.Shattered;
-import shattered.lib.json.JDBArray;
-import shattered.lib.json.JDBCollection;
-import shattered.lib.json.JDBTable;
 
 public final class LuaSerializer {
 
@@ -77,12 +77,12 @@ public final class LuaSerializer {
 	}
 
 	@Nullable
-	public static JDBCollection serializeTable(@NotNull final LuaValue value) {
+	public static NBTXTag serializeTable(@NotNull final LuaValue value) {
 		return LuaSerializer.serializeTable(value, new ArrayList<>(), null);
 	}
 
 	@Nullable
-	private static JDBCollection serializeTable(@NotNull final LuaValue value, @NotNull final ArrayList<LuaValue> tracking, @Nullable final Object trackingKey) {
+	private static NBTXTag serializeTable(@NotNull final LuaValue value, @NotNull final ArrayList<LuaValue> tracking, @Nullable final Object trackingKey) {
 		if (!value.istable()) {
 			return null;
 		}
@@ -95,7 +95,7 @@ public final class LuaSerializer {
 			return LuaSerializer.serializeArray(table, tracking, trackingKey);
 		}
 		tracking.add(value);
-		final JDBTable result = new JDBTable();
+		final NBTXTagTable result = new NBTXTagTable();
 		final LuaTableIterator iterator = new LuaTableIterator(table);
 		while (iterator.hasNext()) {
 			final Varargs entry = iterator.next();
@@ -103,14 +103,14 @@ public final class LuaSerializer {
 			final LuaValue rowValue = entry.arg(2);
 			if (rowValue instanceof LuaTable) {
 				if (LuaSerializer.isArray((LuaTable) rowValue)) {
-					final JDBArray serializedArray = LuaSerializer.serializeArray((LuaTable) value, tracking, key);
+					final NBTXTagArray serializedArray = LuaSerializer.serializeArray((LuaTable) value, tracking, key);
 					if (serializedArray != null) {
-						result.set(key, serializedArray);
+						result.setTag(key, serializedArray);
 					}
 				} else {
-					final JDBCollection serializedTable = LuaSerializer.serializeTable(rowValue, tracking, key);
+					final NBTXTag serializedTable = LuaSerializer.serializeTable(rowValue, tracking, key);
 					if (serializedTable != null) {
-						result.set(key, serializedTable);
+						result.setTag(key, serializedTable);
 					}
 				}
 				continue;
@@ -126,13 +126,13 @@ public final class LuaSerializer {
 	}
 
 	@Nullable
-	private static JDBArray serializeArray(@NotNull final LuaTable table, @NotNull final ArrayList<LuaValue> tracking, @Nullable final Object trackingKey) {
+	private static NBTXTagArray serializeArray(@NotNull final LuaTable table, @NotNull final ArrayList<LuaValue> tracking, @Nullable final Object trackingKey) {
 		if (tracking.contains(table)) {
 			Shattered.LOGGER.warn("Cannot serialize recursive LuaTable at key: {}", trackingKey);
 			return null;
 		}
 		tracking.add(table);
-		final JDBArray result = new JDBArray();
+		final NBTXTagArray result = new NBTXTagArray();
 		final LuaArrayIterator iterator = new LuaArrayIterator(table);
 		while (iterator.hasNext()) {
 			final Varargs entry = iterator.next();
@@ -140,14 +140,14 @@ public final class LuaSerializer {
 			final LuaValue value = entry.arg(2);
 			if (value instanceof LuaTable) {
 				if (LuaSerializer.isArray((LuaTable) value)) {
-					final JDBArray serializedArray = LuaSerializer.serializeArray((LuaTable) value, tracking, index);
+					final NBTXTagArray serializedArray = LuaSerializer.serializeArray((LuaTable) value, tracking, index);
 					if (serializedArray != null) {
-						result.add(serializedArray);
+						result.addTag(serializedArray);
 					}
 				} else {
-					final JDBCollection serializeTable = LuaSerializer.serializeTable(value, tracking, index);
+					final NBTXTag serializeTable = LuaSerializer.serializeTable(value, tracking, index);
 					if (serializeTable != null) {
-						result.add(serializeTable);
+						result.addTag(serializeTable);
 					}
 				}
 				continue;
@@ -163,14 +163,14 @@ public final class LuaSerializer {
 	}
 
 	@Nullable
-	public static LuaTable deserializeTable(@Nullable final JDBCollection collection) {
-		if (collection instanceof JDBArray) {
-			return LuaSerializer.deserializeArray((JDBArray) collection);
+	public static LuaTable deserializeTable(@Nullable final NBTXTag collection) {
+		if (collection instanceof NBTXTagArray) {
+			return LuaSerializer.deserializeArray((NBTXTagArray) collection);
 		}
-		if (!(collection instanceof JDBTable)) {
+		if (!(collection instanceof NBTXTagTable)) {
 			return null;
 		}
-		final JDBTable table = (JDBTable) collection;
+		final NBTXTagTable table = (NBTXTagTable) collection;
 		final LuaTable result = new LuaTable();
 		for (final String keyName : table.getKeyNames()) {
 			final String rowValue = table.getString(keyName);
@@ -185,7 +185,7 @@ public final class LuaSerializer {
 	}
 
 	@NotNull
-	private static LuaTable deserializeArray(@NotNull final JDBArray array) {
+	private static LuaTable deserializeArray(@NotNull final NBTXTagArray array) {
 		final LuaTable result = new LuaTable();
 		for (int i = 0; i < array.getSize(); ++i) {
 			final String rowValue = array.getString(i);

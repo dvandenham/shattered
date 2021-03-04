@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.core.nbtx.NBTX;
+import shattered.core.nbtx.NBTXTagTable;
+import shattered.core.nbtx.NBTXTypes;
 import shattered.Shattered;
 import shattered.lib.Color;
 import shattered.lib.FastNamedObjectMap;
-import shattered.lib.json.JDB;
-import shattered.lib.json.JDBKeyTypes;
-import shattered.lib.json.JDBTable;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
@@ -89,7 +89,7 @@ public class ConfigManager {
 			ConfigManager.save();
 		} else {
 			try {
-				final JDB store = JDB.read(ConfigManager.FILE);
+				final NBTX store = NBTX.deserializeNBTX(ConfigManager.FILE);
 				boolean dirty = !Arrays.asList(store.getKeyNames()).containsAll(ConfigManager.PREFERENCES.keySet());
 				for (final String key : store.getKeyNames()) {
 					final IOption<?> option = ConfigManager.PREFERENCES.get(key);
@@ -111,9 +111,9 @@ public class ConfigManager {
 
 	static void save() {
 		try {
-			final JDB store = new JDB();
+			final NBTX store = new NBTX();
 			ConfigManager.PREFERENCES.values().forEach(option -> option.serialize(store));
-			store.save(ConfigManager.FILE);
+			store.serialize(ConfigManager.FILE);
 		} catch (final IOException e) {
 			Shattered.LOGGER.warn("Could not write config!", e);
 		}
@@ -126,13 +126,13 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
+		void serialize(@NotNull final NBTX store) {
 			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Boolean deserialize(@NotNull final JDB store) {
+		Boolean deserialize(@NotNull final NBTX store) {
 			return store.getBoolean(this.preference);
 		}
 	}
@@ -144,13 +144,13 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
+		void serialize(@NotNull final NBTX store) {
 			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Integer deserialize(@NotNull final JDB store) {
+		Integer deserialize(@NotNull final NBTX store) {
 			return store.getInteger(this.preference);
 		}
 	}
@@ -162,13 +162,13 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
+		void serialize(@NotNull final NBTX store) {
 			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Long deserialize(@NotNull final JDB store) {
+		Long deserialize(@NotNull final NBTX store) {
 			return store.getLong(this.preference);
 		}
 	}
@@ -180,13 +180,13 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
+		void serialize(@NotNull final NBTX store) {
 			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Double deserialize(@NotNull final JDB store) {
+		Double deserialize(@NotNull final NBTX store) {
 			return store.getDouble(this.preference);
 		}
 	}
@@ -198,13 +198,13 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
+		void serialize(@NotNull final NBTX store) {
 			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Character deserialize(@NotNull final JDB store) {
+		Character deserialize(@NotNull final NBTX store) {
 			return store.getCharacter(this.preference);
 		}
 	}
@@ -216,13 +216,13 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
+		void serialize(@NotNull final NBTX store) {
 			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		String deserialize(@NotNull final JDB store) {
+		String deserialize(@NotNull final NBTX store) {
 			return Objects.requireNonNull(store.getString(this.preference));
 		}
 	}
@@ -234,23 +234,14 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
-			final JDBTable table = store.newTable(this.preference);
-			table.set("x", this.get().getX());
-			table.set("y", this.get().getY());
+		void serialize(@NotNull final NBTX store) {
+			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Point deserialize(@NotNull final JDB store) {
-			final JDBTable table = store.getTable(this.preference);
-			if (table == null) {
-				throw new NullPointerException();
-			}
-			if (!table.hasKey("x", JDBKeyTypes.INTEGER) || !table.hasKey("y", JDBKeyTypes.INTEGER)) {
-				throw new NullPointerException();
-			}
-			return Point.create(table.getInteger("x"), table.getInteger("y"));
+		Point deserialize(@NotNull final NBTX store) {
+			return Objects.requireNonNull(store.getPoint(this.preference));
 		}
 	}
 
@@ -261,23 +252,14 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
-			final JDBTable table = store.newTable(this.preference);
-			table.set("w", this.get().getWidth());
-			table.set("h", this.get().getHeight());
+		void serialize(@NotNull final NBTX store) {
+			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Dimension deserialize(@NotNull final JDB store) {
-			final JDBTable table = store.getTable(this.preference);
-			if (table == null) {
-				throw new NullPointerException();
-			}
-			if (!table.hasKey("w", JDBKeyTypes.INTEGER) || !table.hasKey("h", JDBKeyTypes.INTEGER)) {
-				throw new NullPointerException();
-			}
-			return Dimension.create(table.getInteger("w"), table.getInteger("h"));
+		Dimension deserialize(@NotNull final NBTX store) {
+			return Objects.requireNonNull(store.getDimension(this.preference));
 		}
 	}
 
@@ -288,28 +270,14 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
-			final JDBTable table = store.newTable(this.preference);
-			table.set("x", this.get().getX());
-			table.set("y", this.get().getY());
-			table.set("w", this.get().getWidth());
-			table.set("h", this.get().getHeight());
+		void serialize(@NotNull final NBTX store) {
+			store.set(this.preference, this.get());
 		}
 
 		@Override
 		@NotNull
-		Rectangle deserialize(@NotNull final JDB store) {
-			final JDBTable table = store.getTable(this.preference);
-			if (table == null) {
-				throw new NullPointerException();
-			}
-			if (!table.hasKey("x", JDBKeyTypes.INTEGER) || !table.hasKey("y", JDBKeyTypes.INTEGER)) {
-				throw new NullPointerException();
-			}
-			if (!table.hasKey("w", JDBKeyTypes.INTEGER) || !table.hasKey("h", JDBKeyTypes.INTEGER)) {
-				throw new NullPointerException();
-			}
-			return Rectangle.create(table.getInteger("x"), table.getInteger("y"), table.getInteger("w"), table.getInteger("h"));
+		Rectangle deserialize(@NotNull final NBTX store) {
+			return Objects.requireNonNull(store.getRectangle(this.preference));
 		}
 	}
 
@@ -320,8 +288,8 @@ public class ConfigManager {
 		}
 
 		@Override
-		void serialize(@NotNull final JDB store) {
-			final JDBTable table = store.newTable(this.preference);
+		void serialize(@NotNull final NBTX store) {
+			final NBTXTagTable table = store.newTable(this.preference);
 			table.set("r", this.get().getRedByte());
 			table.set("g", this.get().getGreenByte());
 			table.set("b", this.get().getBlueByte());
@@ -330,15 +298,15 @@ public class ConfigManager {
 
 		@Override
 		@NotNull
-		Color deserialize(@NotNull final JDB store) {
-			final JDBTable table = store.getTable(this.preference);
+		Color deserialize(@NotNull final NBTX store) {
+			final NBTXTagTable table = store.getTable(this.preference);
 			if (table == null) {
 				throw new NullPointerException();
 			}
-			if (!table.hasKey("r", JDBKeyTypes.INTEGER)
-					|| !table.hasKey("g", JDBKeyTypes.INTEGER)
-					|| !table.hasKey("b", JDBKeyTypes.INTEGER)
-					|| !table.hasKey("a", JDBKeyTypes.INTEGER)) {
+			if (!table.hasTag("r", NBTXTypes.INTEGER)
+					|| !table.hasTag("g", NBTXTypes.INTEGER)
+					|| !table.hasTag("b", NBTXTypes.INTEGER)
+					|| !table.hasTag("a", NBTXTypes.INTEGER)) {
 				throw new NullPointerException();
 			}
 			return Color.get(table.getInteger("r"), table.getInteger("g"), table.getInteger("b"), table.getInteger("a"));

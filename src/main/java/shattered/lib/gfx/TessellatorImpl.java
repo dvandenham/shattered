@@ -1,24 +1,25 @@
 package shattered.lib.gfx;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import shattered.core.event.EventBus;
-import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.EventListener;
+import shattered.core.event.MessageEvent;
 import shattered.Shattered;
 import shattered.lib.Color;
-import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.AtlasStitcher;
 import shattered.lib.asset.IAsset;
-import shattered.lib.asset.ResourceReloadEvent;
 import shattered.lib.asset.Texture;
 import shattered.lib.asset.TextureAnimated;
 import shattered.lib.asset.TextureAtlas;
@@ -599,10 +600,10 @@ public final class TessellatorImpl implements Tessellator {
 		final float stopY = call.bounds.getMaxY();
 		if (call.useTexture) {
 			if (call.texture == TessellatorImpl.TEXTURE_MISSING) {
-				call.uMin = 1;
-				call.vMin = 1;
-				call.uMax = call.texture.getImageSize().getWidth() - 1;
-				call.vMax = call.texture.getImageSize().getHeight() - 1;
+				call.uMin = 0;
+				call.vMin = 0;
+				call.uMax = call.texture.getImageSize().getWidth();
+				call.vMax = call.texture.getImageSize().getHeight();
 				Arrays.fill(call.colors, Color.WHITE);
 				GLHelper.disableSmoothing();
 			} else if (call.texture instanceof TextureAnimated) {
@@ -679,23 +680,34 @@ public final class TessellatorImpl implements Tessellator {
 	}
 
 	@NotNull
-	public Texture getTexture(@NotNull final ResourceLocation resource) {
+	private Texture getTexture(@NotNull final ResourceLocation resource) {
 		final IAsset asset = AssetRegistry.getAsset(resource);
-		return asset instanceof Texture ? (Texture) asset : TessellatorImpl.TEXTURE_MISSING;
+		if (asset instanceof Texture) {
+			return (Texture) asset;
+		} else {
+			if (TessellatorImpl.TEXTURE_MISSING == null) {
+				TessellatorImpl.TEXTURE_MISSING = TessellatorImpl.createMissingTexture();
+			}
+			assert TessellatorImpl.TEXTURE_MISSING != null;
+			return TessellatorImpl.TEXTURE_MISSING;
+		}
 	}
 
-	@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
-	private static class EventHandler {
-
-		@EventListener(ResourceReloadEvent.class)
-		public static void onResourceReload(final ResourceReloadEvent ignored) {
-			TessellatorImpl.TEXTURE_MISSING = ReflectionHelper.invokeMethod(
-					AssetRegistry.class,
-					null,
-					Texture.class,
-					ResourceLocation.class,
-					new ResourceLocation("missing")
-			);
+	private static Texture createMissingTexture() {
+		final BufferedImage image = new BufferedImage(2, 2, BufferedImage.TYPE_INT_ARGB);
+		final Graphics2D graphics = image.createGraphics();
+		graphics.setColor(java.awt.Color.MAGENTA);
+		graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
+		graphics.setColor(java.awt.Color.BLACK);
+		graphics.fillRect(0, 0, image.getWidth() / 2, image.getHeight() / 2);
+		graphics.fillRect(image.getWidth() / 2, image.getHeight() / 2, image.getWidth() / 2, image.getHeight() / 2);
+		graphics.dispose();
+		final MessageEvent event = new MessageEvent("glfw_create_gl_texture", new ResourceLocation("missing"), image);
+		if (Shattered.SYSTEM_BUS.post(event)) {
+			return null;
 		}
+		final Supplier<?> response = event.getResponse();
+		assert response != null;
+		return (Texture) response.get();
 	}
 }

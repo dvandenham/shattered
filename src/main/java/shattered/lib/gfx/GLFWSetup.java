@@ -19,6 +19,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
@@ -68,6 +69,12 @@ final class GLFWSetup {
 	static long windowId;
 	static double scale = 1;
 
+	static {
+		if (GLFWSetup.DEVELOPER_MODE) {
+			Configuration.DEBUG.set(true);
+		}
+	}
+
 	private GLFWSetup() {
 	}
 
@@ -79,7 +86,7 @@ final class GLFWSetup {
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		if (!glfwInit()) {
-			Shattered.crash("Could not initialize GLFW!");
+			Shattered.crash("Could not initialize GLFW!", null);
 		}
 
 		GLFWSetup.LOGGER.debug("Applying window hints");
@@ -201,8 +208,8 @@ final class GLFWSetup {
 	static void sendResizeEvent() {
 		Config.DISPLAY_SIZE.set(GLFWSetup.DISPLAY_SIZE.toImmutable());
 		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		FrameBufferObject.recreate();
 		VertexArrayObject.recreate();
+		FrameBufferObject.recreate();
 		EventBus.post(new DisplayResizedEvent());
 	}
 

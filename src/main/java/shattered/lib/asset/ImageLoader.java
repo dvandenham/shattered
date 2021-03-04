@@ -14,6 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.lib.ResourceLocation;
+import shattered.lib.math.Dimension;
+import shattered.lib.math.Rectangle;
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_RGB;
 import static org.lwjgl.opengl.GL11.GL_RGBA;
@@ -78,11 +81,30 @@ final class ImageLoader {
 	}
 
 	@MessageListener("glfw_create_texture")
-	private static void onSystemMessage(final MessageEvent event) {
+	private static void onGlfwCreateTexture(final MessageEvent event) {
 		final Object[] data = event.getData();
 		if (data.length == 0 || !(data[0] instanceof BufferedImage)) {
 			return;
 		}
 		event.setResponse(() -> ImageLoader.loadImage((BufferedImage) data[0]));
+	}
+
+	@MessageListener("glfw_create_gl_texture")
+	private static void onGlfwCreateGlTexture(final MessageEvent event) {
+		final Object[] data = event.getData();
+		if (data.length == 0 || !(data[0] instanceof ResourceLocation) || !(data[1] instanceof BufferedImage)) {
+			return;
+		}
+		final BufferedImage image = (BufferedImage) data[1];
+		final int[] textureData = ImageLoader.loadTexture(image);
+		final Dimension size = Dimension.create(image.getWidth(), image.getHeight());
+		final TextureSimple result = new TextureSimple(
+				(ResourceLocation) data[0],
+				textureData[0],
+				size,
+				Dimension.create(textureData[1], textureData[2]),
+				Rectangle.create(0, 0, size)
+		);
+		event.setResponse(() -> result);
 	}
 }

@@ -1,9 +1,11 @@
 package shattered.lib.json;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +37,7 @@ final class EnumAdapterFactory implements TypeAdapterFactory {
 		public EnumTypeAdapter(final Class<T> clazz) {
 			try {
 				for (final T constant : clazz.getEnumConstants()) {
-					String               name       = constant.toString();
+					String name = constant.toString();
 					final SerializedName annotation = clazz.getField(constant.name()).getAnnotation(SerializedName.class);
 					if (annotation != null) {
 						name = annotation.value();
@@ -63,7 +65,14 @@ final class EnumAdapterFactory implements TypeAdapterFactory {
 				reader.nextNull();
 				return null;
 			}
-			return this.nameToConstant.get(reader.nextString());
+			final String name = reader.nextString();
+			final T result = this.nameToConstant.get(name);
+			if (result == null) {
+				throw new JsonSyntaxException(
+						"Invalid ENUM constant: " + name + ". Valid values: " + Arrays.toString(this.nameToConstant.keySet().toArray(new String[0]))
+				);
+			}
+			return result;
 		}
 	}
 }

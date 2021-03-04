@@ -4,6 +4,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
@@ -30,8 +31,19 @@ final class TransformerJson implements ITransformer {
 		node.accept(new ClassVisitor(Opcodes.ASM5, adapter) {
 
 			@Override
+			public MethodVisitor visitMethod(final int access, final String name, final String descriptor, final String signature, final String[] exceptions) {
+				if (name.equals("<init>")) {
+					final int newAccess = (access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED) | Opcodes.ACC_PUBLIC;
+					return super.visitMethod(newAccess, name, descriptor, signature, exceptions);
+				} else {
+					return super.visitMethod(access, name, descriptor, signature, exceptions);
+				}
+			}
+
+			@Override
 			public FieldVisitor visitField(final int access, final String name, final String descriptor, final String signature, final Object value) {
-				return super.visitField((access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED) | Opcodes.ACC_PUBLIC, name, descriptor, signature, value);
+				final int newAccess = (access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED) | Opcodes.ACC_PUBLIC;
+				return super.visitField(newAccess, name, descriptor, signature, value);
 			}
 		});
 		return writer.toByteArray();

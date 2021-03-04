@@ -63,7 +63,7 @@ final class ThreadLoadingScreen implements Runnable {
 				glfwSwapBuffers(Display.getWindowId());
 			}
 		} catch (final Throwable e) {
-			Shattered.crash(e.toString());
+			Shattered.crash("Unknown", e);
 		}
 		glfwMakeContextCurrent(NULL);
 	}

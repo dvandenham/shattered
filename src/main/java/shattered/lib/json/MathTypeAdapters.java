@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -41,7 +42,7 @@ final class MathTypeAdapters {
 					final String data = reader.nextString();
 					final Matcher matcher = PointTypeAdapter.STRING_PATTERN.matcher(data);
 					if (!matcher.matches()) {
-						return null;
+						throw new JsonSyntaxException("Invalid dimension format! Correct format: <x>x<y>");
 					}
 					final String x = matcher.group(1);
 					final String y = matcher.group(2);
@@ -61,17 +62,17 @@ final class MathTypeAdapters {
 								y = reader.nextInt();
 								break;
 							default:
-								return null;
+								throw new JsonSyntaxException("Invalid dimension object key: " + name + ", expected x or y");
 						}
 					}
 					reader.endObject();
 					if (x == null || y == null) {
-						return null;
+						throw new JsonSyntaxException("Incomplete dimension format! Missing: " + (x == null ? "x" : "y"));
 					}
 					return Point.create(x, y);
 				}
 				default:
-					return null;
+					throw new JsonSyntaxException("Expected STRING/BEGIN_OBJECT, got " + reader.peek());
 			}
 		}
 	}
@@ -95,7 +96,7 @@ final class MathTypeAdapters {
 					final String data = reader.nextString();
 					final Matcher matcher = DimensionTypeAdapter.STRING_PATTERN.matcher(data);
 					if (!matcher.matches()) {
-						return null;
+						throw new JsonSyntaxException("Invalid dimension format! Correct format: <width>x<height>");
 					}
 					final String width = matcher.group(1);
 					final String height = matcher.group(2);
@@ -117,17 +118,17 @@ final class MathTypeAdapters {
 								height = reader.nextInt();
 								break;
 							default:
-								return null;
+								throw new JsonSyntaxException("Invalid dimension object key: " + name + ", expected width, w, height or h");
 						}
 					}
 					reader.endObject();
 					if (width == null || height == null) {
-						return null;
+						throw new JsonSyntaxException("Incomplete dimension format! Missing: " + (width == null ? "width" : "height"));
 					}
 					return Dimension.create(width, height);
 				}
 				default:
-					return null;
+					throw new JsonSyntaxException("Expected STRING/BEGIN_OBJECT, got " + reader.peek());
 			}
 		}
 	}
@@ -153,7 +154,7 @@ final class MathTypeAdapters {
 					final String data = reader.nextString();
 					final Matcher matcher = RectangleTypeAdapter.STRING_PATTERN.matcher(data);
 					if (!matcher.matches()) {
-						return null;
+						throw new JsonSyntaxException("Invalid rectangle format! Correct format: <x>x<y>x<width>x<height>");
 					}
 					final String x = matcher.group(1);
 					final String y = matcher.group(2);
@@ -185,18 +186,22 @@ final class MathTypeAdapters {
 								height = reader.nextInt();
 								break;
 							default:
-								return null;
+								throw new JsonSyntaxException("Invalid rectangle object key: " + name + ", expected x, y, width, w, height or h");
 						}
 					}
 					reader.endObject();
 					if (x == null || y == null || width == null || height == null) {
-						return null;
+						throw new JsonSyntaxException(
+								"Incomplete dimension format! Missing:" +
+										(x == null ? " x" : "") +
+										(y == null ? " y" : "") +
+										(width == null ? "width" : "height")
+						);
 					}
 					return Rectangle.create(x, y, width, height);
 				}
-				default: {
-					return null;
-				}
+				default:
+					throw new JsonSyntaxException("Expected STRING/BEGIN_OBJECT, got " + reader.peek());
 			}
 		}
 	}

@@ -38,7 +38,7 @@ final class RegistryLoader {
 						final Type reflectType = TypeToken.getParameterized(ArrayList.class, ResourceLocation.class).getType();
 						return new ObjectObjectImmutablePair<>(resource, JsonUtils.GSON.<ArrayList<ResourceLocation>>fromJson(reader, reflectType));
 					} catch (final IOException | NullPointerException e) {
-						Shattered.crash("Could not load json registry for registry: " + resource);
+						Shattered.crash("Could not load json registry for registry: " + resource, e);
 						return null;
 					}
 				})
@@ -58,7 +58,9 @@ final class RegistryLoader {
 				.filter(RegistryParser.class::isAssignableFrom)
 				.findFirst().orElse(null);
 		if (parserClazz == null) {
-			Shattered.crash("Could not find parser for registry: " + resource);
+			Shattered.crash("Could not find parser for registry: " + resource, new ClassNotFoundException(
+					RegistryParser.class.getName() + '<' + registry.typeClazz.getName() + '>'
+			));
 		}
 		assert parserClazz != null;
 
@@ -66,7 +68,7 @@ final class RegistryLoader {
 		try {
 			parser = parserClazz.getDeclaredConstructor().newInstance();
 		} catch (final Throwable e) {
-			Shattered.crash(e.toString());
+			Shattered.crash("Could not instantiate parser", e);
 		}
 		assert parser != null;
 
@@ -75,18 +77,20 @@ final class RegistryLoader {
 			try (final InputStreamReader reader = new InputStreamReader(RegistryLoader.class.getResourceAsStream(path))) {
 				final Object parsedData = JsonUtils.deserialize(reader, parser.getWrapperClass());
 				if (parsedData == null) {
-					Shattered.crash("Could not load resource: " + subResource);
+					Shattered.crash("Could not load resource: " + subResource, null);
 				}
 				assert parsedData != null;
 				final Object finalType = parser.parse(parsedData);
 				if (!registry.typeClazz.isAssignableFrom(finalType.getClass())) {
-					Shattered.crash("Could not parse resource: " + subResource + ". Expected type: " + registry.typeClazz.getName() + ", got: " + finalType.getClass().getName());
+					final String reason = "Could not parse resource: " + subResource + ". " +
+							"Expected type: " + registry.typeClazz.getName() + ", got: " + finalType.getClass().getName();
+					Shattered.crash(reason, null);
 				}
 				((Registry<Object>) registry).register(subResource, finalType);
 			} catch (final IOException | NullPointerException e) {
-				Shattered.crash("Resource does not exist: " + subResource);
+				Shattered.crash("Resource does not exist: " + subResource, e);
 			} catch (final Throwable e) {
-				Shattered.crash("Could not load resource: " + subResource);
+				Shattered.crash("Could not load resource: " + subResource, e);
 			}
 		}
 	}

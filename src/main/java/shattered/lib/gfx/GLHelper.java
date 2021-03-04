@@ -16,7 +16,7 @@ import static org.lwjgl.opengl.GL11.glTexParameteri;
 public final class GLHelper {
 
 	private static final Vector4f SCISSOR_TRANSFORM = new Vector4f(0, 0, 1, 1);
-	private static boolean isSmoothing = false;
+	private static boolean isSmoothing = true;
 
 	private GLHelper() {
 	}

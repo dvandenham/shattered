@@ -124,7 +124,7 @@ public final class Shattered {
 		Shattered.LOGGER.debug("Initializing rendering system");
 		final Tessellator tessellator = ReflectionHelper.instantiate(TessellatorImpl.class);
 		if (tessellator == null) {
-			Shattered.crash("Could not initialize Tessellator!");
+			Shattered.crash("Could not initialize Tessellator!", null);
 		}
 		this.tessellator = tessellator;
 		assert this.tessellator != null;
@@ -134,7 +134,7 @@ public final class Shattered {
 				Lazy.class, Lazy.of(() -> (FontGroup) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
 		);
 		if (fontRenderer == null) {
-			Shattered.crash("Could not initialize FontRenderer!");
+			Shattered.crash("Could not initialize FontRenderer!", null);
 		}
 		this.fontRenderer = fontRenderer;
 		assert this.fontRenderer != null;
@@ -357,18 +357,27 @@ public final class Shattered {
 		Shattered.TIMERS.remove(timer);
 	}
 
-	public static void crash(@NotNull final String reason) {
+	public static void crash(@NotNull final String reason, @Nullable final Throwable e) {
+		final StringWriter realReason = new StringWriter();
+		realReason.write(reason);
+		if (e != null) {
+			realReason.write('\n');
+			if (Shattered.DEVELOPER_MODE) {
+				e.printStackTrace(new PrintWriter(realReason));
+			} else {
+				realReason.write(e.getMessage());
+			}
+		}
 		try {
 			Shattered.getInstance().cleanup();
 		} catch (final Throwable ignored) {
 		}
 		Shattered.LOGGER.fatal(reason);
-		SwingUtilities.invokeLater(() -> CrashWindow.create(reason));
+		SwingUtilities.invokeLater(() -> CrashWindow.create(realReason.toString()));
 		try {
 			Thread.currentThread().join();
 			Runtime.getRuntime().halt(-1);
-		} catch (final InterruptedException e) {
-			e.printStackTrace();
+		} catch (final InterruptedException ignored) {
 		}
 	}
 
@@ -379,7 +388,7 @@ public final class Shattered {
 
 		private final RuntimeTimerExecutor tickAction;
 		private final RuntimeTimerExecutor renderAction;
-		private final RuntimeTimerExecutor catchupAction;
+		private final RuntimeTimerExecutor tickBoundAction;
 
 		//Runtime loop
 		private long iterationStartTime = Shattered.getSystemTime();
@@ -394,11 +403,11 @@ public final class Shattered {
 		private RuntimeTimer(
 				@NotNull final RuntimeTimerExecutor tickAction,
 				@NotNull final RuntimeTimerExecutor renderAction,
-				@NotNull final RuntimeTimerExecutor catchupAction
+				@NotNull final RuntimeTimerExecutor tickBoundAction
 		) {
 			this.tickAction = tickAction;
 			this.renderAction = renderAction;
-			this.catchupAction = catchupAction;
+			this.tickBoundAction = tickBoundAction;
 		}
 
 		@Nullable
@@ -409,7 +418,7 @@ public final class Shattered {
 				return cachedError;
 			}
 			while (this.iterationAccumulator >= RuntimeTimer.SECONDS_PER_TICK) {
-				cachedError = this.catchupAction.execute(this);
+				cachedError = this.tickBoundAction.execute(this);
 				if (cachedError != null) {
 					return cachedError;
 				}

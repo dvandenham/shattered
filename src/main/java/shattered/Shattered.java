@@ -36,6 +36,7 @@ import shattered.lib.asset.FontGroup;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.FontRendererImpl;
+import shattered.lib.gfx.FrameBufferObject;
 import shattered.lib.gfx.GLHelper;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
@@ -244,6 +245,7 @@ public final class Shattered {
 	@Nullable
 	private Throwable runtimeRender(@NotNull final RuntimeTimer timer) {
 		try {
+			FrameBufferObject.get().bind();
 			//Clear buffers
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			//Setup OpenGL
@@ -276,6 +278,7 @@ public final class Shattered {
 				this.fontRenderer.revertFontSize();
 				this.fontRenderer.resetFont();
 			}
+			FrameBufferObject.get().render();
 			GLFW.glfwSwapBuffers(Display.getWindowId());
 			return null;
 		} catch (final Throwable e) {

@@ -198,7 +198,8 @@ final class GLFWSetup {
 	static void sendResizeEvent() {
 		Config.DISPLAY_SIZE.set(GLFWSetup.DISPLAY_SIZE.toImmutable());
 		GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
-		TessellatorImpl.resize();
+		FrameBufferObject.recreate();
+		VertexArrayObject.recreate();
 		EventBus.post(new DisplayResizedEvent());
 	}
 

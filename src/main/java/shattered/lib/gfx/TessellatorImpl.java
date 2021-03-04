@@ -43,7 +43,6 @@ public final class TessellatorImpl implements Tessellator {
 	private Matrix4f matUniform;
 
 	private TessellatorImpl() {
-		TessellatorImpl.resize();
 		VertexArrayObject.get().bind();
 		this.matrices.offer(MatrixUtils.identity());
 		EventBus.register(this);
@@ -68,10 +67,6 @@ public final class TessellatorImpl implements Tessellator {
 
 	public Shader getShader() {
 		return this.shader;
-	}
-
-	public static void resize() {
-		VertexArrayObject.recreate();
 	}
 
 	public void reset() {

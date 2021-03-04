@@ -7,7 +7,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 final class VertexArrayObject {
 
-	private static VertexArrayObject instance;
+	private static VertexArrayObject INSTANCE;
 	private final int id;
 
 	public VertexArrayObject() {
@@ -28,14 +28,14 @@ final class VertexArrayObject {
 
 	@NotNull
 	public static VertexArrayObject get() {
-		if (VertexArrayObject.instance == null) {
-			VertexArrayObject.instance = new VertexArrayObject();
+		if (VertexArrayObject.INSTANCE == null) {
+			VertexArrayObject.INSTANCE = new VertexArrayObject();
 		}
-		return VertexArrayObject.instance;
+		return VertexArrayObject.INSTANCE;
 	}
 
 	public static void recreate() {
 		VertexArrayObject.get().delete();
-		VertexArrayObject.instance = null;
+		VertexArrayObject.INSTANCE = null;
 	}
 }

@@ -92,6 +92,9 @@ final class GLFWSetup {
 
 	@MessageListener("shutdown_glfw")
 	private static void onSystemShutdown(final MessageEvent ignored) {
+		GLFWSetup.LOGGER.debug("Cleaning up used resources");
+		VertexArrayObject.get().delete();
+		FrameBufferObject.get().delete();
 		GLFWSetup.LOGGER.debug("Destroying root window");
 		GLFWSetup.destroyWindow(GLFWSetup.windowId);
 		GLFWSetup.LOGGER.debug("Releasing error and debug callbacks");

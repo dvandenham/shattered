@@ -68,10 +68,12 @@ public final class SoundSystem {
 	@MessageListener("init_sound_system")
 	private static void onInitSoundSystem(final MessageEvent ignored) {
 		SoundSystem.INSTANCE.initialize();
+		Shattered.LOGGER.debug("SoundSystem has been initialized");
 	}
 
 	@MessageListener("shutdown")
 	private static void onShutdown(final MessageEvent ignored) {
+		Shattered.LOGGER.debug("SoundSystem is shutting down!");
 		SoundSystem.INSTANCE.destroy();
 	}
 }

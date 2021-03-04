@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
 import static org.lwjgl.opengl.GL11.glFlush;
 import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
@@ -53,8 +54,9 @@ public final class FrameBufferObject {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	private void delete() {
+	void delete() {
 		glDeleteFramebuffers(this.id);
+		glDeleteTextures(this.texId);
 	}
 
 	private void checkStatus() {

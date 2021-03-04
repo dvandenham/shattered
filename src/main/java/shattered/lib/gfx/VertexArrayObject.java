@@ -18,12 +18,8 @@ final class VertexArrayObject {
 		glBindVertexArray(this.id);
 	}
 
-	public void delete() {
+	void delete() {
 		glDeleteVertexArrays(this.id);
-	}
-
-	public int getId() {
-		return this.id;
 	}
 
 	@NotNull

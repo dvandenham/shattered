@@ -14,8 +14,7 @@ import shattered.lib.gfx.Tessellator;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 public final class GuiManager {
-
-	public static final GuiManager INSTANCE = new GuiManager();
+	
 	private final ObjectArrayList<IGuiScreen> screens = new ObjectArrayList<>();
 
 	private GuiManager() {
@@ -113,9 +112,11 @@ public final class GuiManager {
 
 	@MessageListener("init_gui")
 	private static void onMessageReceived(final MessageEvent event) {
+		GuiManager manager = new GuiManager();
 		event.setResponse(() -> new Object[]{
-				(Runnable) GuiManager.INSTANCE::tick,
-				(BiConsumer<Tessellator, FontRenderer>) GuiManager.INSTANCE::render
+				manager,
+				(Runnable) manager::tick,
+				(BiConsumer<Tessellator, FontRenderer>) manager::render
 		});
 	}
 }

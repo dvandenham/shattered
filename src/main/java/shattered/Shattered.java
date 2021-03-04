@@ -7,9 +7,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import javax.swing.SwingUtilities;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,11 +67,13 @@ public final class Shattered {
 	private static final AtomicBoolean RUNNING = new AtomicBoolean(true);
 	private static final HashSet<Timer> TIMERS = new HashSet<>();
 
-	private static Shattered instance;
+	private static Shattered INSTANCE;
 	public final Tessellator tessellator;
 	public final FontRenderer fontRenderer;
 	private final ThreadLoadingScreen loadingScreen;
 	private final BootAnimation bootAnimation = new BootAnimation();
+
+	private GuiManager guiManager;
 
 	//Delegate methods
 	private Runnable delegateGuiManagerTick;
@@ -96,12 +100,12 @@ public final class Shattered {
 		Config.DISPLAY_SIZE.get(); //Force load class
 		Shattered.SYSTEM_BUS.post(new MessageEvent("load_config"));
 		//Create all registry instances
-		Shattered.instance = new Shattered(args);
-		Shattered.instance.startLoadingScreen();
-		Shattered.instance.startLoading();
+		Shattered.INSTANCE = new Shattered(args);
+		Shattered.INSTANCE.startLoadingScreen();
+		Shattered.INSTANCE.startLoading();
 		//This call will block the program until a shutdown was requested
-		Shattered.instance.startRuntime();
-		Shattered.instance.cleanup();
+		Shattered.INSTANCE.startRuntime();
+		Shattered.INSTANCE.cleanup();
 		Shattered.LOGGER.info("Goodbye!");
 	}
 
@@ -149,17 +153,23 @@ public final class Shattered {
 	private void startLoading() {
 		final long startTime = Shattered.getSystemTime();
 
+		//Load external registries
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_registries"));
+
 		//Load assets
 		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
 
 		//Initialize GuiHandler and main menu screen
 		Shattered.LOGGER.debug("Initializing gui system");
-		final MessageEvent eventSetupGui = new MessageEvent("init_gui");
-		Shattered.SYSTEM_BUS.post(eventSetupGui);
-		assert eventSetupGui.getResponse() != null;
-		this.delegateGuiManagerTick = (Runnable) ((Object[]) eventSetupGui.getResponse().get())[0];
-		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) ((Object[]) eventSetupGui.getResponse().get())[1];
+		final MessageEvent initGuiEvent = new MessageEvent("init_gui");
+		Shattered.SYSTEM_BUS.post(initGuiEvent);
+		final Supplier<?> initGuiResponse = initGuiEvent.getResponse();
+		assert initGuiResponse != null;
+		final Object[] initGuiResponseData = (Object[]) initGuiResponse.get();
+		this.guiManager = (GuiManager) initGuiResponseData[0];
+		this.delegateGuiManagerTick = (Runnable) initGuiResponseData[1];
+		this.delegateGuiManagerRender = (BiConsumer<Tessellator, FontRenderer>) initGuiResponseData[2];
 
 		//Setup input handlers
 		Shattered.LOGGER.debug("Initializing keyboard/mouse input handler");
@@ -186,11 +196,14 @@ public final class Shattered {
 		Shattered.LOGGER.debug("Loading all audio into memory");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("load_audio"));
 
+		//Freeze all registries
+		Shattered.SYSTEM_BUS.post(new MessageEvent("freeze_registries"));
+
 		Shattered.LOGGER.debug("Loading took {} milliseconds!", Shattered.getSystemTime() - startTime);
 	}
 
 	private void startRuntime() {
-		GuiManager.INSTANCE.openScreen(new ScreenMainMenu());
+		this.guiManager.openScreen(new ScreenMainMenu());
 		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeCatchup);
 		this.bootAnimation.start();
 		while (Shattered.isRunning()) {
@@ -296,8 +309,13 @@ public final class Shattered {
 		Shattered.RUNNING.lazySet(false);
 	}
 
+	@NotNull
+	public GuiManager getGuiManager() {
+		return this.guiManager;
+	}
+
 	public static Shattered getInstance() {
-		return Shattered.instance;
+		return Shattered.INSTANCE;
 	}
 
 	public static boolean isRunning() {
@@ -340,8 +358,18 @@ public final class Shattered {
 	}
 
 	public static void crash(@NotNull final String reason) {
+		try {
+			Shattered.getInstance().cleanup();
+		} catch (final Throwable ignored) {
+		}
 		Shattered.LOGGER.fatal(reason);
-		Runtime.getRuntime().halt(-1);
+		SwingUtilities.invokeLater(() -> CrashWindow.create(reason));
+		try {
+			Thread.currentThread().join();
+			Runtime.getRuntime().halt(-1);
+		} catch (final InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static final class RuntimeTimer {

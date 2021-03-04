@@ -32,13 +32,13 @@ import shattered.lib.json.JsonUtils;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Rectangle;
 import shattered.lib.registry.CreateRegistryEvent;
-import shattered.lib.registry.ResourceSingletonRegistry;
+import shattered.lib.registry.Registry;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 public final class AssetRegistry {
 
-	private static ResourceSingletonRegistry<IAsset> ASSETS;
-	private static ResourceSingletonRegistry<AssetTypes> TYPES;
+	private static Registry<IAsset> ASSETS;
+	private static Registry<AssetTypes> TYPES;
 
 	static final Logger LOGGER = LogManager.getLogger("Assets");
 	static final AtlasStitcher ATLAS = new AtlasStitcher(false);
@@ -56,7 +56,7 @@ public final class AssetRegistry {
 						final Type reflectType = TypeToken.getParameterized(ArrayList.class, ResourceLocation.class).getType();
 						return new ObjectObjectImmutablePair<>(type, JsonUtils.GSON.<ArrayList<ResourceLocation>>fromJson(reader, reflectType));
 					} catch (final IOException | NullPointerException e) {
-						AssetRegistry.LOGGER.error("Could not load json registry: {}", resource);
+						AssetRegistry.LOGGER.error("Could not load json registry for asset type: {}", resource);
 						return null;
 					}
 				})
@@ -98,8 +98,8 @@ public final class AssetRegistry {
 
 	@EventListener
 	private static void onCreateRegistry(final CreateRegistryEvent event) {
-		AssetRegistry.ASSETS = event.newResourceSingletonRegistry(new ResourceLocation("assets"), IAsset.class);
-		AssetRegistry.TYPES = event.newResourceSingletonRegistry(new ResourceLocation("asset_types"), AssetTypes.class);
+		AssetRegistry.ASSETS = event.create(new ResourceLocation("assets"), IAsset.class);
+		AssetRegistry.TYPES = event.create(new ResourceLocation("asset_types"), AssetTypes.class);
 	}
 
 	@Nullable

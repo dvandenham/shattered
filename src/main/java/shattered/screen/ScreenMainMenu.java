@@ -11,9 +11,15 @@ import shattered.lib.gui.component.GuiButton;
 
 public final class ScreenMainMenu extends AbstractScreen {
 
+	private final GuiButton buttonContinue = new GuiButton("screen.main_menu.button.continue");
+	private final GuiButton buttonNewGame = new GuiButton("screen.main_menu.button.new_game");
+	private final GuiButton buttonSettings = new GuiButton("screen.main_menu.button.settings");
 	private final GuiButton buttonShutdown = new GuiButton("screen.main_menu.button.shutdown");
 
 	public ScreenMainMenu() {
+		this.add(this.buttonContinue);
+		this.add(this.buttonNewGame);
+		this.add(this.buttonSettings);
 		this.add(this.buttonShutdown);
 	}
 
@@ -21,6 +27,10 @@ public final class ScreenMainMenu extends AbstractScreen {
 	public void setupComponents(@NotNull final Layout layout) {
 		layout.setInverted();
 		layout.add(this.buttonShutdown);
+		layout.add(this.buttonSettings);
+		layout.addEmptyRow();
+		layout.add(this.buttonNewGame);
+		layout.add(this.buttonContinue);
 	}
 
 	@Override

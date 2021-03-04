@@ -3,6 +3,7 @@ package shattered.lib.gui;
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import shattered.core.event.EventListener;
+import shattered.Shattered;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.DisplayResizedEvent;
 import shattered.lib.gfx.FontRenderer;
@@ -48,6 +49,16 @@ public abstract class IGuiScreen implements IComponentContainer {
 	@Override
 	public void doForAll(final Consumer<IGuiComponent> action) {
 		this.components.doForAll(action);
+	}
+
+	protected void openScreen(@NotNull final IGuiScreen screen) {
+		if (screen != this) {
+			Shattered.getInstance().getGuiManager().openScreen(screen);
+		}
+	}
+
+	protected void closeScreen() {
+		Shattered.getInstance().getGuiManager().closeScreen(this);
 	}
 
 	protected final void setX(final int x) {

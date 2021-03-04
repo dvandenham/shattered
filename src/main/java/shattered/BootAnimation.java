@@ -18,6 +18,9 @@ final class BootAnimation {
 
 	BootAnimation() {
 		this.timer = Shattered.addTimer(BootAnimation.TPS, BootAnimation.TICKS, timer -> {
+			if (timer.isDone()) {
+				Shattered.removeTimer(timer);
+			}
 		});
 		this.player = SoundSystem.createPlayer();
 	}

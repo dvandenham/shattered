@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -22,6 +23,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import preboot.AnnotationRegistry;
 import preboot.BootManager;
+import shattered.core.db.Database;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.IEventBus;
@@ -67,6 +69,7 @@ public final class Shattered {
 	private static Shattered instance;
 	public final Tessellator tessellator;
 	public final FontRenderer fontRenderer;
+	public final Database database;
 	private final ThreadLoadingScreen loadingScreen;
 	private final BootAnimation bootAnimation = new BootAnimation();
 
@@ -105,10 +108,23 @@ public final class Shattered {
 	}
 
 	private Shattered(final String[] args) {
+		Shattered.LOGGER.debug("Initializing database");
+		final MessageEvent initDatabaseEvent = new MessageEvent("init_database", Shattered.WORKSPACE.getDataFile("store"));
+		Shattered.SYSTEM_BUS.post(initDatabaseEvent);
+		final Supplier<?> databaseSupplier = initDatabaseEvent.getResponse();
+		if (databaseSupplier == null) {
+			Shattered.crash("Could not initialize database!");
+		}
+		this.database = (Database) initDatabaseEvent.getResponse().get();
+		if (this.database == null) {
+			Shattered.crash("Could not initialize database!");
+		}
+		assert this.database != null;
+
 		Shattered.LOGGER.debug("Notifying registry holders for registry creation");
-		final CreateRegistryEvent event = ReflectionHelper.instantiate(CreateRegistryEvent.class);
-		assert event != null;
-		Shattered.SYSTEM_BUS.post(event);
+		final CreateRegistryEvent createRegistryEvent = ReflectionHelper.instantiate(CreateRegistryEvent.class);
+		assert createRegistryEvent != null;
+		Shattered.SYSTEM_BUS.post(createRegistryEvent);
 
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_glfw"));
 
@@ -119,20 +135,20 @@ public final class Shattered {
 		Shattered.LOGGER.debug("Initializing rendering system");
 		final Tessellator tessellator = ReflectionHelper.instantiate(TessellatorImpl.class);
 		if (tessellator == null) {
-			Shattered.LOGGER.fatal("Could not initialize Tessellator!");
-			Runtime.getRuntime().halt(-1);
+			Shattered.crash("Could not initialize Tessellator!");
 		}
 		this.tessellator = tessellator;
+		assert this.tessellator != null;
 		final FontRenderer fontRenderer = ReflectionHelper.instantiate(
 				FontRendererImpl.class,
 				Tessellator.class, this.tessellator,
 				Lazy.class, Lazy.of(() -> (FontGroup) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
 		);
 		if (fontRenderer == null) {
-			Shattered.LOGGER.fatal("Could not initialize FontRenderer!");
-			Runtime.getRuntime().halt(-1);
+			Shattered.crash("Could not initialize FontRenderer!");
 		}
 		this.fontRenderer = fontRenderer;
+		assert this.fontRenderer != null;
 
 		this.loadingScreen = new ThreadLoadingScreen(this);
 	}
@@ -334,6 +350,11 @@ public final class Shattered {
 
 	public static void removeTimer(@NotNull final Timer timer) {
 		Shattered.TIMERS.remove(timer);
+	}
+
+	public static void crash(@NotNull final String reason) {
+		Shattered.LOGGER.fatal(reason);
+		Runtime.getRuntime().halt(-1);
 	}
 
 	private static final class RuntimeTimer {

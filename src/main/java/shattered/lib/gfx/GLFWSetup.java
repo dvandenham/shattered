@@ -79,8 +79,7 @@ final class GLFWSetup {
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		if (!glfwInit()) {
-			GLFWSetup.LOGGER.fatal("Could not initialize GLFW! Exiting now!");
-			Runtime.getRuntime().halt(-1);
+			Shattered.crash("Could not initialize GLFW!");
 		}
 
 		GLFWSetup.LOGGER.debug("Applying window hints");

@@ -41,23 +41,24 @@ behaviour packs.
         1. Creating the system EventBus.
         2. Automatically registering all classes annotated with the @EventBusSubscriber annotation into their respective EventBus.
         3. Loading the configuration database (load_config).
-        4. Posting the CreateRegistryEvent, causing all registries to be created and registered into a master registry.
-        5. Initializing GLFW (init_glfw) and the rendering system.
-        6. Loading initial assets for the loading screen.
-        7. Booting up the rendering system and starting the loading screen thread.
-        8. Loading, parsing and validating the json-based registries for every asset type (init_assets).
-        9. Loading all assets defined into these registries into real registries, one asset type at a time.
-        10. Initializing the GuiManager (init_gui)
-        11. Instantiating the main menu screen and registering it into the GuiManager.
-        12. Initializing the keyboard/mouse input handler (input_setup).
-        13. Initialize SoundSystem (init_sound_system)
-        14. Configure the LuaMachine (init_lua_machine)
-        15. Let the Atlas work it's magic (atlas_stitch)
-        16. Load all audio data into memory (load_audio)
-        17. Stopping the loading screen thread.
-        18. Starting the core runtime.
-        19. Playing the boot animation and boot sound.
-        20. Showing the main menu.
+        4. Initializing the global database (init_database).
+        5. Posting the CreateRegistryEvent, causing all registries to be created and registered into a master registry.
+        6. Initializing GLFW (init_glfw) and the rendering system.
+        7. Loading initial assets for the loading screen.
+        8. Booting up the rendering system and starting the loading screen thread.
+        9. Loading, parsing and validating the json-based registries for every asset type (init_assets).
+        10. Loading all assets defined into these registries into real registries, one asset type at a time.
+        11. Initializing the GuiManager (init_gui)
+        12. Instantiating the main menu screen and registering it into the GuiManager.
+        13. Initializing the keyboard/mouse input handler (input_setup).
+        14. Initialize SoundSystem (init_sound_system)
+        15. Configure the LuaMachine (init_lua_machine)
+        16. Let the Atlas work it's magic (atlas_stitch)
+        17. Load all audio data into memory (load_audio)
+        18. Stopping the loading screen thread.
+        19. Starting the core runtime.
+        20. Playing the boot animation and boot sound.
+        21. Showing the main menu.
 
 # Registries
 

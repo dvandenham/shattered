@@ -1,7 +1,6 @@
 package shattered.lib.asset;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.openal.AL10;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
@@ -51,10 +50,10 @@ public final class Audio extends IAsset {
 	}
 
 	@Override
-	void recreate(@Nullable final IAsset newAsset) {
+	void onDestroy() {
+		super.onDestroy();
 		AL10.alDeleteBuffers(this.getBufferPointer());
 		AL10.alDeleteSources(this.getSourcePointer());
-		super.recreate(newAsset);
 	}
 
 	private void load() {

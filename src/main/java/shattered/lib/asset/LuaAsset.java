@@ -9,7 +9,7 @@ import shattered.lib.ResourceLocation;
 public final class LuaAsset extends IAsset {
 
 	private final String path;
-	private       String cachedScript;
+	private String cachedScript;
 
 	LuaAsset(@NotNull final ResourceLocation resource, @NotNull final String path) {
 		super(resource);
@@ -25,7 +25,8 @@ public final class LuaAsset extends IAsset {
 	}
 
 	@Override
-	void recreate(@Nullable final IAsset ignored) {
+	void onDestroy() {
+		super.onDestroy();
 		this.cachedScript = null;
 	}
 }

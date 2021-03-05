@@ -1,7 +1,9 @@
 package shattered.lib;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
@@ -20,6 +22,12 @@ import shattered.lib.math.Rectangle;
 public final class Input {
 
 	private static final long MOUSE_CLICK_TIMEOUT_MS = 150;
+
+	private static final ConcurrentLinkedQueue<KeyEvent> KEY_QUEUE = new ConcurrentLinkedQueue<>();
+	static final Int2ObjectArrayMap<String> KEY_NAMES = new Int2ObjectArrayMap<>();
+	static final Int2ObjectArrayMap<Character[]> KEY_CHARS = new Int2ObjectArrayMap<>();
+	private static KeyManager keyManager;
+	private static boolean keyManagerBlocked = false;
 
 	private static final Vector2d MOUSE_POS_PREV = new Vector2d();
 	private static final Vector2d MOUSE_POS = new Vector2d();
@@ -41,6 +49,11 @@ public final class Input {
 	private static boolean mouseLeft = false;
 	private static boolean mouseRight = false;
 	private static boolean mouseEntered = false;
+
+	static {
+		KeyboardHelper.addKeyNames();
+		KeyboardHelper.addKeyChars();
+	}
 
 	private static void poll() {
 		Input.MOUSE_POS_DISPLAY.set(0, 0);
@@ -88,6 +101,10 @@ public final class Input {
 			Input.mouseRightClickPressTime = -1;
 			Input.mouseRightDownX = -1;
 			Input.mouseRightDownY = -1;
+		}
+		if (!Input.keyManagerBlocked) {
+			Input.keyManager.poll();
+			Input.KEY_QUEUE.clear();
 		}
 	}
 
@@ -200,9 +217,37 @@ public final class Input {
 		Input.mouseBlocked = blocked;
 	}
 
+	public static boolean isKeyManagerBlocked() {
+		return Input.keyManagerBlocked;
+	}
+
+	public static void setKeyManagerBlocked(final boolean blocked) {
+		Input.keyManagerBlocked = blocked;
+	}
+
+	public static boolean hasKeyEventQueued() {
+		return !Input.KEY_QUEUE.isEmpty();
+	}
+
+	@Nullable
+	public static KeyEvent nextQueuedKey() {
+		return Input.KEY_QUEUE.poll();
+	}
+
+	@NotNull
+	public static String getKeyName(final int keyCode) {
+		return Input.KEY_NAMES.get(keyCode);
+	}
+
+	public static char getKeyChar(final int keyCode, final boolean shiftPressed) {
+		final Character[] result = Input.KEY_CHARS.get(keyCode);
+		return result == null ? 0 : result[result.length == 2 && shiftPressed ? 1 : 0];
+	}
+
 	@MessageListener("input_setup")
 	private static void onInputSetup(final MessageEvent event) {
-		event.setResponse(() -> (Runnable) Input::poll);
+		Input.keyManager = new KeyManager(Shattered.WORKSPACE);
+		event.setResponse(() -> new Object[]{Input.keyManager, (Runnable) Input::poll});
 	}
 
 	@MessageListener("input_setup_callbacks")
@@ -212,6 +257,7 @@ public final class Input {
 				(Consumer<Boolean>) entered -> Input.mouseEntered = entered,
 				(Consumer<Boolean>) down -> Input.mouseLeft = down,
 				(Consumer<Boolean>) down -> Input.mouseRight = down,
+				Input.KEY_QUEUE
 		});
 	}
 }

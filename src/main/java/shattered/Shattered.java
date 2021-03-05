@@ -33,6 +33,7 @@ import shattered.core.event.MessageEvent;
 import shattered.game.GameManager;
 import shattered.lib.Color;
 import shattered.lib.ITimerListener;
+import shattered.lib.KeyManager;
 import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.Workspace;
@@ -78,6 +79,7 @@ public final class Shattered {
 	private final BootAnimation bootAnimation;
 
 	private GuiManager guiManager;
+	private KeyManager keyManager;
 
 	//Delegate methods
 	private Runnable delegateGuiManagerTick;
@@ -190,7 +192,13 @@ public final class Shattered {
 		Shattered.LOGGER.debug("Initializing keyboard/mouse input handler");
 		final MessageEvent handleInputSetupEvent = new MessageEvent("input_setup");
 		Shattered.SYSTEM_BUS.post(handleInputSetupEvent);
-		this.delegateInputPoller = (Runnable) Objects.requireNonNull(handleInputSetupEvent.getResponse()).get();
+		final Supplier<?> handleInputSetupResponse = handleInputSetupEvent.getResponse();
+		assert handleInputSetupResponse != null;
+		final Object[] handleInputSetupResponseData = (Object[]) handleInputSetupResponse.get();
+		this.keyManager = (KeyManager) handleInputSetupResponseData[0];
+		this.delegateInputPoller = (Runnable) handleInputSetupResponseData[1];
+		this.keyManager.registerListener(this.guiManager);
+		Keybinds.init(this.keyManager);
 
 		//Setup SoundSystem
 		Shattered.LOGGER.debug("Initializing SoundSystem");

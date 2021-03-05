@@ -8,12 +8,15 @@ import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.Keybinds;
 import shattered.Shattered;
+import shattered.lib.IKeyListener;
+import shattered.lib.KeyBind;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
-public final class GuiManager {
+public final class GuiManager implements IKeyListener {
 
 	private final ObjectArrayList<IGuiScreen> screens = new ObjectArrayList<>();
 
@@ -112,6 +115,17 @@ public final class GuiManager {
 	@Nullable
 	private IGuiScreen getLastScreen() {
 		return !this.screens.isEmpty() ? this.screens.get(this.screens.size() - 1) : null;
+	}
+
+	@Override
+	public void onKeybindChanged(@NotNull final KeyBind keybind) {
+		if (keybind == Keybinds.genericEscape) {
+			if (this.screens.size() > 1) {
+				final IGuiScreen screen = this.getLastScreen();
+				assert screen != null;
+				this.closeScreen(screen);
+			}
+		}
 	}
 
 	@MessageListener("init_gui")

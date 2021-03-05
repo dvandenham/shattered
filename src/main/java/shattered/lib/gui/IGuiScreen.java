@@ -31,6 +31,7 @@ public abstract class IGuiScreen implements IComponentContainer {
 	private boolean hasTitlebar = true;
 	private boolean hasCloseButton = true;
 	private StringData titleDataCached = null;
+	GuiManager manager = null;
 
 	public IGuiScreen(@NotNull final String title) {
 		this.title = title;
@@ -65,6 +66,20 @@ public abstract class IGuiScreen implements IComponentContainer {
 	protected void renderTitlebar(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		if (this.hasTitlebar) {
 			tessellator.drawQuick(this.titlebarBoundsCached, Color.WHITE.withAlpha(0.5F));
+			if (!this.isFullscreen()) {
+				tessellator.drawQuick(this.getX(), this.titlebarBoundsCached.getMaxY(),
+						GuiProperties.BORDER_SIZE, this.getHeight() - this.titlebarBoundsCached.getHeight(),
+						Color.WHITE.withAlpha(0.5F)
+				);
+				tessellator.drawQuick(this.getBounds().getMaxX() - GuiProperties.BORDER_SIZE, this.titlebarBoundsCached.getMaxY(),
+						GuiProperties.BORDER_SIZE, this.getHeight() - this.titlebarBoundsCached.getHeight(),
+						Color.WHITE.withAlpha(0.5F)
+				);
+				tessellator.drawQuick(this.getX(), this.getBounds().getMaxY() - GuiProperties.BORDER_SIZE,
+						this.getWidth(), GuiProperties.BORDER_SIZE,
+						Color.WHITE.withAlpha(0.5F)
+				);
+			}
 			if (this.titleDataCached != null) {
 				fontRenderer.setFont(Assets.FONT_SIMPLE);
 				fontRenderer.setFontSize(this.titlebarBoundsCached.getHeight() / 3 * 2);
@@ -96,9 +111,15 @@ public abstract class IGuiScreen implements IComponentContainer {
 	}
 
 	void tickTitlebar() {
-		if (this.hasTitlebar && this.hasCloseButton) {
-			if (Input.containsMouse(this.closeButtonBoundsCached) && Input.isMouseLeftClicked()) {
-				this.closeScreen();
+		if (this.hasTitlebar) {
+			if (Input.containsMouse(this.titlebarBoundsCached) && Input.isMouseDragging()) {
+				this.setX(Math.max(this.getX() + Input.getDraggedDX(), 0));
+				this.setY(Math.max(this.getY() + Input.getDraggedDY(), 0));
+				this.manager.setupComponents(this);
+			} else if (this.hasCloseButton && Input.containsMouse(this.closeButtonBoundsCached)) {
+				if (Input.isMouseLeftClicked()) {
+					this.closeScreen();
+				}
 			}
 		}
 	}
@@ -325,6 +346,11 @@ public abstract class IGuiScreen implements IComponentContainer {
 				.setSize(newBounds.getSize())
 				.shrink(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE * 2)
 				.shrink(0, this.titlebarBoundsCached.getHeight());
+		if (this.hasTitlebar && !this.isFullscreen()) {
+			this.internalBoundsCached
+					.move(GuiProperties.BORDER_SIZE, 0)
+					.shrink(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE);
+		}
 	}
 
 	@EventListener

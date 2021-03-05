@@ -40,6 +40,7 @@ public final class GuiManager implements IKeyListener {
 			this.tickScreen(lastScreen);
 		}
 		this.screens.add(screen);
+		screen.manager = this;
 		screen.cacheBounds();
 		this.setupComponents(screen);
 		EventBus.post(new ScreenEvent.Opened(screen));
@@ -58,6 +59,7 @@ public final class GuiManager implements IKeyListener {
 		final boolean isLastScreen = this.screens.indexOf(screen) == this.screens.size() - 1;
 
 		this.screens.remove(screen);
+		screen.manager = null;
 		EventBus.post(new ScreenEvent.Closed(screen));
 		EventBus.unregister(screen);
 
@@ -104,7 +106,7 @@ public final class GuiManager implements IKeyListener {
 		screen.renderTitlebar(tessellator, fontRenderer);
 	}
 
-	private void setupComponents(@NotNull final IGuiScreen screen) {
+	void setupComponents(@NotNull final IGuiScreen screen) {
 		final Layout layout = IGuiScreen.createDefaultLayout(screen);
 		screen.setupComponents(layout);
 		screen.doForAll(component -> {

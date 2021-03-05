@@ -102,19 +102,19 @@ public class GuiButton extends IGuiComponent {
 		final Color bgColor;
 		switch (this.state) {
 			case ROLLOVER:
-				bgColor = Color.RED.withAlpha(0.5F);
+				bgColor = Color.RED;
 				break;
 			case LEFT_PRESS:
 			case RIGHT_PRESS:
 			case LEFT_CLICK:
 			case RIGHT_CLICK:
-				bgColor = Color.XEROS.withAlpha(0.5F);
+				bgColor = Color.XEROS;
 				break;
 			default:
-				bgColor = Color.WHITE.withAlpha(0.5F);
+				bgColor = Color.WHITE;
 				break;
 		}
-		tessellator.drawQuick(this.getBounds(), bgColor);
+		tessellator.drawQuick(this.getBounds(), bgColor.withAlpha(0.5F));
 	}
 
 	@Override

@@ -19,7 +19,7 @@ public final class KeyManager {
 	private NBTX store;
 
 	public KeyManager(@NotNull final Workspace workspace) {
-		this.file = workspace.getDataFile("keybinds");
+		this.file = workspace.getDataFile("keybinds.db");
 		try {
 			this.load();
 		} catch (final IOException e) {

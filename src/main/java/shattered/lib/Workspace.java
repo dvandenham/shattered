@@ -81,6 +81,13 @@ public final class Workspace {
 		return result;
 	}
 
+	public void openExternal() {
+		try {
+			java.awt.Desktop.getDesktop().open(this.rootDir);
+		} catch (final Throwable ignored) {
+		}
+	}
+
 	private File createDir(@NotNull final File parent, final String name) {
 		final File result = new File(parent, name);
 		if (!result.exists() && !result.mkdirs()) {

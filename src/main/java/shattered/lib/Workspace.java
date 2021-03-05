@@ -26,6 +26,11 @@ public final class Workspace {
 		this.tempDir = this.createDir(this.rootDir, "temp");
 		this.logsDir = this.createDir(this.tempDir, "logs");
 		this.debugDir = new File(this.rootDir, "debug");
+		if (this.debugDir.exists()) {
+			//Delete debug directory on boot
+			//noinspection ResultOfMethodCallIgnored
+			this.debugDir.delete();
+		}
 	}
 
 	@NotNull

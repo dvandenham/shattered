@@ -9,7 +9,7 @@ import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
 
 public interface Tessellator {
-	
+
 	default void drawQuick(@NotNull final Point position, @NotNull final ResourceLocation resource) {
 		this.start();
 		this.set(position, resource);
@@ -81,6 +81,9 @@ public interface Tessellator {
 		this.set(x, y, width, height, color);
 		this.draw();
 	}
+
+	@NotNull
+	PolygonBuilder createPolygon();
 
 	void start();
 

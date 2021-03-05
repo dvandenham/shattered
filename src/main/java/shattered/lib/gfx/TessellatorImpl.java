@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -38,6 +39,7 @@ public final class TessellatorImpl implements Tessellator {
 	public static Texture TEXTURE_MISSING;
 	private final ConcurrentLinkedQueue<DrawCall> stack = new ConcurrentLinkedQueue<>();
 	private final ConcurrentLinkedDeque<Matrix4f> matrices = new ConcurrentLinkedDeque<>();
+	private final PolygonBuilder polygonBuilder = new PolygonBuilderImpl(this);
 	private DrawCall currentCall = null;
 	private boolean drawing = false, caching = false;
 	private Shader shader;
@@ -86,9 +88,20 @@ public final class TessellatorImpl implements Tessellator {
 		this.shader.setUniformMat4("matCustom", matrix);
 	}
 
+	@Nullable
+	Matrix4f getUniformMatrix() {
+		return this.matUniform;
+	}
+
 	public void resetUniformMatrix() {
 		this.matUniform = null;
 		this.shader.setUniformMat4("matCustom", MatrixUtils.identity());
+	}
+
+	@Override
+	@NotNull
+	public PolygonBuilder createPolygon() {
+		return this.polygonBuilder;
 	}
 
 	@Override

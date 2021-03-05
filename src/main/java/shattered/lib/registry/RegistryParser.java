@@ -4,6 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import shattered.lib.ResourceLocation;
 
@@ -13,7 +14,7 @@ public abstract class RegistryParser<T> {
 	protected abstract Class<?> getWrapperClass();
 
 	@NotNull
-	protected abstract T parse(@NotNull ResourceLocation resource, @NotNull Object data);
+	protected abstract Map<ResourceLocation, T> parse(@NotNull ResourceLocation resource, @NotNull Object data);
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)

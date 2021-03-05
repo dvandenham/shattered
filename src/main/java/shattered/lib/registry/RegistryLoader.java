@@ -80,13 +80,26 @@ final class RegistryLoader {
 					Shattered.crash("Could not load resource: " + subResource, null);
 				}
 				assert parsedData != null;
-				final Object finalType = parser.parse(subResource, parsedData);
-				if (!registry.typeClazz.isAssignableFrom(finalType.getClass())) {
-					final String reason = "Could not parse resource: " + subResource + ". " +
-							"Expected type: " + registry.typeClazz.getName() + ", got: " + finalType.getClass().getName();
-					Shattered.crash(reason, null);
+				final Map<ResourceLocation, ?> variantMapping = parser.parse(subResource, parsedData);
+				for (final Map.Entry<ResourceLocation, ?> entry : variantMapping.entrySet()) {
+					final ResourceLocation variantResource = entry.getKey();
+					if (!variantResource.getNamespace().equals(subResource.getNamespace()) || !variantResource.getResource().equals(subResource.getResource())) {
+						Shattered.crash("Parsing resource " + subResource + " returned invalid variant resource: " + variantResource, null);
+					}
+					final Object finalType = entry.getValue();
+					if (!registry.typeClazz.isAssignableFrom(finalType.getClass())) {
+						final StringBuilder reasonBuilder = new StringBuilder("Could not parse resource: ");
+						reasonBuilder.append(subResource);
+						if (variantMapping.size() > 1) {
+							reasonBuilder.append(" (variant: ").append(variantResource.getVariant()).append(')');
+						}
+						reasonBuilder.append(". ");
+						reasonBuilder.append("Expected type: ").append(registry.typeClazz.getName());
+						reasonBuilder.append(", got: ").append(finalType.getClass().getName());
+						Shattered.crash(reasonBuilder.toString(), null);
+					}
+					((Registry<Object>) registry).register(variantResource, finalType);
 				}
-				((Registry<Object>) registry).register(subResource, finalType);
 			} catch (final IOException | NullPointerException e) {
 				Shattered.crash("Resource does not exist: " + subResource, e);
 			} catch (final Throwable e) {

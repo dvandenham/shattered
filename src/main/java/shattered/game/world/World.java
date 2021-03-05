@@ -36,10 +36,12 @@ public final class World implements ISerializable {
 	public void deserialize(@NotNull final NBTX store) {
 	}
 
+	@NotNull
 	public ResourceLocation getResource() {
 		return this.resource;
 	}
 
+	@NotNull
 	public WorldType getType() {
 		return this.type;
 	}

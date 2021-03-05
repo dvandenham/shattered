@@ -1,13 +1,12 @@
 package shattered.lib.gui.component;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import shattered.core.event.Event;
 import shattered.core.event.EventBus;
+import shattered.Assets;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
-import shattered.lib.gfx.RenderHelper;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiComponent;
@@ -19,17 +18,17 @@ public class GuiToggleButton extends IGuiComponent {
 
 	@NotNull
 	private String text;
-	@Nullable
+	@NotNull
 	private Color textColor;
 	private boolean localize = true;
 
-	public GuiToggleButton(@NotNull final String text, @Nullable final Color textColor) {
+	public GuiToggleButton(@NotNull final String text, @NotNull final Color textColor) {
 		this.text = text;
 		this.textColor = textColor;
 	}
 
 	public GuiToggleButton(@NotNull final String text) {
-		this(text, null);
+		this(text, Color.WHITE);
 	}
 
 	@Override
@@ -67,14 +66,12 @@ public class GuiToggleButton extends IGuiComponent {
 
 	@Override
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+		fontRenderer.setFont(Assets.FONT_SIMPLE);
 		fontRenderer.setFontSize(Math.min(this.getHeight() / 4 * 3, 48));
 		final int yOffset = 2;
-		if (this.textColor != null) {
-			fontRenderer.writeQuickCentered(this.getBounds().moveY(yOffset), new StringData(this.text, this.textColor).localize(this.localize));
-		} else {
-			RenderHelper.writeGlitchedCentered(fontRenderer, this.getBounds().moveY(yOffset), new StringData(this.text).localize(this.localize));
-		}
+		fontRenderer.writeQuickCentered(this.getBounds().moveY(yOffset), new StringData(this.text, this.textColor).localize(this.localize));
 		fontRenderer.revertFontSize();
+		fontRenderer.resetFont();
 	}
 
 	public GuiToggleButton setState(final boolean state) {
@@ -106,9 +103,13 @@ public class GuiToggleButton extends IGuiComponent {
 		return this.text;
 	}
 
-	@Nullable
+	@NotNull
 	public final Color getTextColor() {
 		return this.textColor;
+	}
+
+	public final boolean doLocalize() {
+		return this.localize;
 	}
 
 	public static abstract class ToggleButtonEvent extends Event<GuiToggleButton> {

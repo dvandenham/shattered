@@ -3,5 +3,5 @@ screen.main_menu.button.new_game=New Game
 screen.main_menu.button.settings=Settings
 screen.main_menu.button.shutdown=Exit Shattered
 
-screen.settings.button.close_screen=Back to Main Menu
+screen.settings.title=Settings
 screen.settings.toggle.boot_animation=Enable boot animation

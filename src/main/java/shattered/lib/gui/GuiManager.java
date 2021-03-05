@@ -93,6 +93,7 @@ public final class GuiManager implements IKeyListener {
 	private void tickScreen(@NotNull final IGuiScreen screen) {
 		screen.tick();
 		screen.doForAll(IGuiComponent::tick);
+		screen.tickTitlebar();
 	}
 
 	private void renderScreen(@NotNull final IGuiScreen screen, @NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
@@ -100,6 +101,7 @@ public final class GuiManager implements IKeyListener {
 		screen.doForAll(component -> component.renderBackground(tessellator, fontRenderer));
 		screen.renderForeground(tessellator, fontRenderer);
 		screen.doForAll(component -> component.renderForeground(tessellator, fontRenderer));
+		screen.renderTitlebar(tessellator, fontRenderer);
 	}
 
 	private void setupComponents(@NotNull final IGuiScreen screen) {

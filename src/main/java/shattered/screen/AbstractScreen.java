@@ -10,6 +10,13 @@ import shattered.lib.gui.IGuiScreen;
 
 abstract class AbstractScreen extends IGuiScreen {
 
+	public AbstractScreen(@NotNull final String title) {
+		super(title);
+	}
+
+	public AbstractScreen() {
+	}
+
 	@Override
 	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		if (!this.isFullscreen()) {

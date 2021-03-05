@@ -9,15 +9,17 @@ import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
+import shattered.screen.component.GlitchButton;
 
 public final class ScreenMainMenu extends AbstractScreen {
 
-	private final GuiButton buttonContinue = new GuiButton("screen.main_menu.button.continue");
-	private final GuiButton buttonNewGame = new GuiButton("screen.main_menu.button.new_game");
-	private final GuiButton buttonSettings = new GuiButton("screen.main_menu.button.settings");
-	private final GuiButton buttonShutdown = new GuiButton("screen.main_menu.button.shutdown");
+	private final GuiButton buttonContinue = new GlitchButton("screen.main_menu.button.continue");
+	private final GuiButton buttonNewGame = new GlitchButton("screen.main_menu.button.new_game");
+	private final GuiButton buttonSettings = new GlitchButton("screen.main_menu.button.settings");
+	private final GuiButton buttonShutdown = new GlitchButton("screen.main_menu.button.shutdown");
 
 	public ScreenMainMenu() {
+		this.setHasTitlebar(false);
 		this.add(this.buttonContinue);
 		this.add(this.buttonNewGame);
 		this.add(this.buttonSettings);

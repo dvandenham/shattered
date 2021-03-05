@@ -21,6 +21,7 @@ import shattered.lib.math.Rectangle;
 @EventBusSubscriber("SYSTEM")
 public final class Input {
 
+	private static final int MAX_CLICK_POS_DELTA = 4;
 	private static final long MOUSE_CLICK_TIMEOUT_MS = 150;
 
 	private static final ConcurrentLinkedQueue<KeyEvent> KEY_QUEUE = new ConcurrentLinkedQueue<>();
@@ -112,9 +113,10 @@ public final class Input {
 		if (Input.isNotSetup(leftButton)) {
 			return false;
 		}
-		final int x = (leftButton ? Input.mouseLeftDownX : Input.mouseRightDownX) - 5;
-		final int y = (leftButton ? Input.mouseLeftDownY : Input.mouseRightDownY) - 5;
-		return Rectangle.create(x, y, 10, 10).contains(Input.getMouseX(), Input.getMouseY());
+		final int x = (leftButton ? Input.mouseLeftDownX : Input.mouseRightDownX) - Input.MAX_CLICK_POS_DELTA;
+		final int y = (leftButton ? Input.mouseLeftDownY : Input.mouseRightDownY) - Input.MAX_CLICK_POS_DELTA;
+		return Rectangle.create(x, y, Input.MAX_CLICK_POS_DELTA * 2, Input.MAX_CLICK_POS_DELTA * 2)
+				.contains(Input.getMouseX(), Input.getMouseY());
 	}
 
 	private static boolean isNotSetup(final boolean leftButton) {

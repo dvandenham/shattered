@@ -2,11 +2,17 @@ package shattered.lib.gui;
 
 import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import shattered.core.event.EventListener;
+import shattered.Assets;
 import shattered.Shattered;
+import shattered.lib.Color;
+import shattered.lib.Input;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.DisplayResizedEvent;
 import shattered.lib.gfx.FontRenderer;
+import shattered.lib.gfx.PolygonBuilder;
+import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
@@ -17,7 +23,37 @@ public abstract class IGuiScreen implements IComponentContainer {
 	private final GuiPanel components = new GuiScreenComponentPanel();
 	private final Rectangle bounds = Rectangle.createMutable(-1, -1, -1, -1);
 	private final Rectangle boundsCached = Rectangle.createMutable(0, 0, 0, 0);
+	private final Rectangle titlebarBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
+	private final Rectangle closeButtonBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
 	private final Rectangle internalBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
+	@Nullable
+	private String title = null;
+	private boolean hasTitlebar = true;
+	private boolean hasCloseButton = true;
+	private StringData titleDataCached = null;
+
+	public IGuiScreen(@NotNull final String title) {
+		this.title = title;
+	}
+
+	public IGuiScreen() {
+	}
+
+	protected final void setHasTitlebar(final boolean hasTitlebar) {
+		if (this.hasTitlebar == hasTitlebar) {
+			return;
+		}
+		this.hasTitlebar = hasTitlebar;
+		this.cacheBounds();
+	}
+
+	protected final void setHasCloseButton(final boolean hasCloseButton) {
+		if (this.hasCloseButton == hasCloseButton) {
+			return;
+		}
+		this.hasCloseButton = hasCloseButton;
+		this.cacheBounds();
+	}
 
 	protected void tick() {
 	}
@@ -25,6 +61,47 @@ public abstract class IGuiScreen implements IComponentContainer {
 	protected abstract void renderBackground(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
 
 	protected abstract void renderForeground(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
+
+	protected void renderTitlebar(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+		if (this.hasTitlebar) {
+			tessellator.drawQuick(this.titlebarBoundsCached, Color.WHITE.withAlpha(0.5F));
+			if (this.titleDataCached != null) {
+				fontRenderer.setFont(Assets.FONT_SIMPLE);
+				fontRenderer.setFontSize(this.titlebarBoundsCached.getHeight() / 3 * 2);
+				fontRenderer.writeQuick(this.titlebarBoundsCached.getPosition().moveX(GuiProperties.BORDER_SIZE), this.titleDataCached);
+				fontRenderer.revertFontSize();
+				fontRenderer.resetFont();
+			}
+			if (this.hasCloseButton) {
+				tessellator.drawQuick(this.closeButtonBoundsCached, Color.RED.withAlpha(0.5F));
+				final PolygonBuilder polygons = tessellator.createPolygon();
+				polygons.start(Color.WHITE);
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-GuiProperties.BORDER_SIZE, -(GuiProperties.BORDER_SIZE * 2)));
+				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-GuiProperties.BORDER_SIZE, -GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-(GuiProperties.BORDER_SIZE * 2), -GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE * 2));
+				polygons.draw();
+				polygons.start(Color.WHITE);
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE * 2));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE * 2, this.closeButtonBoundsCached.getHeight() - GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, this.closeButtonBoundsCached.getHeight() - GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, this.closeButtonBoundsCached.getHeight() - (GuiProperties.BORDER_SIZE * 2)));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE));
+				polygons.draw();
+			}
+		}
+	}
+
+	void tickTitlebar() {
+		if (this.hasTitlebar && this.hasCloseButton) {
+			if (Input.containsMouse(this.closeButtonBoundsCached) && Input.isMouseLeftClicked()) {
+				this.closeScreen();
+			}
+		}
+	}
 
 	@Override
 	public final void add(@NotNull final IGuiComponent component) {
@@ -204,16 +281,50 @@ public abstract class IGuiScreen implements IComponentContainer {
 		return this.internalBoundsCached.toImmutable();
 	}
 
+	@NotNull
+	public final Rectangle getTitlebarBounds() {
+		return this.titlebarBoundsCached;
+	}
+
 	public final boolean isFullscreen() {
 		return this.boundsCached.equals(Display.getBounds());
+	}
+
+	public final boolean hasTitlebar() {
+		return this.hasTitlebar;
+	}
+
+	@Nullable
+	public final String getTitle() {
+		return this.title;
 	}
 
 	void cacheBounds() {
 		final Rectangle newBounds = IGuiScreen.getCorrectBounds(this.bounds);
 		this.boundsCached.setPosition(newBounds.getPosition()).setSize(newBounds.getSize());
+		this.titlebarBoundsCached.setPosition(newBounds.getPosition());
+		if (this.hasTitlebar) {
+			this.titlebarBoundsCached.setSize(newBounds.getWidth(), GuiProperties.TITLEBAR_SIZE);
+			if (this.hasCloseButton) {
+				this.titlebarBoundsCached.shrinkX(GuiProperties.CLOSE_BUTTON_WIDTH);
+				this.closeButtonBoundsCached
+						.setPosition(this.titlebarBoundsCached.getMaxX(), this.titlebarBoundsCached.getY())
+						.setSize(GuiProperties.CLOSE_BUTTON_WIDTH, GuiProperties.CLOSE_BUTTON_HEIGHT);
+			}
+			if (this.title != null) {
+				this.titleDataCached = new StringData(this.title, Color.BLACK)
+						.wrap(this.titlebarBoundsCached.getWidth(), true)
+						.centerY(this.titlebarBoundsCached.getHeight());
+			}
+		} else {
+			this.titlebarBoundsCached.setSize(0, 0);
+		}
 		this.internalBoundsCached
-				.setPosition(newBounds.getPosition().move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE))
-				.setSize(newBounds.getSize().grow(-(GuiProperties.BORDER_SIZE * 2), -(GuiProperties.BORDER_SIZE * 2)));
+				.setPosition(this.titlebarBoundsCached.getX(), this.titlebarBoundsCached.getMaxY())
+				.move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE)
+				.setSize(newBounds.getSize())
+				.shrink(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE * 2)
+				.shrink(0, this.titlebarBoundsCached.getHeight());
 	}
 
 	@EventListener

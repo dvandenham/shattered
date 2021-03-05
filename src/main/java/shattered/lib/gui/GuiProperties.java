@@ -2,6 +2,9 @@ package shattered.lib.gui;
 
 public final class GuiProperties {
 
+	public static final int TITLEBAR_SIZE = 48;
+	public static final int CLOSE_BUTTON_WIDTH = GuiProperties.TITLEBAR_SIZE;
+	public static final int CLOSE_BUTTON_HEIGHT = GuiProperties.TITLEBAR_SIZE;
 	public static final int BORDER_SIZE = 4;
 
 	public static final int COMPONENT_HEIGHT = 48;

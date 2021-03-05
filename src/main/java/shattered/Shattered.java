@@ -64,6 +64,7 @@ public final class Shattered {
 	public static final Logger LOGGER = LogManager.getLogger(Shattered.NAME);
 	public static final String SYSTEM_BUS_NAME = "SYSTEM";
 	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
+	public static final BootMessageQueue MESSAGES = new BootMessageQueue();
 	public static final Workspace WORKSPACE = Objects.requireNonNull(
 			ReflectionHelper.instantiate(Workspace.class, String.class, Shattered.NAME.toLowerCase(Locale.ROOT))
 	);
@@ -109,6 +110,16 @@ public final class Shattered {
 		Shattered.INSTANCE = new Shattered(args);
 		Shattered.INSTANCE.startLoadingScreen();
 		Shattered.INSTANCE.startLoading();
+		//Flush the message queue to disk
+		if (Shattered.MESSAGES.hasNewMessages()) {
+			Shattered.MESSAGES.writeToDisk();
+			final BootMessageQueue.BootMessage[] messages = Shattered.MESSAGES.getMessages();
+			for (final BootMessageQueue.BootMessage msg : messages) {
+				System.out.println(msg);
+			}
+		} else {
+			Shattered.LOGGER.info("There were no new boot messages since the last boot");
+		}
 		//Shutdown after loading, for debug purposes
 		if (!Boolean.getBoolean("shattered.debug.shutdown_before_runtime")) {
 			//This call will block the program until a shutdown was requested

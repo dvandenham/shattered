@@ -81,6 +81,9 @@ final class GLFWSetup {
 	@MessageListener("init_glfw")
 	private static void onInitializeGLFW(final MessageEvent event) {
 		GLFWSetup.LOGGER.debug("Initialing GLFW");
+		if (Config.DISPLAY_SIZE.get().getWidth() <= 0 || Config.DISPLAY_SIZE.get().getHeight() <= 0) {
+			Config.DISPLAY_SIZE.reset();
+		}
 		GLFWSetup.DISPLAY_SIZE.setWidth(Config.DISPLAY_SIZE.get().getWidth());
 		GLFWSetup.DISPLAY_SIZE.setHeight(Config.DISPLAY_SIZE.get().getHeight());
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -131,7 +134,7 @@ final class GLFWSetup {
 		glfwWindowHint(GLFW_BLUE_BITS, vidMode.blueBits());
 
 		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFWSetup.DEVELOPER_MODE ? GLFW_TRUE : GLFW_FALSE);
-		glfwSetErrorCallback((error, description) -> GLFWSetup.LOGGER.error("[ErrorID={}]{}", error, description));
+		glfwSetErrorCallback((error, description) -> GLFWSetup.LOGGER.error("[ErrorID={}]{}", error, GLFWErrorCallback.getDescription(description)));
 	}
 
 	private static void applyWindowProperties() {

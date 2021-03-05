@@ -80,7 +80,7 @@ final class RegistryLoader {
 					Shattered.crash("Could not load resource: " + subResource, null);
 				}
 				assert parsedData != null;
-				final Object finalType = parser.parse(parsedData);
+				final Object finalType = parser.parse(subResource, parsedData);
 				if (!registry.typeClazz.isAssignableFrom(finalType.getClass())) {
 					final String reason = "Could not parse resource: " + subResource + ". " +
 							"Expected type: " + registry.typeClazz.getName() + ", got: " + finalType.getClass().getName();

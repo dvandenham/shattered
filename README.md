@@ -48,9 +48,9 @@ behaviour packs.
         8. Booting up the rendering system.
         9. Initializing the GameManager (init_game_manager).
         10. Starting the loading screen thread.
-        11. Loading all json-based registries for the registries that were created during step ```e``` (load_registries).
-        12. Loading, parsing and validating the json-based registries for every asset type (init_assets).
-        13. Loading all assets defined into these registries into real registries, one asset type at a time.
+        11. Loading, parsing and validating the json-based registries for every asset type (init_assets).
+        12. Loading all assets defined into these registries into real registries, one asset type at a time.
+        13. Loading all json-based registries for the registries that were created during step ```e``` (load_registries).
         14. Initializing the GuiManager (init_gui).
         15. Instantiating the main menu screen and registering it into the GuiManager.
         16. Initializing the keyboard/mouse input handler (input_setup).

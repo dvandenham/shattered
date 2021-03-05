@@ -170,12 +170,12 @@ public final class Shattered {
 	private void startLoading() {
 		final long startTime = Shattered.getSystemTime();
 
-		//Load external registries
-		Shattered.SYSTEM_BUS.post(new MessageEvent("load_registries"));
-
 		//Load assets
 		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
 		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
+
+		//Load external registries
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_registries"));
 
 		//Initialize GuiHandler and main menu screen
 		Shattered.LOGGER.debug("Initializing gui system");

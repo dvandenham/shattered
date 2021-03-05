@@ -1,6 +1,7 @@
 package shattered.lib.json;
 
 import java.io.IOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -15,6 +16,10 @@ final class ResourceLocationTypeAdapter extends TypeAdapter<ResourceLocation> {
 
 	@Override
 	public ResourceLocation read(final JsonReader in) throws IOException {
-		return new ResourceLocation(in.nextString());
+		try {
+			return new ResourceLocation(in.nextString());
+		} catch (final Throwable e) {
+			throw new JsonSyntaxException("Invalid ResourceLocation at " + in.getPath() + ". (" + e.getMessage() + ')');
+		}
 	}
 }

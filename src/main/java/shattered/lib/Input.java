@@ -171,12 +171,22 @@ public final class Input {
 		return Input.isMouseAllowed() && Input.mouseLeftDown && !Input.mouseLeftRelease;
 	}
 
+	public static int getDraggedStartX() {
+		return Input.isMouseDragging() ? Input.mouseLeftDownX : -1;
+	}
+
+	public static int getDraggedStartY() {
+		return Input.isMouseDragging() ? Input.mouseLeftDownY : -1;
+	}
+
 	public static int getDraggedDX() {
-		return Input.isMouseDragging() ? Input.getMouseX() - Input.mouseLeftDownX : 0;
+		final int startX = Input.getDraggedStartX();
+		return startX != -1 ? Input.getMouseX() - startX : 0;
 	}
 
 	public static int getDraggedDY() {
-		return Input.isMouseDragging() ? Input.getMouseY() - Input.mouseLeftDownY : 0;
+		final int startY = Input.getDraggedStartY();
+		return startY != -1 ? Input.getMouseY() - startY : 0;
 	}
 
 	public static boolean isKeyboardShiftDown() {

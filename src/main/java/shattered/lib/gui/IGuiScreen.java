@@ -30,6 +30,7 @@ public abstract class IGuiScreen implements IComponentContainer {
 	private String title = null;
 	private boolean hasTitlebar = true;
 	private boolean hasCloseButton = true;
+	private Point draggingOriginPoint = null;
 	private StringData titleDataCached = null;
 	GuiManager manager = null;
 
@@ -112,10 +113,17 @@ public abstract class IGuiScreen implements IComponentContainer {
 
 	void tickTitlebar() {
 		if (this.hasTitlebar) {
-			if (Input.containsMouse(this.titlebarBoundsCached) && Input.isMouseDragging()) {
-				this.setX(Math.max(this.getX() + Input.getDraggedDX(), 0));
-				this.setY(Math.max(this.getY() + Input.getDraggedDY(), 0));
-				this.manager.setupComponents(this);
+			if (this.draggingOriginPoint != null || (Input.containsMouse(this.titlebarBoundsCached) && Input.isMouseDragging())) {
+				if (!Input.isMouseDragging()) {
+					this.draggingOriginPoint = null;
+				} else {
+					if (this.draggingOriginPoint == null) {
+						this.draggingOriginPoint = this.getPosition();
+					}
+					this.setX(Math.max(this.draggingOriginPoint.getX() + Input.getDraggedDX(), 0));
+					this.setY(Math.max(this.draggingOriginPoint.getY() + Input.getDraggedDY(), 0));
+					this.manager.setupComponents(this);
+				}
 			} else if (this.hasCloseButton && Input.containsMouse(this.closeButtonBoundsCached)) {
 				if (Input.isMouseLeftClicked()) {
 					this.closeScreen();

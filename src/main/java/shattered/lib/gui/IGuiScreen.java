@@ -15,7 +15,7 @@ import shattered.lib.math.Rectangle;
 public abstract class IGuiScreen implements IComponentContainer {
 
 	private final GuiPanel components = new GuiScreenComponentPanel();
-	private final Rectangle bounds = Rectangle.createMutable(0, 0, -1, -1);
+	private final Rectangle bounds = Rectangle.createMutable(-1, -1, -1, -1);
 	private final Rectangle boundsCached = Rectangle.createMutable(0, 0, 0, 0);
 	private final Rectangle internalBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
 

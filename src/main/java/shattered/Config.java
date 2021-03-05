@@ -9,4 +9,7 @@ public final class Config {
 			= ConfigManager.register("display_size", Dimension.create(800, 600));
 	public static final ConfigManager.ConfigBoolean DISPLAY_VSYNC
 			= ConfigManager.register("display_vsync", true);
+
+	public static final ConfigManager.ConfigBoolean GLOBAL_BOOT_ANIMATION
+			= ConfigManager.register("global_boot_animation", true);
 }

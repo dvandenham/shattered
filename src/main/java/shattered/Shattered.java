@@ -75,7 +75,7 @@ public final class Shattered {
 	public final FontRenderer fontRenderer;
 	public final GameManager gameManager;
 	private final ThreadLoadingScreen loadingScreen;
-	private final BootAnimation bootAnimation = new BootAnimation();
+	private final BootAnimation bootAnimation;
 
 	private GuiManager guiManager;
 
@@ -148,6 +148,8 @@ public final class Shattered {
 
 		this.loadingScreen = new ThreadLoadingScreen(this);
 
+		this.bootAnimation = Config.GLOBAL_BOOT_ANIMATION.get() ? new BootAnimation() : null;
+
 		final MessageEvent initGameManagerEvent = new MessageEvent("init_game_manager");
 		Shattered.SYSTEM_BUS.post(initGameManagerEvent);
 		final Supplier<?> initGameManagerResponse = initGameManagerEvent.getResponse();
@@ -218,7 +220,9 @@ public final class Shattered {
 	private void startRuntime() {
 		this.guiManager.openScreen(new ScreenMainMenu());
 		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeTickBound);
-		this.bootAnimation.start();
+		if (this.bootAnimation != null) {
+			this.bootAnimation.start();
+		}
 		while (Shattered.isRunning()) {
 			final Throwable cachedError = timer.execute();
 			if (cachedError != null) {
@@ -245,7 +249,7 @@ public final class Shattered {
 			this.tickTimers();
 			//TODO animations
 
-			if (!this.bootAnimation.isFinished()) {
+			if (this.bootAnimation != null && !this.bootAnimation.isFinished()) {
 				return null;
 			}
 
@@ -285,7 +289,7 @@ public final class Shattered {
 			this.delegateGuiManagerRender.accept(this.tessellator, this.fontRenderer);
 
 			//Render boot animation
-			if (!this.bootAnimation.isFinished()) {
+			if (this.bootAnimation != null && !this.bootAnimation.isFinished()) {
 				this.bootAnimation.render(this.tessellator);
 			}
 

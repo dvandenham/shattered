@@ -49,6 +49,8 @@ public final class ScreenMainMenu extends AbstractScreen {
 		if (button == this.buttonContinue) {
 			//TODO temporary
 			Shattered.getInstance().gameManager.loadWorld(new ResourceLocation("1-1"));
+		} else if (button == this.buttonSettings) {
+			this.openScreen(new ScreenSettings());
 		} else if (button == this.buttonShutdown) {
 			Shattered.getInstance().stop();
 		}

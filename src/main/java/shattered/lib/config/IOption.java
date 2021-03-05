@@ -1,5 +1,6 @@
 package shattered.lib.config;
 
+import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import shattered.core.nbtx.NBTX;
 
@@ -26,8 +27,11 @@ abstract class IOption<T> {
 	}
 
 	public void set(@NotNull final T value) {
+		final T current = this.get();
 		this.value = value;
-		ConfigManager.save();
+		if (!Objects.equals(current, this.value)) {
+			ConfigManager.save();
+		}
 	}
 
 	public T get() {

@@ -208,8 +208,8 @@ public final class AssetRegistry {
 	}
 
 	@ReflectionHelper.Reflectable
-	private static FontGroup loadFont(@NotNull final ResourceLocation resource) {
-		final FontGroup result = AssetRegistry.createFont(resource);
+	private static Font loadFont(@NotNull final ResourceLocation resource) {
+		final Font result = AssetRegistry.createFont(resource);
 		if (result == null) {
 			AssetRegistry.registerInternal(resource, AssetTypes.FONT, null);
 			AssetRegistry.LOGGER.error("Could not load font: {}", resource);
@@ -221,16 +221,12 @@ public final class AssetRegistry {
 	}
 
 	@Nullable
-	private static FontGroup createFont(@NotNull final ResourceLocation resource) {
+	private static Font createFont(@NotNull final ResourceLocation resource) {
 		final java.awt.Font baseFont = FontLoader.loadFontAwt(resource);
 		if (baseFont == null) {
 			return null;
 		}
-		final FontGroup result = new FontGroup(resource, baseFont);
-		for (final int size : FontGroup.DEFAULT_SIZES) {
-			result.addSize(size);
-		}
-		return result;
+		return FontLoader.createFont(resource, baseFont);
 	}
 
 	private static void loadLua(@NotNull final ResourceLocation resource) {

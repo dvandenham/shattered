@@ -37,7 +37,7 @@ import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.Workspace;
 import shattered.lib.asset.AssetRegistry;
-import shattered.lib.asset.FontGroup;
+import shattered.lib.asset.Font;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.FontRendererImpl;
@@ -107,8 +107,11 @@ public final class Shattered {
 		Shattered.INSTANCE = new Shattered(args);
 		Shattered.INSTANCE.startLoadingScreen();
 		Shattered.INSTANCE.startLoading();
-		//This call will block the program until a shutdown was requested
-		Shattered.INSTANCE.startRuntime();
+		//Shutdown after loading, for debug purposes
+		if (!Boolean.getBoolean("shattered.debug.shutdown_before_runtime")) {
+			//This call will block the program until a shutdown was requested
+			Shattered.INSTANCE.startRuntime();
+		}
 		Shattered.INSTANCE.cleanup();
 		Shattered.LOGGER.info("Goodbye!");
 	}
@@ -135,7 +138,7 @@ public final class Shattered {
 		final FontRenderer fontRenderer = ReflectionHelper.instantiate(
 				FontRendererImpl.class,
 				Tessellator.class, this.tessellator,
-				Lazy.class, Lazy.of(() -> (FontGroup) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
+				Lazy.class, Lazy.of(() -> (Font) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
 		);
 		if (fontRenderer == null) {
 			Shattered.crash("Could not initialize FontRenderer!", null);

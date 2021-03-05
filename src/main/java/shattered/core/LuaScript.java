@@ -23,7 +23,7 @@ import shattered.StaticAssets;
 import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.asset.AssetRegistry;
-import shattered.lib.asset.FontGroup;
+import shattered.lib.asset.Font;
 import shattered.lib.asset.LuaAsset;
 import shattered.lib.gfx.FontRendererImpl;
 import shattered.lib.gfx.Tessellator;
@@ -51,7 +51,7 @@ public final class LuaScript {
 			this.scriptFontRenderer = ReflectionHelper.instantiate(
 					FontRendererImpl.class,
 					Tessellator.class, this.scriptTessellator,
-					Lazy.class, Lazy.of(() -> (FontGroup) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
+					Lazy.class, Lazy.of(() -> (Font) AssetRegistry.getAsset(Assets.FONT_DEFAULT))
 			);
 		} else {
 			this.scriptTessellator = null;

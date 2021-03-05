@@ -12,7 +12,6 @@ import shattered.lib.Localizer;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.Font;
-import shattered.lib.asset.FontGroup;
 import shattered.lib.asset.IAsset;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
@@ -26,21 +25,21 @@ public final class FontRendererImpl implements FontRenderer {
 	@NotNull
 	private final Tessellator tessellator;
 	@NotNull
-	private final Lazy<FontGroup> fontDefault;
+	private final Lazy<Font> fontDefault;
 	@Nullable
-	private FontGroup fontCurrent;
+	private Font fontCurrent;
 	private boolean writing = false;
 
-	private FontRendererImpl(@NotNull final Tessellator tessellator, @NotNull final Lazy<FontGroup> fontDefault) {
+	private FontRendererImpl(@NotNull final Tessellator tessellator, @NotNull final Lazy<Font> fontDefault) {
 		this.tessellator = tessellator;
 		this.fontDefault = fontDefault;
-		this.fontSizeStack.offerLast(FontGroup.DEFAULT_SIZES[FontGroup.DEFAULT_SIZE_INDEX]);
+		this.fontSizeStack.offerLast(Font.DEFAULT_SIZES[Font.DEFAULT_SIZE_INDEX]);
 	}
 
 	@Override
 	public void setFont(@NotNull final ResourceLocation font) {
 		final IAsset asset = AssetRegistry.getAsset(font);
-		this.fontCurrent = asset instanceof FontGroup ? (FontGroup) asset : this.fontDefault.get();
+		this.fontCurrent = asset instanceof Font ? (Font) asset : this.fontDefault.get();
 	}
 
 	@Override
@@ -184,6 +183,8 @@ public final class FontRendererImpl implements FontRenderer {
 		if (!this.isWriting()) {
 			throw new IllegalStateException("Not writing!");
 		}
+		assert !this.fontSizeStack.isEmpty();
+		final int fontSize = this.fontSizeStack.peekLast();
 		while (!this.queue.isEmpty()) {
 			//Retrieve current write call
 			final WriteCall call = this.queue.poll();
@@ -222,11 +223,10 @@ public final class FontRendererImpl implements FontRenderer {
 				this.tessellator.start();
 				final Font font = this.getFont();
 				for (final char character : text.toCharArray()) {
-					final Rectangle uv = font.getUv(character);
+					final Rectangle uv = font.getUv(fontSize, character);
 					if (uv != null) {
 						final int charWidth = this.getWidthInternal(String.valueOf(character));
-						assert !this.fontSizeStack.isEmpty();
-						((TessellatorImpl) this.tessellator).set(x + totalWidth, y, charWidth, this.fontSizeStack.peekLast(), Objects.requireNonNull(font.getCharTexture(character)));
+						((TessellatorImpl) this.tessellator).set(x + totalWidth, y, charWidth, fontSize, Objects.requireNonNull(font.getCharTexture(fontSize, character)));
 						this.tessellator.color(data.getColor());
 						this.tessellator.next();
 						totalWidth += charWidth;
@@ -272,10 +272,12 @@ public final class FontRendererImpl implements FontRenderer {
 
 	private int getWidthInternal(@NotNull final String text) {
 		assert !this.fontSizeStack.isEmpty();
-		final float fontSizeRatio = (float) this.fontSizeStack.peekLast() / (float) this.getFont().getSize();
+		final int logicalSize = this.fontSizeStack.peekLast();
+		final int physicalSize = Font.getPhysicalSizeForLogicalSize(logicalSize);
+		final float fontSizeRatio = (float) logicalSize / (float) physicalSize;
 		float totalWidth = 0f;
 		for (final char character : text.toCharArray()) {
-			final Rectangle uv = this.getFont().getUv(character);
+			final Rectangle uv = this.getFont().getUv(logicalSize, character);
 			if (uv != null) {
 				totalWidth += uv.getWidth() * fontSizeRatio;
 			}
@@ -384,11 +386,10 @@ public final class FontRendererImpl implements FontRenderer {
 
 	@NotNull
 	private Font getFont() {
-		FontGroup current = this.fontCurrent;
-		if (current == null) {
-			current = this.fontDefault.get();
+		Font result = this.fontCurrent;
+		if (result == null) {
+			result = this.fontDefault.get();
 		}
-		assert !this.fontSizeStack.isEmpty();
-		return current.getFont(this.fontSizeStack.peekLast());
+		return result;
 	}
 }

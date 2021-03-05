@@ -276,6 +276,11 @@ public final class NBTX implements INBTXKeyValueStore {
 	}
 
 	@Override
+	public int getKeyCount() {
+		return this.data.getKeyCount();
+	}
+
+	@Override
 	public void clear() {
 		this.data.clear();
 	}

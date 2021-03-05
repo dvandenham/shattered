@@ -115,5 +115,7 @@ interface INBTXKeyValueStore {
 	@NotNull
 	String[] getKeyNames();
 
+	int getKeyCount();
+
 	void clear();
 }

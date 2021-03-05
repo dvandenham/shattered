@@ -277,6 +277,11 @@ public class NBTXTagTable extends NBTXTag implements INBTXKeyValueStore {
 	}
 
 	@Override
+	public int getKeyCount() {
+		return this.data.size();
+	}
+
+	@Override
 	public void clear() {
 		this.data.clear();
 	}

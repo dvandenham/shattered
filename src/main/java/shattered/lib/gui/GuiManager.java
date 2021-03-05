@@ -14,7 +14,7 @@ import shattered.lib.gfx.Tessellator;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 public final class GuiManager {
-	
+
 	private final ObjectArrayList<IGuiScreen> screens = new ObjectArrayList<>();
 
 	private GuiManager() {
@@ -74,12 +74,16 @@ public final class GuiManager {
 	}
 
 	private void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+		int renderStartIndex = 0;
 		for (int i = this.screens.size() - 1; i >= 0; --i) {
-			final IGuiScreen screen = this.screens.get(i);
-			this.renderScreen(screen, tessellator, fontRenderer);
-			if (screen.isFullscreen()) {
+			if (this.screens.get(i).isFullscreen()) {
+				renderStartIndex = i;
 				break;
 			}
+		}
+		for (int i = renderStartIndex; i < this.screens.size(); ++i) {
+			final IGuiScreen screen = this.screens.get(i);
+			this.renderScreen(screen, tessellator, fontRenderer);
 		}
 	}
 
@@ -112,7 +116,7 @@ public final class GuiManager {
 
 	@MessageListener("init_gui")
 	private static void onMessageReceived(final MessageEvent event) {
-		GuiManager manager = new GuiManager();
+		final GuiManager manager = new GuiManager();
 		event.setResponse(() -> new Object[]{
 				manager,
 				(Runnable) manager::tick,

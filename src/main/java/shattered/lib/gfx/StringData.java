@@ -1,12 +1,13 @@
 package shattered.lib.gfx;
 
+import java.util.Arrays;
 import org.jetbrains.annotations.NotNull;
 import shattered.lib.Color;
 import shattered.lib.math.Dimension;
 
 public final class StringData {
 
-	private final String text;
+	private final String[] text;
 	private final Color color;
 	private boolean doCenterX = false;
 	private boolean doCenterY = false;
@@ -17,9 +18,31 @@ public final class StringData {
 	private int wrapText = 0;
 	private boolean doLocalize = true;
 
-	public StringData(@NotNull final String text, @NotNull final Color color) {
-		this.text = text;
+	public StringData(@NotNull final String[] text, @NotNull final Color color) {
+		this.text = StringData.parseText(text);
 		this.color = color;
+	}
+
+	public StringData(@NotNull final String[] text) {
+		this(text, Color.WHITE);
+	}
+
+	public StringData(@NotNull final String[] text, @NotNull final Color color, final int centerWidth) {
+		this(text, color);
+		this.centerX(centerWidth);
+	}
+
+	public StringData(@NotNull final String[] text, @NotNull final Color color, @NotNull final Dimension centerSize) {
+		this(text, color, centerSize.getWidth(), centerSize.getHeight());
+	}
+
+	public StringData(@NotNull final String[] text, @NotNull final Color color, final int centerWidth, final int centerHeight) {
+		this(text, color);
+		this.center(centerWidth, centerHeight);
+	}
+
+	public StringData(@NotNull final String text, @NotNull final Color color) {
+		this(new String[]{text}, color);
 	}
 
 	public StringData(@NotNull final String text) {
@@ -27,8 +50,7 @@ public final class StringData {
 	}
 
 	public StringData(@NotNull final String text, @NotNull final Color color, final int centerWidth) {
-		this(text, color);
-		this.centerX(centerWidth);
+		this(new String[]{text}, color, centerWidth);
 	}
 
 	public StringData(@NotNull final String text, @NotNull final Color color, @NotNull final Dimension centerSize) {
@@ -36,8 +58,11 @@ public final class StringData {
 	}
 
 	public StringData(@NotNull final String text, @NotNull final Color color, final int centerWidth, final int centerHeight) {
-		this(text, color);
-		this.center(centerWidth, centerHeight);
+		this(new String[]{text}, color, centerWidth, centerHeight);
+	}
+
+	private static String[] parseText(final String[] text) {
+		return Arrays.stream(text).map(line -> line.split("\n")).flatMap(Arrays::stream).filter(str -> !str.trim().isEmpty()).toArray(String[]::new);
 	}
 
 	@NotNull
@@ -104,8 +129,10 @@ public final class StringData {
 	}
 
 	@NotNull
-	public String getText() {
-		return this.text;
+	public String[] getText() {
+		final String[] result = new String[this.text.length];
+		System.arraycopy(this.text, 0, result, 0, result.length);
+		return result;
 	}
 
 	@NotNull

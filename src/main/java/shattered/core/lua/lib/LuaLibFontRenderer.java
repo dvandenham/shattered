@@ -197,8 +197,8 @@ public class LuaLibFontRenderer extends ILuaLib {
 		@Override
 		public LuaValue call(final LuaValue arg) {
 			if (arg.istable()) {
-				final String result = LuaLibFontRenderer.this.fontRenderer.getWrappedText(LuaLibFontRenderer.parseTable(arg.checktable()));
-				return result != null ? LuaString.valueOf(result) : LuaValue.NIL;
+				final String[] result = LuaLibFontRenderer.this.fontRenderer.getWrappedText(LuaLibFontRenderer.parseTable(arg.checktable()));
+				return result != null && result.length > 0 ? LuaString.valueOf(result[0]) : LuaValue.NIL;
 			}
 			return this.argerror("getWrappedText only accepts StringData!");
 		}

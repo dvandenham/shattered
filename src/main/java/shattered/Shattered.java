@@ -114,10 +114,7 @@ public final class Shattered {
 		//Flush the message queue to disk
 		if (Shattered.MESSAGES.hasNewMessages()) {
 			Shattered.MESSAGES.writeToDisk();
-			final BootMessageQueue.BootMessage[] messages = Shattered.MESSAGES.getMessages();
-			for (final BootMessageQueue.BootMessage msg : messages) {
-				System.out.println(msg);
-			}
+			Shattered.LOGGER.warn("There were {} boot messages registered!", Shattered.MESSAGES.getMessages().length);
 		} else {
 			Shattered.LOGGER.info("There were no new boot messages since the last boot");
 		}

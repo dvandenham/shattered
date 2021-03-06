@@ -49,6 +49,7 @@ import shattered.lib.gfx.Tessellator;
 import shattered.lib.gfx.TessellatorImpl;
 import shattered.lib.gui.GuiManager;
 import shattered.lib.registry.CreateRegistryEvent;
+import shattered.screen.ScreenBootMessages;
 import shattered.screen.ScreenMainMenu;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerFrequency;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerValue;
@@ -238,6 +239,11 @@ public final class Shattered {
 
 	private void startRuntime() {
 		this.guiManager.openScreen(new ScreenMainMenu());
+		if (Shattered.MESSAGES.hasNewMessages()) {
+			final ScreenBootMessages screen = ReflectionHelper.instantiate(ScreenBootMessages.class);
+			assert screen != null;
+			this.guiManager.openScreen(screen);
+		}
 		final RuntimeTimer timer = new RuntimeTimer(this::runtimeTick, this::runtimeRender, this::runtimeTickBound);
 		if (this.bootAnimation != null) {
 			this.bootAnimation.start();

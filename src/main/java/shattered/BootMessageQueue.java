@@ -11,6 +11,7 @@ public final class BootMessageQueue {
 
 	private final ConcurrentLinkedQueue<BootMessage> queue = new ConcurrentLinkedQueue<>();
 	private boolean hasWarningOrError = false;
+	private boolean didCacheCheck = false, didCacheCheckResult = false;
 
 	BootMessageQueue() {
 	}
@@ -34,6 +35,14 @@ public final class BootMessageQueue {
 	}
 
 	public boolean hasNewMessages() {
+		if (!this.didCacheCheck) {
+			this.didCacheCheck = true;
+			this.didCacheCheckResult = this.hasNewMessagesNoCache();
+		}
+		return this.didCacheCheckResult;
+	}
+
+	private boolean hasNewMessagesNoCache() {
 		if (this.queue.isEmpty()) {
 			return false;
 		} else {
@@ -62,6 +71,7 @@ public final class BootMessageQueue {
 
 	void writeToDisk() {
 		final File file = BootMessageQueue.getStoreFile();
+		file.deleteOnExit();
 		final NBTX store = new NBTX();
 		final NBTXTagTable table = store.newTable("messages");
 		this.queue.forEach(msg -> {

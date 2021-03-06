@@ -62,6 +62,10 @@ public final class Shattered {
 	public static final String NAME = "Shattered";
 	public static final String VERSION = Shattered.readManifest().getMainAttributes().getValue("VERSION");
 
+	public static final int TICK_RATE = 60;
+	public static final double SECONDS_PER_TICK = 1.0 / Shattered.TICK_RATE;
+	public static final double MILLI_TO_SECONDS = 1E3;
+
 	public static final Logger LOGGER = LogManager.getLogger(Shattered.NAME);
 	public static final String SYSTEM_BUS_NAME = "SYSTEM";
 	public static final IEventBus SYSTEM_BUS = EventBus.createBus(Shattered.SYSTEM_BUS_NAME);
@@ -318,7 +322,9 @@ public final class Shattered {
 			//Render runtime metrics
 			if (Shattered.DEVELOPER_MODE) {
 				final StringData metrics = new StringData(
-						"FPS: " + timer.getCachedFps() + " TickLength (ms): " + String.format("%.2f", timer.getPrevIterationLength()),
+						"FPS: " + timer.getCachedFps()
+								+ " TickLength (ms): " + String.format("%.2f", timer.getPrevIterationLength())
+								+ " BoundTicks: " + timer.cachedBoundTicks,
 						Color.YELLOW
 				).localize(false);
 				this.fontRenderer.setFont(Assets.FONT_SIMPLE);
@@ -429,9 +435,6 @@ public final class Shattered {
 
 	private static final class RuntimeTimer {
 
-		private static final int TICK_RATE = 60;
-		private static final double SECONDS_PER_TICK = 1.0 / RuntimeTimer.TICK_RATE;
-
 		private final RuntimeTimerExecutor tickAction;
 		private final RuntimeTimerExecutor renderAction;
 		private final RuntimeTimerExecutor tickBoundAction;
@@ -441,10 +444,12 @@ public final class Shattered {
 		private long iterationLength;
 		private double iterationAccumulator = 0;
 
-		//FPS counter
+		//FPS + bound-tick counter
 		private long fpsCountStartTime = Shattered.getSystemTime();
 		private int fpsAccumulator = 0;
 		private int cachedFps = 0;
+		private int boundTickAccumulator = 0;
+		private int cachedBoundTicks = 0;
 
 		private RuntimeTimer(
 				@NotNull final RuntimeTimerExecutor tickAction,
@@ -463,12 +468,13 @@ public final class Shattered {
 			if (cachedError != null) {
 				return cachedError;
 			}
-			while (this.iterationAccumulator >= RuntimeTimer.SECONDS_PER_TICK) {
+			while (this.iterationAccumulator >= Shattered.SECONDS_PER_TICK) {
 				cachedError = this.tickBoundAction.execute(this);
 				if (cachedError != null) {
 					return cachedError;
 				}
-				this.iterationAccumulator -= RuntimeTimer.SECONDS_PER_TICK;
+				this.iterationAccumulator -= Shattered.SECONDS_PER_TICK;
+				++this.boundTickAccumulator;
 			}
 			cachedError = this.renderAction.execute(this);
 			if (cachedError != null) {
@@ -479,6 +485,8 @@ public final class Shattered {
 				this.cachedFps = this.fpsAccumulator;
 				this.fpsAccumulator = 0;
 				this.fpsCountStartTime = Shattered.getSystemTime();
+				this.cachedBoundTicks = this.boundTickAccumulator;
+				this.boundTickAccumulator = 0;
 			}
 			this.iterationLength = Shattered.getSystemTime() - this.iterationStartTime;
 			return null;
@@ -488,13 +496,17 @@ public final class Shattered {
 			return this.cachedFps;
 		}
 
+		public int getCachedBoundTicks() {
+			return this.cachedBoundTicks;
+		}
+
 		public double getPrevIterationLength() {
 			return this.iterationLength;
 		}
 
 		private double calcAndHandleDelta() {
 			final long time = Shattered.getSystemTime();
-			final double delta = time - this.iterationStartTime;
+			final double delta = (time - this.iterationStartTime) / Shattered.MILLI_TO_SECONDS;
 			this.iterationStartTime = time;
 			return delta;
 		}

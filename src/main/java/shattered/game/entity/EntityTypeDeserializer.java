@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import shattered.BootMessageQueue;
 import shattered.Shattered;
 import shattered.lib.ResourceLocation;
+import shattered.lib.asset.AssetRegistry;
+import shattered.lib.asset.InvalidResourceException;
+import shattered.lib.asset.ScriptAsset;
 import shattered.lib.registry.RegistryParser;
 
 @RegistryParser.RegistryParserMetadata(EntityType.class)
@@ -105,6 +108,12 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 					jsonData.renderScripts.getOrDefault(variant, jsonData.renderScripts.get(ResourceLocation.DEFAULT_VARIANT)),
 					attributes
 			);
+			if (!(AssetRegistry.getAsset(entityType.getUpdateScript()) instanceof ScriptAsset)) {
+				throw new InvalidResourceException(variantResource, "update script", entityType.getUpdateScript());
+			}
+			if (!(AssetRegistry.getAsset(entityType.getRenderScript()) instanceof ScriptAsset)) {
+				throw new InvalidResourceException(variantResource, "render script", entityType.getUpdateScript());
+			}
 			result.put(variantResource, entityType);
 		}
 		return result;

@@ -19,6 +19,7 @@ def log4jVersion = "2.14.0"
 def jomlVersion = "1.10.0"
 def annotationsVersion = "20.1.0"
 def luajVersion = "3.0.1"
+def jboxVersion = "2.2.1.1"
 
 dependencies {
     implementation("org.lwjgl:lwjgl:${lwjglVersion}")
@@ -51,6 +52,7 @@ dependencies {
     implementation("org.joml:joml:${jomlVersion}")
     implementation("org.jetbrains:annotations:${annotationsVersion}")
     implementation("org.luaj:luaj-jse:${luajVersion}")
+    implementation("org.jbox2d:jbox2d-library:${jboxVersion}")
 }
 
 compileJava {

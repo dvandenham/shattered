@@ -23,7 +23,7 @@ public final class GameRegistries {
 
 	@NotNull
 	public static Registry<EntityType> ENTITY() {
-		return GameRegistries.ENTITY();
+		return GameRegistries.ENTITY;
 	}
 
 	@EventListener(CreateRegistryEvent.class)

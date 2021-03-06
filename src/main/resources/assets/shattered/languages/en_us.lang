@@ -2,6 +2,7 @@ screen.main_menu.button.continue=Continue
 screen.main_menu.button.new_game=New Game
 screen.main_menu.button.settings=Settings
 screen.main_menu.button.shutdown=Exit Shattered
+screen.main_menu.boot_messages.title=This may require your attention!
 
 screen.settings.title=Settings
 screen.settings.toggle.boot_animation=Enable boot animation

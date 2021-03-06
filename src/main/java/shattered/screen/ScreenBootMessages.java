@@ -16,6 +16,7 @@ public final class ScreenBootMessages extends IGuiScreen {
 	private final String[] textToRender;
 
 	ScreenBootMessages() {
+		super("screen.main_menu.boot_messages.title");
 		final BootMessageQueue.BootMessage[] messages = Shattered.MESSAGES.getMessages();
 		this.textToRender = new String[messages.length];
 		for (int i = 0; i < messages.length; ++i) {
@@ -29,14 +30,14 @@ public final class ScreenBootMessages extends IGuiScreen {
 
 	@Override
 	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-		tessellator.drawQuick(this.getBounds(), Color.WHITE);
+		tessellator.drawQuick(this.getBounds(), Color.BLACK);
 	}
 
 	@Override
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		fontRenderer.setFont(Assets.FONT_SIMPLE);
 		fontRenderer.setFontSize(16);
-		fontRenderer.writeQuick(this.getInternalPosition(), new StringData(this.textToRender, Color.BLACK).wrap(this.getInternalWidth()).localize(false));
+		fontRenderer.writeQuick(this.getInternalPosition(), new StringData(this.textToRender, Color.WHITE).wrap(this.getInternalWidth()).localize(false));
 		fontRenderer.revertFontSize();
 		fontRenderer.resetFont();
 	}

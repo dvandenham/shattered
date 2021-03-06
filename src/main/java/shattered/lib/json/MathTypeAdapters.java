@@ -42,7 +42,7 @@ final class MathTypeAdapters {
 					final String data = reader.nextString();
 					final Matcher matcher = PointTypeAdapter.STRING_PATTERN.matcher(data);
 					if (!matcher.matches()) {
-						throw new JsonSyntaxException("Invalid dimension format! Correct format: <x>x<y>");
+						throw new JsonSyntaxException("Invalid coordinate format! Correct format: <x>:<y>");
 					}
 					final String x = matcher.group(1);
 					final String y = matcher.group(2);
@@ -62,12 +62,12 @@ final class MathTypeAdapters {
 								y = reader.nextInt();
 								break;
 							default:
-								throw new JsonSyntaxException("Invalid dimension object key: " + name + ", expected x or y");
+								throw new JsonSyntaxException("Invalid coordinate object key: " + name + ", expected x or y");
 						}
 					}
 					reader.endObject();
 					if (x == null || y == null) {
-						throw new JsonSyntaxException("Incomplete dimension format! Missing: " + (x == null ? "x" : "y"));
+						throw new JsonSyntaxException("Incomplete coordinate format! Missing: " + (x == null ? "x" : "y"));
 					}
 					return Point.create(x, y);
 				}
@@ -192,7 +192,7 @@ final class MathTypeAdapters {
 					reader.endObject();
 					if (x == null || y == null || width == null || height == null) {
 						throw new JsonSyntaxException(
-								"Incomplete dimension format! Missing:" +
+								"Incomplete rectangle format! Missing:" +
 										(x == null ? " x" : "") +
 										(y == null ? " y" : "") +
 										(width == null ? "width" : "height")

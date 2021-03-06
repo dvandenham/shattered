@@ -29,7 +29,7 @@ public final class GuiManager implements IKeyListener {
 		}
 		EventBus.register(screen);
 
-		if (EventBus.post(new ScreenEvent.Closing(screen))) {
+		if (EventBus.post(new ScreenEvent.Opening(screen))) {
 			//Screen opening has been rejected somewhere
 			EventBus.unregister(screen);
 			return;

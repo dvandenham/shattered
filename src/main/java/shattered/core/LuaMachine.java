@@ -23,7 +23,7 @@ import shattered.core.lua.lib.LuaLibTessellator;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.IAsset;
-import shattered.lib.asset.LuaAsset;
+import shattered.lib.asset.ScriptAsset;
 
 @EventBusSubscriber("SYSTEM")
 public final class LuaMachine {
@@ -61,28 +61,28 @@ public final class LuaMachine {
 	@Nullable
 	public static LuaScript loadScript(@NotNull final ResourceLocation resource) {
 		final IAsset asset = AssetRegistry.getAsset(resource);
-		if (!(asset instanceof LuaAsset)) {
+		if (!(asset instanceof ScriptAsset)) {
 			return null;
 		}
-		return LuaMachine.registerLibs(new LuaScript((LuaAsset) asset, false), false);
+		return LuaMachine.registerLibs(new LuaScript((ScriptAsset) asset, false), false);
 	}
 
 	@Nullable
 	public static LuaScript loadRenderScript(@NotNull final ResourceLocation resource) {
 		final IAsset asset = AssetRegistry.getAsset(resource);
-		if (!(asset instanceof LuaAsset)) {
+		if (!(asset instanceof ScriptAsset)) {
 			return null;
 		}
-		return LuaMachine.registerLibs(new LuaScript((LuaAsset) asset, true), true);
+		return LuaMachine.registerLibs(new LuaScript((ScriptAsset) asset, true), true);
 	}
 
 	@NotNull
-	public static LuaScript loadScript(@NotNull final LuaAsset asset) {
+	public static LuaScript loadScript(@NotNull final ScriptAsset asset) {
 		return LuaMachine.registerLibs(new LuaScript(asset, false), false);
 	}
 
 	@NotNull
-	public static LuaScript loadRenderScript(@NotNull final LuaAsset asset) {
+	public static LuaScript loadRenderScript(@NotNull final ScriptAsset asset) {
 		return LuaMachine.registerLibs(new LuaScript(asset, true), true);
 	}
 

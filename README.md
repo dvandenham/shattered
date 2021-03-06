@@ -78,7 +78,7 @@ Registries themselves are bound to a unique ResourceLocation.
 | Textures       | /textures/\<namespace\>/texture.json | /assets/\<namespace\>/textures/ | .json     |
 | Fonts          | /assets/\<namespace\>/font.json      | /assets/\<namespace\>/fonts/    | .ttf      |
 | Audio          | /assets/\<namespace\>/audio.json     | /assets/\<namespace\>/audio/    | .json     |
-| Lua Scripts    | /assets/\<namespace\>/scripts.json   | /assets/\<namespace\>/scripts/  | .lua      |
+| Scripts        | /assets/\<namespace\>/script.json    | /assets/\<namespace\>/scripts/  | .lua      |
 | Binary Files   | /assets/\<namespace\>/binary.json    | /assets/\<namespace\>/          |           |
 
 ## Language files

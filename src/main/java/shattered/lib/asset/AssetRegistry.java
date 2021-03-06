@@ -82,8 +82,8 @@ public final class AssetRegistry {
 				case FONT:
 					action = AssetRegistry::loadFont;
 					break;
-				case LUA:
-					action = AssetRegistry::loadLua;
+				case SCRIPT:
+					action = AssetRegistry::loadScript;
 					break;
 				case BINARY:
 					action = AssetRegistry::loadBinary;
@@ -229,30 +229,29 @@ public final class AssetRegistry {
 		return FontLoader.createFont(resource, baseFont);
 	}
 
-	private static void loadLua(@NotNull final ResourceLocation resource) {
-		AssetRegistry.loadLua(resource, false);
+	private static void loadScript(@NotNull final ResourceLocation resource) {
+		AssetRegistry.loadScript(resource, false);
 	}
 
 	@ReflectionHelper.Reflectable
-	private static LuaAsset loadLua(@NotNull final ResourceLocation resource, final boolean customHandling) {
+	private static ScriptAsset loadScript(@NotNull final ResourceLocation resource, final boolean customHandling) {
 		if (AssetRegistry.ASSETS.contains(resource)) {
-			return (LuaAsset) AssetRegistry.ASSETS.get(resource);
+			return (ScriptAsset) AssetRegistry.ASSETS.get(resource);
 		}
 		final String path = AssetRegistry.getResourcePath(
 				resource,
-				!customHandling ? AssetTypes.LUA : AssetTypes.BINARY,
+				!customHandling ? AssetTypes.SCRIPT : AssetTypes.BINARY,
 				"lua"
 		);
 		if (AssetRegistry.getPathUrl(path) == null) {
 			AssetRegistry.LOGGER.error("Registered script \"{}\" does not exist!", resource);
 			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
-			AssetRegistry.registerInternal(resource, AssetTypes.LUA, null);
+			AssetRegistry.registerInternal(resource, AssetTypes.SCRIPT, null);
 			return null;
 		}
-		final LuaAsset result = new LuaAsset(resource, path);
+		final ScriptAsset result = new ScriptAsset(resource, path);
 		if (!customHandling) {
-
-			AssetRegistry.registerInternal(resource, AssetTypes.LUA, result);
+			AssetRegistry.registerInternal(resource, AssetTypes.SCRIPT, result);
 		}
 		return result;
 	}

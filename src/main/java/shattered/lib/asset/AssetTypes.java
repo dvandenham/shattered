@@ -10,7 +10,7 @@ enum AssetTypes {
 	TEXTURE("textures"),
 	FONT("fonts"),
 	AUDIO("audio"),
-	LUA("scripts"),
+	SCRIPT("scripts"),
 	BINARY(null);
 
 	private final String name = super.toString().toLowerCase(Locale.ROOT);

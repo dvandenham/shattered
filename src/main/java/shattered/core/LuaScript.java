@@ -24,7 +24,7 @@ import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.Font;
-import shattered.lib.asset.LuaAsset;
+import shattered.lib.asset.ScriptAsset;
 import shattered.lib.gfx.FontRendererImpl;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gfx.TessellatorImpl;
@@ -32,13 +32,13 @@ import shattered.lib.gfx.TessellatorImpl;
 public final class LuaScript {
 
 	private static final String SCRIPT_DESTROY_MESSAGE = "Destroyed a script using more system resources than allowed";
-	private final LuaAsset asset;
+	private final ScriptAsset asset;
 	private final Globals sandbox;
 	private final LuaValue setHook;
 	private final TessellatorImpl scriptTessellator;
 	private final FontRendererImpl scriptFontRenderer;
 
-	LuaScript(@NotNull final LuaAsset asset, final boolean canUseRenderUtils) {
+	LuaScript(@NotNull final ScriptAsset asset, final boolean canUseRenderUtils) {
 		this.asset = asset;
 		this.sandbox = LuaScript.createSandbox();
 		this.setHook = this.createSetHook();

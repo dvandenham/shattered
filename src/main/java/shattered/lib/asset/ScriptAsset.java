@@ -6,12 +6,12 @@ import shattered.Shattered;
 import shattered.lib.FileUtils;
 import shattered.lib.ResourceLocation;
 
-public final class LuaAsset extends IAsset {
+public final class ScriptAsset extends IAsset {
 
 	private final String path;
 	private String cachedScript;
 
-	LuaAsset(@NotNull final ResourceLocation resource, @NotNull final String path) {
+	ScriptAsset(@NotNull final ResourceLocation resource, @NotNull final String path) {
 		super(resource);
 		this.path = path;
 	}

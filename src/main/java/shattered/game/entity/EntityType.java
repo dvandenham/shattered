@@ -1,8 +1,8 @@
 package shattered.game.entity;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.lib.ResourceLocation;
 import shattered.lib.math.Dimension;
+import org.jetbrains.annotations.NotNull;
 
 public final class EntityType {
 
@@ -19,12 +19,12 @@ public final class EntityType {
 	@NotNull
 	private final EntityAttributeContainer attributes;
 
-	public EntityType(@NotNull final ResourceLocation resource,
-	                  @NotNull final ResourceLocation texture,
-	                  @NotNull final Dimension entitySize,
-	                  @NotNull final ResourceLocation updateScript,
-	                  @NotNull final ResourceLocation renderScript,
-	                  @NotNull final EntityAttributeContainer attributes
+	EntityType(@NotNull final ResourceLocation resource,
+	           @NotNull final ResourceLocation texture,
+	           @NotNull final Dimension entitySize,
+	           @NotNull final ResourceLocation updateScript,
+	           @NotNull final ResourceLocation renderScript,
+	           @NotNull final EntityAttributeContainer attributes
 	) {
 		this.resource = resource;
 		this.texture = texture;

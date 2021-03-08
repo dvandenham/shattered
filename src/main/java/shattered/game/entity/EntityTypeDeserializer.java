@@ -2,9 +2,6 @@ package shattered.game.entity;
 
 import java.util.HashMap;
 import java.util.Map;
-import com.google.gson.JsonSyntaxException;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.jetbrains.annotations.NotNull;
 import shattered.BootMessageQueue;
 import shattered.Shattered;
 import shattered.lib.ResourceLocation;
@@ -12,6 +9,9 @@ import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.InvalidResourceException;
 import shattered.lib.asset.ScriptAsset;
 import shattered.lib.registry.RegistryParser;
+import com.google.gson.JsonSyntaxException;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.jetbrains.annotations.NotNull;
 
 @RegistryParser.RegistryParserMetadata(EntityType.class)
 public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
@@ -39,7 +39,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 		EntityTypeDeserializer.checkMapForVariant(resource, jsonData.entitySizes, ResourceLocation.DEFAULT_VARIANT, "Entity-size");
 		EntityTypeDeserializer.checkMapForVariant(resource, jsonData.updateScripts, ResourceLocation.DEFAULT_VARIANT, "Update-script");
 		EntityTypeDeserializer.checkMapForVariant(resource, jsonData.renderScripts, ResourceLocation.DEFAULT_VARIANT, "Render-script");
-		EntityTypeDeserializer.checkMapForVariant(resource, jsonData.attributes, ResourceLocation.DEFAULT_VARIANT, "Render-script");
+		EntityTypeDeserializer.checkMapForVariant(resource, jsonData.attributes, ResourceLocation.DEFAULT_VARIANT, "Attributes");
 
 		final HashMap<ResourceLocation, EntityType> result = new HashMap<>();
 		for (final String variant : jsonData.variants) {
@@ -47,7 +47,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 
 			if (!jsonData.textures.containsKey(variant)) {
 				Shattered.MESSAGES.addMessage(
-						"entity_type_json_deserializer",
+						"entity_type_json_deserializer_" + resource,
 						"missing_textures_for_variant_" + variant,
 						BootMessageQueue.BootMessage.Severity.INFO,
 						"Entity \"" + resource + "\" is missing texture for variant \"" + variant + "\". Using \"" + ResourceLocation.DEFAULT_VARIANT + "\" variant texture."
@@ -55,7 +55,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 			}
 			if (!jsonData.entitySizes.containsKey(variant)) {
 				Shattered.MESSAGES.addMessage(
-						"entity_type_json_deserializer",
+						"entity_type_json_deserializer_" + resource,
 						"missing_entity_size_for_variant_" + variant,
 						BootMessageQueue.BootMessage.Severity.INFO,
 						"Entity \"" + resource + "\" is missing size mapping for variant \"" + variant + "\". Using \"" + ResourceLocation.DEFAULT_VARIANT + "\" variant entity size."
@@ -63,7 +63,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 			}
 			if (!jsonData.updateScripts.containsKey(variant)) {
 				Shattered.MESSAGES.addMessage(
-						"entity_type_json_deserializer",
+						"entity_type_json_deserializer_" + resource,
 						"missing_update_script_for_variant_" + variant,
 						BootMessageQueue.BootMessage.Severity.INFO,
 						"Entity \"" + resource + "\" is missing update script mapping for variant \"" + variant + "\". Using \"" + ResourceLocation.DEFAULT_VARIANT + "\" variant update script."
@@ -71,7 +71,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 			}
 			if (!jsonData.renderScripts.containsKey(variant)) {
 				Shattered.MESSAGES.addMessage(
-						"entity_type_json_deserializer",
+						"entity_type_json_deserializer_" + resource,
 						"missing_render_script_for_variant_" + variant,
 						BootMessageQueue.BootMessage.Severity.INFO,
 						"Entity \"" + resource + "\" is missing render script mapping for variant \"" + variant + "\". Using \"" + ResourceLocation.DEFAULT_VARIANT + "\" variant render script."
@@ -79,7 +79,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 			}
 			if (!jsonData.attributes.containsKey(variant)) {
 				Shattered.MESSAGES.addMessage(
-						"entity_type_json_deserializer",
+						"entity_type_json_deserializer_" + resource,
 						"missing_attributes_for_variant_" + variant,
 						BootMessageQueue.BootMessage.Severity.WARNING,
 						"Entity \"" + resource + "\" is missing attribute mapping for variant \"" + variant + "\". Using \"" + ResourceLocation.DEFAULT_VARIANT + "\" variant attributes."
@@ -112,7 +112,7 @@ public final class EntityTypeDeserializer extends RegistryParser<EntityType> {
 				throw new InvalidResourceException(variantResource, "update script", entityType.getUpdateScript());
 			}
 			if (!(AssetRegistry.getAsset(entityType.getRenderScript()) instanceof ScriptAsset)) {
-				throw new InvalidResourceException(variantResource, "render script", entityType.getUpdateScript());
+				throw new InvalidResourceException(variantResource, "render script", entityType.getRenderScript());
 			}
 			result.put(variantResource, entityType);
 		}

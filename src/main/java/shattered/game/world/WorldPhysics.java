@@ -2,6 +2,11 @@ package shattered.game.world;
 
 import java.util.ArrayList;
 import java.util.List;
+import shattered.Shattered;
+import shattered.game.ICollisionListener;
+import shattered.game.WorldObjectPhysicsIdentifier;
+import shattered.lib.ResourceLocation;
+import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -16,19 +21,13 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.contacts.Contact;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.Shattered;
-import shattered.game.ICollisionListener;
-import shattered.game.WorldObjectPhysicsIdentifier;
-import shattered.lib.ResourceLocation;
-import shattered.lib.math.Dimension;
-import shattered.lib.math.Rectangle;
 
 class WorldPhysics {
 
 	private final List<ICollisionListener> collisionListeners = new ObjectArrayList<>();
 	public final World physics;
 
-	public WorldPhysics(@NotNull final Dimension worldSize) {
+	WorldPhysics() {
 		this.physics = new World(new Vec2(0, -0.1F));
 	}
 

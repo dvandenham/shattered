@@ -1,26 +1,56 @@
 package shattered.game.world;
 
-import com.google.gson.annotations.SerializedName;
 import shattered.lib.ResourceLocation;
-import shattered.lib.json.Json;
-import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
+import org.jetbrains.annotations.NotNull;
 
-@Json
 public final class WorldType {
 
-	@SerializedName("world_size")
-	@Json.Required
-	public Dimension worldSize;
+	@NotNull
+	private final ResourceLocation resource;
+	@NotNull
+	private final String displayName;
+	@NotNull
+	private final ResourceLocation wallpaperTexture;
+	@NotNull
+	private final Point playerPos;
+	@NotNull
+	private final Structure structure;
 
-	@SerializedName("wallpaper")
-	@Json.Required
-	public ResourceLocation wallpaperTexture;
+	WorldType(@NotNull final ResourceLocation resource,
+	          @NotNull final String displayName,
+	          @NotNull final ResourceLocation wallpaperTexture,
+	          @NotNull final Point playerPos,
+	          @NotNull final Structure structure) {
+		this.resource = resource;
+		this.displayName = displayName;
+		this.wallpaperTexture = wallpaperTexture;
+		this.playerPos = playerPos;
+		this.structure = structure;
+	}
 
-	@SerializedName("player_position")
-	@Json.Required
-	public Point playerPos;
+	@NotNull
+	public ResourceLocation getResource() {
+		return this.resource;
+	}
 
-	private WorldType() {
+	@NotNull
+	public String getDisplayName() {
+		return this.displayName;
+	}
+
+	@NotNull
+	public ResourceLocation getWallpaperTexture() {
+		return this.wallpaperTexture;
+	}
+
+	@NotNull
+	public Point getPlayerPos() {
+		return this.playerPos;
+	}
+
+	@NotNull
+	public Structure getStructure() {
+		return this.structure;
 	}
 }

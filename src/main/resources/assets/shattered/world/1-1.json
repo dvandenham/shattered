@@ -1,5 +1,15 @@
 {
-	"world_size": "10x10",
-	"wallpaper": "shattered:feshjjfjsekhk",
-	"player_position": "0:10"
+    "display_name": "World 1-1",
+    "wallpaper": "shattered:wallpaper/sky",
+    "player_position": "0:10",
+    "tiles": {
+        "A": "shattered:grass",
+        "AL": "shattered:grass#left",
+        "AR": "shattered:grass#right"
+    },
+    "structure": [
+        ["0", "AL", "A", "A", "0", "A", "AR"],
+        ["0"],
+        ["A", "A", "A", "A", "0", "A", "AR"]
+    ]
 }

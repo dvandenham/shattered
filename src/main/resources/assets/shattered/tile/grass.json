@@ -1,0 +1,12 @@
+{
+	"variants": [
+		"default",
+		"left",
+		"right"
+	],
+	"textures": {
+		"default": "shattered:tile/grass",
+		"left": "shattered:tile/grass_left",
+		"right": "shattered:tile/grass_right"
+	}
+}

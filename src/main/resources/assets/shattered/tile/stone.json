@@ -1,0 +1,12 @@
+{
+	"variants": [
+		"default",
+		"left",
+		"right"
+	],
+	"textures": {
+		"default": "shattered:tile/stone",
+		"left": "shattered:tile/stone_left",
+		"right": "shattered:tile/stone_right"
+	}
+}

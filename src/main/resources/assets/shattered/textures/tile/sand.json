@@ -1,0 +1,8 @@
+{
+    "type": "default",
+    "variants": {
+        "default": "shattered:tile/sand",
+        "left": "shattered:tile/sand_left",
+        "right": "shattered:tile/sand_right"
+    }
+}

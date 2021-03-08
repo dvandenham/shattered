@@ -1,12 +1,12 @@
 {
-	"variants": [
-		"default",
-		"left",
-		"right"
-	],
-	"textures": {
-		"default": "shattered:tile/sand",
-		"left": "shattered:tile/sand_left",
-		"right": "shattered:tile/sand_right"
-	}
+    "variants": [
+        "default",
+        "left",
+        "right"
+    ],
+    "textures": {
+        "default": "shattered:tile/sand",
+        "left": "shattered:tile/sand#left",
+        "right": "shattered:tile/sand#right"
+    }
 }

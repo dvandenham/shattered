@@ -1,17 +1,18 @@
 package shattered.game;
 
-import org.jetbrains.annotations.NotNull;
+import shattered.Shattered;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
-import shattered.Shattered;
 import shattered.game.world.World;
 import shattered.game.world.WorldType;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
+import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.screen.ScreenInGame;
+import org.jetbrains.annotations.NotNull;
 
 public final class GameManager {
 
@@ -52,7 +53,9 @@ public final class GameManager {
 
 	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		//TODO handle errors, backup when possible
+		Display.setLogicalResolution(600, 480);
 		this.runningWorld.render(tessellator, fontRenderer);
+		Display.resetLogicalResolution();
 	}
 
 	@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)

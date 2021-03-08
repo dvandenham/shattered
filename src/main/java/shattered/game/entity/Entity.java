@@ -1,8 +1,5 @@
 package shattered.game.entity;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jetbrains.annotations.NotNull;
 import shattered.game.WorldObjectPhysicsIdentifier;
 import shattered.lib.ResourceLocation;
 import shattered.lib.StringUtils;
@@ -11,6 +8,9 @@ import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Rectangle;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jetbrains.annotations.NotNull;
 
 public final class Entity {
 
@@ -38,7 +38,6 @@ public final class Entity {
 		final Dimension s = this.type.getEntitySize();
 		final Vec2 pp = this.physicsBody.getPosition();
 		final Rectangle render = Rectangle.create((int) pp.x, Display.getHeight() - (int) pp.y, s.getWidth() * 32, s.getHeight() * 32);
-		System.out.println(render);
 		tessellator.drawQuick(render, this.type.getTexture());
 	}
 

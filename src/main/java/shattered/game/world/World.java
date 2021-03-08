@@ -5,35 +5,38 @@ import shattered.game.GameRegistries;
 import shattered.game.ISerializable;
 import shattered.game.entity.Entity;
 import shattered.game.entity.EntityType;
+import shattered.game.tile.Tile;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
+import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jbox2d.dynamics.Body;
 import org.jetbrains.annotations.NotNull;
 
 public final class World implements ISerializable {
 
-	public static final int TILE_SIZE = 8;
+	public static final int TILE_SIZE = 32;
 	public static final ResourceLocation DEATH_BARRIER_RESOURCE = new ResourceLocation("death_barrier");
+	static final Logger LOGGER = LogManager.getLogger("World");
 
+	private final TileContainer tiles = new TileContainer(this);
 	private final ObjectArrayList<Entity> entities = new ObjectArrayList<>();
 	@NotNull
 	private final ResourceLocation resource;
 	@NotNull
 	private final WorldType type;
 	@NotNull
-	private final Structure structure;
-	@NotNull
 	private final WorldPhysics physics;
 
 	private World(@NotNull final ResourceLocation resource, @NotNull final WorldType type) {
 		this.resource = resource;
 		this.type = type;
-		this.structure = type.getStructure();
 		this.physics = new WorldPhysics();
 		//Add death barrier and player
 		this.physics.addWorldBody(World.DEATH_BARRIER_RESOURCE, Rectangle.create(0, -10, type.getStructure().getWorldSize().getWidth(), 10));
@@ -45,6 +48,7 @@ public final class World implements ISerializable {
 				this.physics.physics.destroyBody(body1);
 			}
 		});
+		this.loadTiles(type.getStructure());
 	}
 
 	private void createPlayer() {
@@ -65,6 +69,22 @@ public final class World implements ISerializable {
 		this.entities.add(entity);
 	}
 
+	private void loadTiles(@NotNull final Structure structure) {
+		final Tile[][] tiles = structure.getStructure();
+		for (int x = 0; x < structure.getWorldSize().getWidth(); ++x) {
+			for (int y = 0; y < structure.getWorldSize().getHeight(); ++y) {
+				if (y < tiles.length) {
+					if (x < tiles[y].length) {
+						final Tile tile = tiles[y][x];
+						if (tile != null) {
+							this.tiles.addTile(Point.create(x, y), tile.getResource(), null);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	public void tick() {
 		this.physics.tick();
 	}
@@ -73,7 +93,7 @@ public final class World implements ISerializable {
 		tessellator.drawQuick(Display.getBounds(), this.type.getWallpaperTexture());
 		//TODO render environment here
 
-		//TODO render physical terrain here
+		this.tiles.render(tessellator, fontRenderer);
 
 		this.entities.forEach(entity -> entity.render(tessellator, fontRenderer));
 	}

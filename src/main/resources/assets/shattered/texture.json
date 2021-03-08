@@ -1,4 +1,7 @@
 [
-	"shattered:logo",
-	"shattered:wallpaper/sky"
+    "shattered:logo",
+    "shattered:wallpaper/sky",
+    "shattered:tile/grass",
+    "shattered:tile/sand",
+    "shattered:tile/stone"
 ]

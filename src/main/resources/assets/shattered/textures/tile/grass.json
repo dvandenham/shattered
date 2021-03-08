@@ -1,0 +1,8 @@
+{
+    "type": "default",
+    "variants": {
+        "default": "shattered:tile/grass",
+        "left": "shattered:tile/grass_left",
+        "right": "shattered:tile/grass_right"
+    }
+}

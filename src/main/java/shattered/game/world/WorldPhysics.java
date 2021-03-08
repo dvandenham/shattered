@@ -28,7 +28,7 @@ class WorldPhysics {
 	public final World physics;
 
 	WorldPhysics() {
-		this.physics = new World(new Vec2(0, -0.1F));
+		this.physics = new World(new Vec2(0, -10F));
 	}
 
 	public void tick() {

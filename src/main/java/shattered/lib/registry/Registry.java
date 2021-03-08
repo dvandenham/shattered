@@ -2,25 +2,19 @@ package shattered.lib.registry;
 
 import java.util.Iterator;
 import java.util.Map;
+import shattered.lib.ResourceLocation;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
-import shattered.Shattered;
-import shattered.lib.ResourceLocation;
 
 public final class Registry<T> implements Iterable<Map.Entry<ResourceLocation, T>> {
-
-	static final Object2ObjectArrayMap<ResourceLocation, Registry<?>> REGISTRIES = new Object2ObjectArrayMap<>();
 
 	private final Object2ObjectArrayMap<ResourceLocation, T> mapping = new Object2ObjectArrayMap<>();
 	@NotNull
 	protected final ResourceLocation resource;
 	@NotNull
 	protected Class<T> typeClazz;
-	private boolean frozen = false;
+	boolean frozen = false;
 
 	Registry(@NotNull final ResourceLocation resource, @NotNull final Class<T> typeClazz) {
 		this.resource = resource;
@@ -80,15 +74,6 @@ public final class Registry<T> implements Iterable<Map.Entry<ResourceLocation, T
 		@Override
 		public T next() {
 			return this.delegate.next();
-		}
-	}
-
-	@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
-	private static class EventHandler {
-
-		@MessageListener("freeze_registries")
-		public static void onRegistryFreeze(final MessageEvent ignored) {
-			Registry.REGISTRIES.values().forEach(registry -> registry.frozen = true);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package shattered.lib.registry;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.core.event.Event;
 import shattered.lib.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public final class CreateRegistryEvent extends Event<Void> {
 
@@ -11,12 +11,12 @@ public final class CreateRegistryEvent extends Event<Void> {
 
 	@SuppressWarnings("unused")
 	@NotNull
-	public <T> Registry<T> create(@NotNull final ResourceLocation resource, @NotNull final Class<T> typeClass) {
-		if (Registry.REGISTRIES.containsKey(resource)) {
+	public <T> Registry<T> create(@NotNull final ResourceLocation resource, @NotNull final Class<T> typeClass, @NotNull final ResourceLocation... dependencies) {
+		if (MasterRegistry.registryExists(resource)) {
 			throw new IllegalStateException(String.format("Registry %s already exists!", resource));
 		}
 		final Registry<T> result = new Registry<>(resource, typeClass);
-		Registry.REGISTRIES.put(resource, result);
+		MasterRegistry.register(resource, result, dependencies);
 		return result;
 	}
 }

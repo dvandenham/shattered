@@ -6,51 +6,62 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import preboot.AnnotationRegistry;
+import shattered.Shattered;
+import shattered.core.event.EventBusSubscriber;
+import shattered.lib.ResourceLocation;
+import shattered.lib.json.JsonUtils;
 import com.google.gson.reflect.TypeToken;
-import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import preboot.AnnotationRegistry;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
-import shattered.Shattered;
-import shattered.lib.ResourceLocation;
-import shattered.lib.json.JsonUtils;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 final class RegistryLoader {
 
 	static final Logger LOGGER = LogManager.getLogger("Registries");
 
-	private static void loadRegistries() {
-		final Map<ResourceLocation, List<ResourceLocation>> registries = Registry.REGISTRIES.keySet().stream()
-				.filter(resource -> !resource.equals(new ResourceLocation("assets")))
-				.filter(resource -> !resource.equals(new ResourceLocation("asset_types")))
-				.map(resource -> {
-					Shattered.LOGGER.debug("Loading json registry for registry: {}", resource);
-					final String location = RegistryLoader.getResourcePath(resource, null);
-					try (final InputStreamReader reader = new InputStreamReader(RegistryLoader.class.getResourceAsStream(location))) {
-						final Type reflectType = TypeToken.getParameterized(ArrayList.class, ResourceLocation.class).getType();
-						return new ObjectObjectImmutablePair<>(resource, JsonUtils.GSON.<ArrayList<ResourceLocation>>fromJson(reader, reflectType));
-					} catch (final IOException | NullPointerException e) {
-						Shattered.crash("Could not load json registry for registry: " + resource, e);
-						return null;
-					}
-				})
-				.filter(Objects::nonNull)
-				.collect(Collectors.toMap(ObjectObjectImmutablePair::left, ObjectObjectImmutablePair::right));
-		registries.forEach(RegistryLoader::loadRegistry);
+	static void loadRegistries(final Registry<?>[] loadOrderArray) {
+		for (int i = loadOrderArray.length - 1; i >= 0; --i) {
+			final Registry<?> registry = loadOrderArray[i];
+			final ResourceLocation resource = registry.resource;
+
+			//Skip asset and asset types since they have been loaded already.
+			if (resource.equals(new ResourceLocation("assets"))) {
+				continue;
+			}
+			if (resource.equals(new ResourceLocation("asset_types"))) {
+				continue;
+			}
+
+			//Load entries in the json-registry
+			final List<ResourceLocation> list = RegistryLoader.loadJsonRegistry(resource);
+			if (list == null) {
+				continue;
+			}
+
+			//Load registry for real
+			RegistryLoader.loadRegistry(resource, registry, list);
+		}
+	}
+
+	@Nullable
+	private static List<ResourceLocation> loadJsonRegistry(@NotNull final ResourceLocation registry) {
+		RegistryLoader.LOGGER.debug("Loading json registry for registry: {}", registry);
+		final String location = RegistryLoader.getResourcePath(registry, null);
+		try (final InputStreamReader reader = new InputStreamReader(RegistryLoader.class.getResourceAsStream(location))) {
+			final Type reflectType = TypeToken.getParameterized(ArrayList.class, ResourceLocation.class).getType();
+			return JsonUtils.GSON.<ArrayList<ResourceLocation>>fromJson(reader, reflectType);
+		} catch (final IOException | NullPointerException e) {
+			Shattered.crash("Could not load json registry for registry: " + registry, e);
+			return null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void loadRegistry(@NotNull final ResourceLocation resource, @NotNull final List<ResourceLocation> list) {
-		Shattered.LOGGER.info("Loading registry: {}", resource);
-		final Registry<?> registry = Registry.REGISTRIES.get(resource);
+	private static void loadRegistry(@NotNull final ResourceLocation resource, @NotNull final Registry<?> registry, @NotNull final List<ResourceLocation> list) {
+		RegistryLoader.LOGGER.info("Loading registry: {}", resource);
 
 		final List<Class<?>> classes = AnnotationRegistry.getAnnotatedClasses(RegistryParser.RegistryParserMetadata.class);
 		@SuppressWarnings("unchecked") final Class<? extends RegistryParser<?>> parserClazz = (Class<? extends RegistryParser<?>>) classes.stream()
@@ -111,10 +122,5 @@ final class RegistryLoader {
 	@NotNull
 	private static String getResourcePath(@NotNull final ResourceLocation resource, @Nullable final String type) {
 		return String.format("/assets/%s/%s%s.json", resource.getNamespace(), type != null ? type + "/" : "", resource.getResource());
-	}
-
-	@MessageListener("load_registries")
-	private static void onLoadRegistries(final MessageEvent ignored) {
-		RegistryLoader.loadRegistries();
 	}
 }

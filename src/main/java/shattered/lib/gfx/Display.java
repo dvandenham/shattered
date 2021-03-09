@@ -1,9 +1,9 @@
 package shattered.lib.gfx;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.Shattered;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
 
 public final class Display {
 
@@ -25,7 +25,7 @@ public final class Display {
 	}
 
 	private static Shader getActiveShader() {
-		return ((TessellatorImpl) Shattered.getInstance().tessellator).getShader();
+		return ((TessellatorImpl) Shattered.getInstance().getTessellator()).getShader();
 	}
 
 	//TODO implement fullscreen

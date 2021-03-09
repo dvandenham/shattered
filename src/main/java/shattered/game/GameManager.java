@@ -1,5 +1,6 @@
 package shattered.game;
 
+import java.io.IOException;
 import shattered.Config;
 import shattered.Keybinds;
 import shattered.Shattered;
@@ -23,29 +24,35 @@ import shattered.lib.gui.IGuiScreen;
 import shattered.screen.ScreenInGamePaused;
 import shattered.screen.ScreenMainMenu;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class GameManager implements IKeyListener {
 
+	private final SaveManager saveManager;
 	private World runningWorld = null;
 	private IGuiScreen screenPaused;
 
 	private GameManager() {
+		this.saveManager = new SaveManager(this, Shattered.WORKSPACE.getDataFile("saves"));
 	}
 
 	public boolean loadWorld(@NotNull final ResourceLocation resource) {
-		final WorldType type = GameRegistries.WORLD().get(resource);
-		if (type == null) {
-			return false;
-		}
 		//TODO handle saves
-		final World world = ReflectionHelper.instantiate(World.class, ResourceLocation.class, resource, WorldType.class, type);
+		final World world = this.createWorld(resource);
 		if (world == null) {
 			return false;
+		} else {
+			this.runningWorld = world;
+			//TODO move this
+			Shattered.getInstance().getGuiManager().closeAllScreens();
+			return true;
 		}
-		this.runningWorld = world;
-		//TODO move this
-		Shattered.getInstance().getGuiManager().closeAllScreens();
-		return true;
+	}
+
+	@Nullable
+	World createWorld(@NotNull final ResourceLocation resource) {
+		final WorldType type = GameRegistries.WORLD().get(resource);
+		return type != null ? ReflectionHelper.instantiate(World.class, ResourceLocation.class, resource, WorldType.class, type) : null;
 	}
 
 	public void pause() {
@@ -62,7 +69,12 @@ public final class GameManager implements IKeyListener {
 	}
 
 	public void stop() {
-		//TODO serialize world
+		try {
+			this.saveManager.serializeWorld(this.runningWorld);
+		} catch (final IOException | InvalidSaveException e) {
+			//TODO handle error
+			e.printStackTrace();
+		}
 		this.runningWorld = null;
 		final GuiManager manager = Shattered.getInstance().getGuiManager();
 		if (this.screenPaused != null) {
@@ -125,6 +137,11 @@ public final class GameManager implements IKeyListener {
 				}
 			}
 		}
+	}
+
+	@NotNull
+	public SaveManager getSaveManager() {
+		return this.saveManager;
 	}
 
 	@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)

@@ -51,9 +51,9 @@ public final class ScreenInGamePaused extends IGuiScreen {
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)
 	private void onButtonClicked(final GuiButton.ButtonEvent.LeftClick event) {
 		if (event.get() == this.buttonResume) {
-			Shattered.getInstance().gameManager.unpause();
+			Shattered.getInstance().getGameManager().unpause();
 		} else if (event.get() == this.buttonExit) {
-			Shattered.getInstance().gameManager.stop();
+			Shattered.getInstance().getGameManager().stop();
 		}
 	}
 }

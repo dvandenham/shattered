@@ -1,15 +1,15 @@
 package shattered.screen;
 
-import org.jetbrains.annotations.NotNull;
-import shattered.core.event.EventListener;
 import shattered.Assets;
 import shattered.Shattered;
+import shattered.core.event.EventListener;
 import shattered.lib.ResourceLocation;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
 import shattered.screen.component.GlitchButton;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScreenMainMenu extends AbstractScreen {
 
@@ -50,7 +50,7 @@ public final class ScreenMainMenu extends AbstractScreen {
 		final GuiButton button = event.get();
 		if (button == this.buttonContinue) {
 			//TODO temporary
-			Shattered.getInstance().gameManager.loadWorld(new ResourceLocation("1-1"));
+			Shattered.getInstance().getGameManager().loadWorld(new ResourceLocation("1-1"));
 		} else if (button == this.buttonSettings) {
 			this.openScreen(new ScreenSettings());
 		} else if (button == this.buttonShutdown) {

@@ -26,7 +26,7 @@ public final class Keybinds implements IKeyListener {
 		if (keybind == Keybinds.internalOpenWorkspace) {
 			Shattered.WORKSPACE.openExternal();
 		} else if (keybind == Keybinds.genericEscape) {
-			if (!Shattered.getInstance().gameManager.isRunning()) {
+			if (!Shattered.getInstance().getGameManager().isRunning()) {
 				Shattered.getInstance().getGuiManager().closeLastScreen();
 			}
 		}

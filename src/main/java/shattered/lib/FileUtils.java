@@ -1,12 +1,13 @@
 package shattered.lib;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import shattered.Shattered;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.Shattered;
 
 public final class FileUtils {
 
@@ -25,6 +26,19 @@ public final class FileUtils {
 		} catch (final IOException e) {
 			Shattered.LOGGER.error(e);
 			return null;
+		}
+	}
+
+	public static void deleteDirectoryRecursive(@NotNull final File file) {
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				for (final File child : file.listFiles()) {
+					FileUtils.deleteDirectoryRecursive(child);
+				}
+			}
+			if (!file.delete()) {
+				file.deleteOnExit();
+			}
 		}
 	}
 }

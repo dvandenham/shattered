@@ -78,9 +78,9 @@ public final class Shattered {
 	private static final HashSet<Timer> TIMERS = new HashSet<>();
 
 	private static Shattered INSTANCE;
-	public final Tessellator tessellator;
-	public final FontRenderer fontRenderer;
-	public final GameManager gameManager;
+	private final Tessellator tessellator;
+	private final FontRenderer fontRenderer;
+	private final GameManager gameManager;
 	private final ThreadLoadingScreen loadingScreen;
 	private final BootAnimation bootAnimation;
 
@@ -366,6 +366,21 @@ public final class Shattered {
 	public void stop() {
 		Shattered.LOGGER.debug("Shutdown has been requested");
 		Shattered.RUNNING.lazySet(false);
+	}
+
+	@NotNull
+	public Tessellator getTessellator() {
+		return this.tessellator;
+	}
+
+	@NotNull
+	public FontRenderer getFontRenderer() {
+		return this.fontRenderer;
+	}
+
+	@NotNull
+	public GameManager getGameManager() {
+		return this.gameManager;
 	}
 
 	@NotNull

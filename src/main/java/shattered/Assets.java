@@ -14,7 +14,8 @@ public final class Assets {
 	public static final ResourceLocation FONT_SIMPLE = new ResourceLocation("simple");
 
 	public static final ResourceLocation TEXTURE_LOGO = new ResourceLocation("logo");
-	
+	public static final ResourceLocation TEXTURE_GUI_PANEL = new ResourceLocation("gui/panel");
+
 	public static final ResourceLocation AUDIO_BOOT = new ResourceLocation("boot");
 
 	private Assets() {

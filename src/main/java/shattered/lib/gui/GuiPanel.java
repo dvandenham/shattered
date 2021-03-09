@@ -1,10 +1,10 @@
 package shattered.lib.gui;
 
 import java.util.function.Consumer;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.jetbrains.annotations.NotNull;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class GuiPanel extends IGuiComponent implements IComponentContainer {
 

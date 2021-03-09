@@ -1,6 +1,5 @@
 package shattered.screen;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.Assets;
 import shattered.BootMessageQueue;
 import shattered.Shattered;
@@ -10,6 +9,7 @@ import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiScreen;
 import shattered.lib.gui.Layout;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScreenBootMessages extends IGuiScreen {
 

@@ -1,15 +1,15 @@
 package shattered.lib.gui.component;
 
-import org.jetbrains.annotations.NotNull;
+import shattered.Assets;
 import shattered.core.event.Event;
 import shattered.core.event.EventBus;
-import shattered.Assets;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class GuiToggleButton extends IGuiComponent {
 
@@ -32,7 +32,7 @@ public class GuiToggleButton extends IGuiComponent {
 	}
 
 	@Override
-	protected void tick() {
+	public void tick() {
 		if (this.currentState != this.previousState) {
 			this.previousState = this.currentState;
 			final ToggleButtonEvent event;
@@ -52,7 +52,7 @@ public class GuiToggleButton extends IGuiComponent {
 	}
 
 	@Override
-	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		final Color bgColor;
 		if (!this.isEnabled()) {
 			bgColor = Color.DARK_GRAY;
@@ -65,7 +65,7 @@ public class GuiToggleButton extends IGuiComponent {
 	}
 
 	@Override
-	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		fontRenderer.setFont(Assets.FONT_SIMPLE);
 		fontRenderer.setFontSize(Math.min(this.getHeight() / 4 * 3, 48));
 		final int yOffset = 2;

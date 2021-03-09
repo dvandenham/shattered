@@ -1,19 +1,19 @@
 package shattered.lib.gui.component;
 
-import org.jetbrains.annotations.NotNull;
+import shattered.Assets;
 import shattered.core.event.Event;
 import shattered.core.event.EventBus;
-import shattered.Assets;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class GuiButton extends IGuiComponent {
 
-	enum ButtonState {
+	public enum ButtonState {
 		DISABLED,
 		DEFAULT,
 		ROLLOVER,
@@ -23,8 +23,8 @@ public class GuiButton extends IGuiComponent {
 		RIGHT_CLICK,
 	}
 
-	private ButtonState state = ButtonState.DEFAULT;
-	private ButtonState prevState = this.state;
+	protected ButtonState state = ButtonState.DEFAULT;
+	protected ButtonState prevState = this.state;
 
 	@NotNull
 	private String text;
@@ -42,7 +42,7 @@ public class GuiButton extends IGuiComponent {
 	}
 
 	@Override
-	protected void tick() {
+	public void tick() {
 		if (this.state != this.prevState) {
 			this.prevState = this.state;
 			final ButtonEvent event;
@@ -97,7 +97,7 @@ public class GuiButton extends IGuiComponent {
 	}
 
 	@Override
-	protected void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		final Color bgColor;
 		switch (this.state) {
 			case ROLLOVER:
@@ -117,7 +117,7 @@ public class GuiButton extends IGuiComponent {
 	}
 
 	@Override
-	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		fontRenderer.setFont(Assets.FONT_SIMPLE);
 		fontRenderer.setFontSize(Math.min(this.getHeight() / 4 * 3, 48));
 		final int yOffset = 2;

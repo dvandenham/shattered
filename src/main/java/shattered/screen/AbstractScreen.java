@@ -1,12 +1,12 @@
 package shattered.screen;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.Assets;
 import shattered.lib.Color;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiScreen;
+import org.jetbrains.annotations.NotNull;
 
 abstract class AbstractScreen extends IGuiScreen {
 

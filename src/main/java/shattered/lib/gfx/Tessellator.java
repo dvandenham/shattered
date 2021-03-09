@@ -1,12 +1,12 @@
 package shattered.lib.gfx;
 
-import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2f;
 import shattered.lib.Color;
 import shattered.lib.ResourceLocation;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2f;
 
 public interface Tessellator {
 

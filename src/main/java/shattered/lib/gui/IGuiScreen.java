@@ -1,11 +1,9 @@
 package shattered.lib.gui;
 
 import java.util.function.Consumer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import shattered.core.event.EventListener;
 import shattered.Assets;
 import shattered.Shattered;
+import shattered.core.event.EventListener;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.gfx.Display;
@@ -17,17 +15,22 @@ import shattered.lib.gfx.Tessellator;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class IGuiScreen implements IComponentContainer {
 
 	private final GuiPanel components = new GuiScreenComponentPanel();
-	private final Rectangle bounds = Rectangle.createMutable(-1, -1, -1, -1);
+	private final Rectangle bounds = GuiHelper.BOUNDS_FULLSCREEN.toMutable();
+	private final Dimension sizeMin = GuiHelper.BOUNDS_IGNORE.toMutable();
+	private final Dimension sizeMax = GuiHelper.BOUNDS_IGNORE.toMutable();
 	private final Rectangle boundsCached = Rectangle.createMutable(0, 0, 0, 0);
 	private final Rectangle titlebarBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
 	private final Rectangle closeButtonBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
 	private final Rectangle internalBoundsCached = Rectangle.createMutable(0, 0, 0, 0);
 	@Nullable
 	private String title = null;
+	private boolean localizeTitle = true;
 	private boolean hasTitlebar = true;
 	private boolean hasCloseButton = true;
 	private Point draggingOriginPoint = null;
@@ -57,6 +60,10 @@ public abstract class IGuiScreen implements IComponentContainer {
 		this.cacheBounds();
 	}
 
+	protected final void localizeTitle(final boolean localize) {
+		this.localizeTitle = localize;
+	}
+
 	protected void tick() {
 	}
 
@@ -69,22 +76,22 @@ public abstract class IGuiScreen implements IComponentContainer {
 			tessellator.drawQuick(this.titlebarBoundsCached, Color.WHITE.withAlpha(0.5F));
 			if (!this.isFullscreen()) {
 				tessellator.drawQuick(this.getX(), this.titlebarBoundsCached.getMaxY(),
-						GuiProperties.BORDER_SIZE, this.getHeight() - this.titlebarBoundsCached.getHeight(),
+						GuiHelper.BORDER_SIZE, this.getHeight() - this.titlebarBoundsCached.getHeight(),
 						Color.WHITE.withAlpha(0.5F)
 				);
-				tessellator.drawQuick(this.getBounds().getMaxX() - GuiProperties.BORDER_SIZE, this.titlebarBoundsCached.getMaxY(),
-						GuiProperties.BORDER_SIZE, this.getHeight() - this.titlebarBoundsCached.getHeight(),
+				tessellator.drawQuick(this.getBounds().getMaxX() - GuiHelper.BORDER_SIZE, this.titlebarBoundsCached.getMaxY(),
+						GuiHelper.BORDER_SIZE, this.getHeight() - this.titlebarBoundsCached.getHeight(),
 						Color.WHITE.withAlpha(0.5F)
 				);
-				tessellator.drawQuick(this.getX(), this.getBounds().getMaxY() - GuiProperties.BORDER_SIZE,
-						this.getWidth(), GuiProperties.BORDER_SIZE,
+				tessellator.drawQuick(this.getX(), this.getBounds().getMaxY() - GuiHelper.BORDER_SIZE,
+						this.getWidth(), GuiHelper.BORDER_SIZE,
 						Color.WHITE.withAlpha(0.5F)
 				);
 			}
 			if (this.titleDataCached != null) {
 				fontRenderer.setFont(Assets.FONT_SIMPLE);
 				fontRenderer.setFontSize(this.titlebarBoundsCached.getHeight() / 3 * 2);
-				fontRenderer.writeQuick(this.titlebarBoundsCached.getPosition().moveX(GuiProperties.BORDER_SIZE), this.titleDataCached);
+				fontRenderer.writeQuick(this.titlebarBoundsCached.getPosition().moveX(GuiHelper.BORDER_SIZE), this.titleDataCached);
 				fontRenderer.revertFontSize();
 				fontRenderer.resetFont();
 			}
@@ -92,20 +99,20 @@ public abstract class IGuiScreen implements IComponentContainer {
 				tessellator.drawQuick(this.closeButtonBoundsCached, Color.RED.withAlpha(0.5F));
 				final PolygonBuilder polygons = tessellator.createPolygon();
 				polygons.start(Color.WHITE);
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-GuiProperties.BORDER_SIZE, -(GuiProperties.BORDER_SIZE * 2)));
-				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-GuiProperties.BORDER_SIZE, -GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-(GuiProperties.BORDER_SIZE * 2), -GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE * 2));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiHelper.BORDER_SIZE, GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiHelper.BORDER_SIZE * 2, GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-GuiHelper.BORDER_SIZE, -(GuiHelper.BORDER_SIZE * 2)));
+				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-GuiHelper.BORDER_SIZE, -GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getMaxPosition().move(-(GuiHelper.BORDER_SIZE * 2), -GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiHelper.BORDER_SIZE, GuiHelper.BORDER_SIZE * 2));
 				polygons.draw();
 				polygons.start(Color.WHITE);
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE * 2));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE * 2, this.closeButtonBoundsCached.getHeight() - GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, this.closeButtonBoundsCached.getHeight() - GuiProperties.BORDER_SIZE));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiProperties.BORDER_SIZE, this.closeButtonBoundsCached.getHeight() - (GuiProperties.BORDER_SIZE * 2)));
-				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiHelper.BORDER_SIZE, GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiHelper.BORDER_SIZE, GuiHelper.BORDER_SIZE * 2));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiHelper.BORDER_SIZE * 2, this.closeButtonBoundsCached.getHeight() - GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiHelper.BORDER_SIZE, this.closeButtonBoundsCached.getHeight() - GuiHelper.BORDER_SIZE));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(GuiHelper.BORDER_SIZE, this.closeButtonBoundsCached.getHeight() - (GuiHelper.BORDER_SIZE * 2)));
+				polygons.add(this.closeButtonBoundsCached.getPosition().move(this.closeButtonBoundsCached.getWidth() - GuiHelper.BORDER_SIZE * 2, GuiHelper.BORDER_SIZE));
 				polygons.draw();
 			}
 		}
@@ -248,6 +255,26 @@ public abstract class IGuiScreen implements IComponentContainer {
 		this.setSize(bounds.getSize());
 	}
 
+	protected final void setMinSize(final int width, final int height) {
+		this.sizeMin.setWidth(width).setHeight(height);
+		this.cacheBounds();
+	}
+
+	protected final void setMinSize(@NotNull final Dimension size) {
+		this.sizeMin.setWidth(size.getWidth()).setHeight(size.getHeight());
+		this.cacheBounds();
+	}
+
+	protected final void setMaxSize(final int width, final int height) {
+		this.sizeMax.setWidth(width).setHeight(height);
+		this.cacheBounds();
+	}
+
+	protected final void setMaxSize(@NotNull final Dimension size) {
+		this.sizeMax.setWidth(size.getWidth()).setHeight(size.getHeight());
+		this.cacheBounds();
+	}
+
 	public final int getX() {
 		return this.boundsCached.getX();
 	}
@@ -329,81 +356,43 @@ public abstract class IGuiScreen implements IComponentContainer {
 	}
 
 	void cacheBounds() {
-		final Rectangle newBounds = IGuiScreen.getCorrectBounds(this.bounds);
+		final Rectangle newBounds = GuiHelper.getCorrectBounds(this.bounds, this.sizeMin, this.sizeMax);
 		this.boundsCached.setPosition(newBounds.getPosition()).setSize(newBounds.getSize());
 		this.titlebarBoundsCached.setPosition(newBounds.getPosition());
 		if (this.hasTitlebar) {
-			this.titlebarBoundsCached.setSize(newBounds.getWidth(), GuiProperties.TITLEBAR_SIZE);
+			this.titlebarBoundsCached.setSize(newBounds.getWidth(), GuiHelper.TITLEBAR_SIZE);
 			if (this.hasCloseButton) {
-				this.titlebarBoundsCached.shrinkX(GuiProperties.CLOSE_BUTTON_WIDTH);
+				this.titlebarBoundsCached.shrinkX(GuiHelper.CLOSE_BUTTON_WIDTH);
 				this.closeButtonBoundsCached
 						.setPosition(this.titlebarBoundsCached.getMaxX(), this.titlebarBoundsCached.getY())
-						.setSize(GuiProperties.CLOSE_BUTTON_WIDTH, GuiProperties.CLOSE_BUTTON_HEIGHT);
+						.setSize(GuiHelper.CLOSE_BUTTON_WIDTH, GuiHelper.CLOSE_BUTTON_HEIGHT);
 			}
 			if (this.title != null) {
 				this.titleDataCached = new StringData(this.title, Color.BLACK)
 						.wrap(this.titlebarBoundsCached.getWidth(), true)
-						.centerY(this.titlebarBoundsCached.getHeight());
+						.centerY(this.titlebarBoundsCached.getHeight())
+						.localize(this.localizeTitle);
 			}
 		} else {
 			this.titlebarBoundsCached.setSize(0, 0);
 		}
 		this.internalBoundsCached
 				.setPosition(this.titlebarBoundsCached.getX(), this.titlebarBoundsCached.getMaxY())
-				.move(GuiProperties.BORDER_SIZE, GuiProperties.BORDER_SIZE)
+				.move(GuiHelper.BORDER_SIZE, GuiHelper.BORDER_SIZE)
 				.setSize(newBounds.getSize())
-				.shrink(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE * 2)
+				.shrink(GuiHelper.BORDER_SIZE * 2, GuiHelper.BORDER_SIZE * 2)
 				.shrink(0, this.titlebarBoundsCached.getHeight());
 		if (this.hasTitlebar && !this.isFullscreen()) {
 			this.internalBoundsCached
-					.move(GuiProperties.BORDER_SIZE, 0)
-					.shrink(GuiProperties.BORDER_SIZE * 2, GuiProperties.BORDER_SIZE);
+					.move(GuiHelper.BORDER_SIZE, 0)
+					.shrink(GuiHelper.BORDER_SIZE * 2, GuiHelper.BORDER_SIZE);
 		}
 	}
 
 	@EventListener
 	private void onDisplayResized(final DisplayResizedEvent ignored) {
 		this.cacheBounds();
-		this.setupComponents(IGuiScreen.createDefaultLayout(this));
-	}
-
-	private static Rectangle getCorrectBounds(final Rectangle bounds) {
-		int width = bounds.getWidth();
-		if (width < 0) {
-			width = Display.getWidth() / -width;
-		} else if (width == 0 || width > Display.getWidth()) {
-			width = Display.getWidth();
-		}
-
-		int height = bounds.getHeight();
-		if (height < 0) {
-			height = Display.getHeight() / -height;
-		} else if (height == 0 || height > Display.getHeight()) {
-			height = Display.getHeight();
-		}
-
-		final int availableX = Display.getWidth() - width;
-		final int availableY = Display.getHeight() - height;
-
-		int x = bounds.getX();
-		if (x < 0) {
-			x = availableX / 2;
-		} else if (x > availableX) {
-			x = availableX;
-		}
-
-		int y = bounds.getY();
-		if (y < 0) {
-			y = availableY / 2;
-		} else if (y > availableY) {
-			y = availableY;
-		}
-
-		return Rectangle.create(x, y, width, height);
-	}
-
-	static Layout createDefaultLayout(@NotNull final IGuiScreen screen) {
-		return new DefaultLayout(GuiProperties.COMPONENT_HEIGHT, GuiProperties.COMPONENT_SPACING, screen.getInternalBounds());
+		this.setupComponents(GuiHelper.createDefaultLayout(this));
 	}
 
 	private static class GuiScreenComponentPanel extends GuiPanel {

@@ -1,6 +1,5 @@
 package shattered;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.lib.Color;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.Texture;
@@ -8,6 +7,7 @@ import shattered.lib.audio.AudioPlayer;
 import shattered.lib.audio.SoundSystem;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.Tessellator;
+import org.jetbrains.annotations.NotNull;
 
 final class BootAnimation {
 

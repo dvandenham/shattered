@@ -37,16 +37,22 @@ public final class GameManager implements IKeyListener {
 	}
 
 	public boolean loadWorld(@NotNull final ResourceLocation resource) {
-		//TODO handle saves
-		final World world = this.createWorld(resource);
-		if (world == null) {
+		return this.loadWorld(this.createWorld(resource));
+	}
+
+	public boolean loadWorld(@NotNull final SaveData save, @NotNull final String uuid) {
+		try {
+			final World world = this.saveManager.deserializeWorld(save, uuid);
+			return this.loadWorld(world);
+		} catch (final IOException e) {
+			Shattered.LOGGER.error("Could not load world!", e);
 			return false;
-		} else {
-			this.runningWorld = world;
-			//TODO move this
-			Shattered.getInstance().getGuiManager().closeAllScreens();
-			return true;
 		}
+	}
+
+	private boolean loadWorld(@Nullable final World world) {
+		this.runningWorld = world;
+		return world != null;
 	}
 
 	@Nullable
@@ -76,12 +82,13 @@ public final class GameManager implements IKeyListener {
 			e.printStackTrace();
 		}
 		this.runningWorld = null;
-		final GuiManager manager = Shattered.getInstance().getGuiManager();
+		final GuiManager guiManager = Shattered.getInstance().getGuiManager();
 		if (this.screenPaused != null) {
-			manager.closeScreen(this.screenPaused);
+			guiManager.closeScreen(this.screenPaused);
+			this.screenPaused = null;
 		}
 		//TODO move this
-		manager.openScreen(new ScreenMainMenu());
+		guiManager.openScreen(new ScreenMainMenu());
 	}
 
 	public boolean isRunning() {

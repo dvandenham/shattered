@@ -1,5 +1,10 @@
 package shattered.core.lua.lib;
 
+import shattered.core.lua.ILuaLib;
+import shattered.lib.Color;
+import shattered.lib.ResourceLocation;
+import shattered.lib.gfx.Tessellator;
+import shattered.lib.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.LuaBoolean;
 import org.luaj.vm2.LuaTable;
@@ -9,11 +14,6 @@ import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
-import shattered.core.lua.ILuaLib;
-import shattered.lib.Color;
-import shattered.lib.ResourceLocation;
-import shattered.lib.gfx.Tessellator;
-import shattered.lib.math.Rectangle;
 
 public final class LuaLibTessellator extends ILuaLib {
 

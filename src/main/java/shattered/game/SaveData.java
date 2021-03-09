@@ -84,11 +84,11 @@ public final class SaveData {
 		final NBTXTagArray newArray = this.metadata.newArray("versions");
 
 		newArray.add(uuid);
-		for (int i = 1; i < Math.min(SaveData.MAX_SAVES, array.getSize()); ++i) {
+		for (int i = 0; i < Math.min(SaveData.MAX_SAVES, array.getSize()); ++i) {
 			newArray.add(array.getString(i));
 		}
 
-		final String oldUuid = array.getSize() > 0 ? array.getString(0) : null;
+		final String oldUuid = array.getSize() == SaveData.MAX_SAVES ? array.getString(array.getSize() - 1) : null;
 
 		final NBTXTagTable versionData = this.metadata.getTable("version_data");
 		if (oldUuid != null) {
@@ -119,7 +119,7 @@ public final class SaveData {
 		assert array != null;
 		final String[] result = new String[array.getSize()];
 		for (int i = 0; i < result.length; ++i) {
-			result[result.length - 1 - i] = Objects.requireNonNull(array.getString(i));
+			result[i] = Objects.requireNonNull(array.getString(i));
 		}
 		return result;
 	}

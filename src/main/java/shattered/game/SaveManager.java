@@ -40,6 +40,7 @@ public class SaveManager {
 				oldWorldFile.deleteOnExit();
 			}
 		}
+		save.save();
 	}
 
 	@Nullable

@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import shattered.lib.Color;
 import shattered.lib.Lazy;
 import shattered.lib.Localizer;
@@ -17,6 +15,8 @@ import shattered.lib.asset.IAsset;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public final class FontRendererImpl implements FontRenderer {

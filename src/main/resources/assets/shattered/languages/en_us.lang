@@ -1,4 +1,8 @@
+popup.yes_no.button.no=No
+popup.yes_no.button.yes=Yes
+
 screen.main_menu.button.continue=Continue
+screen.main_menu.button.save_list=Saved worlds
 screen.main_menu.button.new_game=New Game
 screen.main_menu.button.settings=Settings
 screen.main_menu.button.shutdown=Exit Shattered
@@ -10,3 +14,16 @@ screen.settings.toggle.boot_animation=Enable boot animation
 screen.in_game.paused.label.paused=Game Paused
 screen.in_game.paused.button.resume=Continue
 screen.in_game.paused.button.exit=Exit world
+
+screen.save_list.title=Saved worlds
+screen.save_list.button.load_versions=Select
+screen.save_versions.button.delete=Delete save
+screen.save_versions.button.rename=Rename
+screen.save_versions.list.name_newest=Last save
+screen.save_versions.button.details=Details
+screen.save_versions.popup.delete.description=Are you sure you want to delete this save? this will delete all versions and cannot be undone!
+screen.save_rename.button.cancel=Cancel
+screen.save_rename.button.confirm=Confirm
+screen.save_details.button.load=Load save
+screen.save_details.info.resource=Resource Name
+screen.save_details.info.date=Save date

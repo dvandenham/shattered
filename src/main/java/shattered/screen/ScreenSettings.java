@@ -1,12 +1,12 @@
 package shattered.screen;
 
-import org.jetbrains.annotations.NotNull;
-import shattered.core.event.EventListener;
 import shattered.Config;
+import shattered.core.event.EventListener;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiToggleButton;
+import org.jetbrains.annotations.NotNull;
 
 public final class ScreenSettings extends AbstractScreen {
 

@@ -1,5 +1,20 @@
 package shattered.core;
 
+import shattered.Assets;
+import shattered.StaticAssets;
+import shattered.core.lua.LuaStringLib;
+import shattered.core.lua.lib.LuaGlobalLibColor;
+import shattered.core.lua.lib.LuaGlobalLibStringData;
+import shattered.core.lua.lib.LuaLibFontRenderer;
+import shattered.core.lua.lib.LuaLibTessellator;
+import shattered.lib.Lazy;
+import shattered.lib.ReflectionHelper;
+import shattered.lib.asset.AssetRegistry;
+import shattered.lib.asset.Font;
+import shattered.lib.asset.ScriptAsset;
+import shattered.lib.gfx.FontRendererImpl;
+import shattered.lib.gfx.Tessellator;
+import shattered.lib.gfx.TessellatorImpl;
 import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaThread;
@@ -13,21 +28,6 @@ import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 import org.luaj.vm2.lib.jse.JseBaseLib;
 import org.luaj.vm2.lib.jse.JseMathLib;
-import shattered.core.lua.LuaStringLib;
-import shattered.core.lua.lib.LuaGlobalLibColor;
-import shattered.core.lua.lib.LuaGlobalLibStringData;
-import shattered.core.lua.lib.LuaLibFontRenderer;
-import shattered.core.lua.lib.LuaLibTessellator;
-import shattered.Assets;
-import shattered.StaticAssets;
-import shattered.lib.Lazy;
-import shattered.lib.ReflectionHelper;
-import shattered.lib.asset.AssetRegistry;
-import shattered.lib.asset.Font;
-import shattered.lib.asset.ScriptAsset;
-import shattered.lib.gfx.FontRendererImpl;
-import shattered.lib.gfx.Tessellator;
-import shattered.lib.gfx.TessellatorImpl;
 
 public final class LuaScript {
 

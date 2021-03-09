@@ -207,8 +207,16 @@ public final class Rectangle {
 		return this.size.getDoubleHeight();
 	}
 
+	public final int getCenterX() {
+		return this.getX() + this.getWidth() / 2;
+	}
+
 	public final double getDoubleCenterX() {
 		return this.getDoubleX() + this.getDoubleWidth() / 2.0;
+	}
+
+	public final int getCenterY() {
+		return this.getY() + this.getHeight() / 2;
 	}
 
 	public final double getDoubleCenterY() {

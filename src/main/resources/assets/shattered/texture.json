@@ -1,5 +1,6 @@
 [
     "shattered:logo",
+    "shattered:gui/panel",
     "shattered:wallpaper/sky",
     "shattered:tile/grass",
     "shattered:tile/sand",

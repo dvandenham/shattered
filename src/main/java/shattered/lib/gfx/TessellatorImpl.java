@@ -6,16 +6,10 @@ import java.util.Arrays;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Supplier;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
+import shattered.Shattered;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventListener;
 import shattered.core.event.MessageEvent;
-import shattered.Shattered;
 import shattered.lib.Color;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
@@ -27,6 +21,12 @@ import shattered.lib.asset.TextureAtlas;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
@@ -693,7 +693,7 @@ public final class TessellatorImpl implements Tessellator {
 	}
 
 	@NotNull
-	private Texture getTexture(@NotNull final ResourceLocation resource) {
+	Texture getTexture(@NotNull final ResourceLocation resource) {
 		final IAsset asset = AssetRegistry.getAsset(resource);
 		if (asset instanceof Texture) {
 			return (Texture) asset;

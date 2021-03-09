@@ -63,6 +63,7 @@ public final class GuiManager {
 		if (isLastScreen && !this.screens.isEmpty()) {
 			final IGuiScreen newScreen = this.getLastScreen();
 			assert newScreen != null;
+			this.setupComponents(newScreen);
 			EventBus.post(new ScreenEvent.Opened(newScreen));
 		}
 	}
@@ -120,7 +121,7 @@ public final class GuiManager {
 	}
 
 	void setupComponents(@NotNull final IGuiScreen screen) {
-		final Layout layout = IGuiScreen.createDefaultLayout(screen);
+		final Layout layout = GuiHelper.createDefaultLayout(screen);
 		screen.setupComponents(layout);
 		screen.doForAll(component -> {
 			if (component instanceof IComponentContainer) {

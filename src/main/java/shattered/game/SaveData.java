@@ -26,25 +26,21 @@ public final class SaveData {
 	@NotNull
 	private final NBTX metadata;
 
-	SaveData(@NotNull final File saveDir) throws InvalidSaveException {
+	SaveData(@NotNull final File saveDir) throws IOException, InvalidSaveException {
 		this.saveDir = saveDir;
 		this.metaFile = new File(saveDir, SaveData.META_FILE_NAME);
 		if (!this.metaFile.exists()) {
-			throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_MISSING);
+			throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_MISSING, this.metaFile.getAbsolutePath());
 		} else {
-			try {
-				this.metadata = NBTX.deserializeNBTX(this.metaFile);
-				if (!this.metadata.hasString("world_id")) {
-					throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT);
-				} else if (!this.metadata.hasString("display_name")) {
-					throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT);
-				} else if (!this.metadata.hasArray("versions")) {
-					throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT);
-				} else if (!this.metadata.hasTable("version_data")) {
-					throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT);
-				}
-			} catch (final IOException ignored) {
-				throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT);
+			this.metadata = NBTX.deserializeNBTX(this.metaFile);
+			if (!this.metadata.hasString("world_id")) {
+				throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT, this.metaFile.getAbsolutePath());
+			} else if (!this.metadata.hasString("display_name")) {
+				throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT, this.metaFile.getAbsolutePath());
+			} else if (!this.metadata.hasArray("versions")) {
+				throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT, this.metaFile.getAbsolutePath());
+			} else if (!this.metadata.hasTable("version_data")) {
+				throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT, this.metaFile.getAbsolutePath());
 			}
 		}
 	}

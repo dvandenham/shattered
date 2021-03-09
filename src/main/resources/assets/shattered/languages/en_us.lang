@@ -1,5 +1,6 @@
 popup.yes_no.button.no=No
 popup.yes_no.button.yes=Yes
+popup.notice.button.close=Close
 
 screen.main_menu.button.continue=Continue
 screen.main_menu.button.save_list=Saved worlds
@@ -17,6 +18,11 @@ screen.in_game.paused.button.exit=Exit world
 
 screen.save_list.title=Saved worlds
 screen.save_list.button.load_versions=Select
+screen.save_list.popup.error.io=Could not load saves. Reason: %s
+screen.save_list.popup.error.generic=Could not load saves. Reason: unknown
+screen.save_list.popup.error.meta_missing=Could not load saves because a metadata file is missing. Missing file path: %s
+screen.save_list.popup.error.meta_corrupt=Could not load saves because a metadata file is corrupt. Corrupt file path: %s
+screen.save_list.popup.error.generic=Could not load saves. Reason: unknown
 screen.save_versions.button.delete=Delete save
 screen.save_versions.button.rename=Rename
 screen.save_versions.list.name_newest=Last save

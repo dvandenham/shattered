@@ -9,6 +9,7 @@ import shattered.lib.math.Dimension;
 import shattered.lib.math.MathHelper;
 import shattered.lib.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class GuiHelper {
 
@@ -81,7 +82,7 @@ public final class GuiHelper {
 		return new DefaultLayout(GuiHelper.COMPONENT_HEIGHT, GuiHelper.COMPONENT_SPACING, screen.getInternalBounds());
 	}
 
-	public static void renderGuiPanel(@NotNull final Tessellator tessellator, @NotNull final Rectangle bounds, @NotNull final Color overlayColor) {
+	public static void renderGuiPanel(@NotNull final Tessellator tessellator, @NotNull final Rectangle bounds, @Nullable final Color overlayColor) {
 		RenderHelper.renderBorderTexture(tessellator, bounds, Assets.TEXTURE_GUI_PANEL, 5, overlayColor);
 	}
 

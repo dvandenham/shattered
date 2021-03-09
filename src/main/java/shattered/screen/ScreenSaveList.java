@@ -1,11 +1,16 @@
 package shattered.screen;
 
+import java.io.IOException;
 import shattered.Shattered;
 import shattered.core.event.EventListener;
+import shattered.game.InvalidSaveException;
 import shattered.game.SaveData;
 import shattered.lib.Color;
+import shattered.lib.Localizer;
 import shattered.lib.gfx.FontRenderer;
+import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
+import shattered.lib.gui.GuiPopupNotice;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.ScreenEvent;
 import shattered.lib.gui.component.GuiButton;
@@ -33,9 +38,31 @@ public class ScreenSaveList extends AbstractScreen {
 
 	private void makeList() {
 		this.listSaves.reset();
-		final SaveData[] saves = Shattered.getInstance().getGameManager().getSaveManager().listSaves();
-		for (int i = 0; i < saves.length; ++i) {
-			this.listSaves.add(saves[i].getDisplayName(), new ButtonLoadVersions(saves[i], i));
+		try {
+			final SaveData[] saves = Shattered.getInstance().getGameManager().getSaveManager().listSaves();
+			for (int i = 0; i < saves.length; ++i) {
+				this.listSaves.add(saves[i].getDisplayName(), new ButtonLoadVersions(saves[i], i));
+			}
+		} catch (final IOException e) {
+			this.closeScreen();
+			this.openScreen(new GuiPopupNotice(new StringData(Localizer.format("screen.save_list.popup.error.io", e.getMessage())), true));
+		} catch (final InvalidSaveException e) {
+			final String translationKey;
+			switch (e.getReason()) {
+				case METADATA_MISSING:
+					translationKey = "screen.save_list.popup.error.meta_missing";
+					break;
+				case METADATA_CORRUPT:
+					translationKey = "screen.save_list.popup.error.meta_corrupt";
+					break;
+				default:
+					translationKey = "screen.save_list.popup.error.generic";
+					break;
+
+			}
+			final StringData message = new StringData(Localizer.format(translationKey, e.getDetail()));
+			this.closeScreen();
+			this.openScreen(new GuiPopupNotice(message, true));
 		}
 	}
 

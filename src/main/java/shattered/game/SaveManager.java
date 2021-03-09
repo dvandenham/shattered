@@ -2,7 +2,6 @@ package shattered.game;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.TreeSet;
 import shattered.Shattered;
@@ -59,21 +58,18 @@ public class SaveManager {
 	}
 
 	@NotNull
-	public SaveData[] listSaves() {
+	public SaveData[] listSaves() throws IOException, InvalidSaveException {
 		final File[] saveDirs = this.rootDir.listFiles();
 		if (saveDirs == null) {
 			return new SaveData[0];
 		} else {
 			final TreeSet<SaveData> set = new TreeSet<>(Comparator.comparingLong(SaveData::getLastModifiedTime));
-			Arrays.stream(saveDirs).filter(File::isDirectory).forEach(saveDir -> {
-				try {
+			for (final File saveDir : saveDirs) {
+				if (saveDir.isDirectory()) {
 					final SaveData save = new SaveData(saveDir);
 					set.add(save);
-				} catch (final InvalidSaveException e) {
-					//TODO handle this
-					e.printStackTrace();
 				}
-			});
+			}
 			return set.toArray(new SaveData[0]);
 		}
 	}

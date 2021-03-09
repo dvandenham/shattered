@@ -1,7 +1,7 @@
 {
     "display_name": "World 1-1",
     "wallpaper": "shattered:wallpaper/sky",
-    "player_position": "0:10",
+    "player_position": "0:2",
     "tiles": {
         "A": "shattered:grass",
         "AL": "shattered:grass#left",

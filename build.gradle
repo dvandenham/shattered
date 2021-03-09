@@ -53,7 +53,6 @@ dependencies {
     implementation("org.joml:joml:${jomlVersion}")
     implementation("org.jetbrains:annotations:${annotationsVersion}")
     implementation("org.luaj:luaj-jse:${luajVersion}")
-    implementation("org.jbox2d:jbox2d-library:${jboxVersion}")
     implementation("com.google.guava:guava:${guavaVersion}-jre")
 }
 

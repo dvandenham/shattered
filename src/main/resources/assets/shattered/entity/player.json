@@ -1,22 +1,22 @@
 {
-	"variants": [
-		"default"
-	],
-	"textures": {
-		"default": "shattered:player"
-	},
-	"entity_sizes": {
-		"default": "1x2"
-	},
-	"update_scripts": {
-		"default": "shattered:player_update"
-	},
-	"render_scripts": {
-		"default": "shattered:player_render"
-	},
-	"attributes": {
-		"default": {
-			"health": 20
-		}
-	}
+    "variants": [
+        "default"
+    ],
+    "textures": {
+        "default": "shattered:player"
+    },
+    "entity_sizes": {
+        "default": "28x58"
+    },
+    "update_scripts": {
+        "default": "shattered:player_update"
+    },
+    "render_scripts": {
+        "default": "shattered:player_render"
+    },
+    "attributes": {
+        "default": {
+            "health": 20
+        }
+    }
 }

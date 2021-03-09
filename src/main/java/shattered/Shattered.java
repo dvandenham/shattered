@@ -14,16 +14,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import javax.swing.SwingUtilities;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GL11;
 import preboot.AnnotationRegistry;
 import preboot.BootManager;
 import shattered.core.event.EventBus;
@@ -51,6 +41,16 @@ import shattered.lib.gui.GuiManager;
 import shattered.lib.registry.CreateRegistryEvent;
 import shattered.screen.ScreenBootMessages;
 import shattered.screen.ScreenMainMenu;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL11;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerFrequency;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerValue;
 
@@ -210,8 +210,10 @@ public final class Shattered {
 		final Object[] handleInputSetupResponseData = (Object[]) handleInputSetupResponse.get();
 		this.keyManager = (KeyManager) handleInputSetupResponseData[0];
 		this.delegateInputPoller = (Runnable) handleInputSetupResponseData[1];
-		this.keyManager.registerListener(this.guiManager);
 		Keybinds.init(this.keyManager);
+
+		//Register all KeyListeners
+		this.keyManager.registerListener(this.gameManager);
 
 		//Setup SoundSystem
 		Shattered.LOGGER.debug("Initializing SoundSystem");
@@ -309,6 +311,11 @@ public final class Shattered {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			GLHelper.disableScissor();
+
+			//Render game
+			if (this.gameManager.isRunning()) {
+				this.gameManager.render(this.tessellator, this.fontRenderer);
+			}
 
 			//Render gui
 			GLHelper.resetScissor();

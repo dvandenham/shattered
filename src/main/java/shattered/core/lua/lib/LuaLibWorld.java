@@ -5,8 +5,8 @@ import shattered.game.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.LuaTable;
 
-public class LuaLibWorld extends ILuaLib {
-	
+public final class LuaLibWorld extends ILuaLib {
+
 	@NotNull
 	private final World world;
 

@@ -6,7 +6,7 @@ import shattered.lib.math.Point;
 import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.LuaTable;
 
-public class LuaLibTile extends ILuaLib {
+public final class LuaLibTile extends ILuaLib {
 
 	@NotNull
 	private final World world;

@@ -3,26 +3,26 @@ package shattered.lib;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import shattered.Shattered;
+import shattered.core.event.EventBusSubscriber;
+import shattered.core.event.MessageEvent;
+import shattered.core.event.MessageListener;
+import shattered.lib.gfx.Display;
+import shattered.lib.math.Point;
+import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
-import shattered.Shattered;
-import shattered.lib.gfx.Display;
-import shattered.lib.math.Point;
-import shattered.lib.math.Rectangle;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber("SYSTEM")
 public final class Input {
 
 	private static final int MAX_CLICK_POS_DELTA = 4;
-	private static final long MOUSE_CLICK_TIMEOUT_MS = 150;
+	private static final long MOUSE_CLICK_TIMEOUT_MS = 250;
 
 	private static final ConcurrentLinkedQueue<KeyEvent> KEY_QUEUE = new ConcurrentLinkedQueue<>();
 	static final Int2ObjectArrayMap<String> KEY_NAMES = new Int2ObjectArrayMap<>();

@@ -1,22 +1,19 @@
 package shattered.lib.gui;
 
 import java.util.function.BiConsumer;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import shattered.Shattered;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
-import shattered.Keybinds;
-import shattered.Shattered;
-import shattered.lib.IKeyListener;
-import shattered.lib.KeyBind;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
-public final class GuiManager implements IKeyListener {
+public final class GuiManager {
 
 	private final ObjectArrayList<IGuiScreen> screens = new ObjectArrayList<>();
 
@@ -67,6 +64,22 @@ public final class GuiManager implements IKeyListener {
 			final IGuiScreen newScreen = this.getLastScreen();
 			assert newScreen != null;
 			EventBus.post(new ScreenEvent.Opened(newScreen));
+		}
+	}
+
+	public void closeLastScreen() {
+		if (this.screens.size() > 1) {
+			final IGuiScreen screen = this.getLastScreen();
+			assert screen != null;
+			this.closeScreen(screen);
+		}
+	}
+
+	public void closeAllScreens() {
+		while (!this.screens.isEmpty()) {
+			final IGuiScreen screen = this.getLastScreen();
+			assert screen != null;
+			this.closeScreen(screen);
 		}
 	}
 
@@ -121,16 +134,6 @@ public final class GuiManager implements IKeyListener {
 		return !this.screens.isEmpty() ? this.screens.get(this.screens.size() - 1) : null;
 	}
 
-	@Override
-	public void onKeybindChanged(@NotNull final KeyBind keybind) {
-		if (keybind == Keybinds.genericEscape) {
-			if (this.screens.size() > 1) {
-				final IGuiScreen screen = this.getLastScreen();
-				assert screen != null;
-				this.closeScreen(screen);
-			}
-		}
-	}
 
 	@MessageListener("init_gui")
 	private static void onMessageReceived(final MessageEvent event) {

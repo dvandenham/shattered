@@ -6,3 +6,7 @@ screen.main_menu.boot_messages.title=This may require your attention!
 
 screen.settings.title=Settings
 screen.settings.toggle.boot_animation=Enable boot animation
+
+screen.in_game.paused.label.paused=Game Paused
+screen.in_game.paused.button.resume=Continue
+screen.in_game.paused.button.exit=Exit world

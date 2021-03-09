@@ -21,9 +21,10 @@ import org.luaj.vm2.LuaTable;
 public final class Entity {
 
 	//Jumping takes 1 second and jumps 2.25 tiles
-	public static final int JUMP_TIMER = Shattered.TICK_RATE;
-	public static final double JUMP_STRENGTH = (World.TILE_SIZE * 2.25) / (double) Entity.JUMP_TIMER;
-	public static final double MOVE_STRENGTH = 2.5;
+	public static final int JUMP_TIMER = Shattered.TICK_RATE / 3;
+	private static final double JUMP_STRENGTH = (World.TILE_SIZE * 2.25) / (double) Entity.JUMP_TIMER;
+	private static final double MAX_MOVE_STRENGTH = 1.5;
+	private static final double MOVEMENT_SPEED_MODIFIER = 1.15;
 
 	@NotNull
 	private final ResourceLocation resource;
@@ -47,6 +48,10 @@ public final class Entity {
 	@Nullable
 	private EntityAction currentAction;
 	private int currentActionTimer;
+	@Nullable
+	private Direction moveDirection = null;
+	private boolean didMoveLastTick = false;
+	private double moveSpeed = 0;
 
 	private Entity(@NotNull final EntityType type, @NotNull final World world, @NotNull final Rectangle bounds) {
 		this.resource = type.getResource();
@@ -71,6 +76,7 @@ public final class Entity {
 
 	@SuppressWarnings("ConstantConditions")
 	public void tick() {
+		this.tryMove();
 		if ((boolean) this.attributes.get(EntityAttributes.HAS_GRAVITY)) {
 			if (this.isJumping()) {
 				this.bounds.moveY(Entity.JUMP_STRENGTH);
@@ -92,6 +98,39 @@ public final class Entity {
 		this.updateScript.executeScript();
 	}
 
+	private void tryMove() {
+		if (this.moveDirection != null && this.canMove(this.moveDirection)) {
+			if (this.didMoveLastTick) {
+				if (this.moveSpeed < Entity.MAX_MOVE_STRENGTH) {
+					if (this.moveSpeed == 0) {
+						this.moveSpeed = 0.25;
+					} else {
+						this.moveSpeed = Math.min(this.moveSpeed * Entity.MOVEMENT_SPEED_MODIFIER, Entity.MAX_MOVE_STRENGTH);
+					}
+				}
+			} else {
+				this.moveSpeed = Math.max(this.moveSpeed / Entity.MOVEMENT_SPEED_MODIFIER, 0);
+				if (this.moveSpeed <= 0.25) {
+					this.moveSpeed = 0;
+				}
+			}
+			switch (this.moveDirection) {
+				case LEFT:
+					this.bounds.moveX(-this.moveSpeed);
+					break;
+				case RIGHT:
+					this.bounds.moveX(this.moveSpeed);
+					break;
+			}
+		} else {
+			this.moveSpeed = 0;
+		}
+		if (this.moveSpeed == 0) {
+			this.moveDirection = null;
+		}
+		this.didMoveLastTick = false;
+	}
+
 	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		final int renderY = Display.getHeight() - this.bounds.getY() - this.bounds.getHeight();
 		tessellator.drawQuick(this.bounds.getX(), renderY, this.bounds.getSize(), this.type.getTexture());
@@ -103,6 +142,13 @@ public final class Entity {
 			throw new IllegalArgumentException("Variant can only contain characters from range [a-z]");
 		}
 		this.currentVariant = variant;
+	}
+
+	public void move(@NotNull final Direction direction) {
+		if (this.moveSpeed == 0 || this.moveDirection == direction) {
+			this.moveDirection = direction;
+			this.didMoveLastTick = true;
+		}
 	}
 
 	public void execute(@Nullable final EntityAction action, final int timer) {

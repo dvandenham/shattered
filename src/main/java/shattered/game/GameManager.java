@@ -1,5 +1,6 @@
 package shattered.game;
 
+import shattered.Config;
 import shattered.Keybinds;
 import shattered.Shattered;
 import shattered.core.event.EventBusSubscriber;
@@ -10,6 +11,7 @@ import shattered.game.entity.EntityAction;
 import shattered.game.world.World;
 import shattered.game.world.WorldType;
 import shattered.lib.IKeyListener;
+import shattered.lib.Input;
 import shattered.lib.KeyBind;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
@@ -77,6 +79,7 @@ public final class GameManager implements IKeyListener {
 	public void tick() {
 		if (this.screenPaused == null) {
 			//TODO handle errors, backup when possible
+			this.handleMovement();
 			this.runningWorld.tick();
 		}
 	}
@@ -86,6 +89,22 @@ public final class GameManager implements IKeyListener {
 		Display.setLogicalResolution(600, 480);
 		this.runningWorld.render(tessellator, fontRenderer);
 		Display.resetLogicalResolution();
+	}
+
+	private void handleMovement() {
+		final Entity player = this.runningWorld.getPlayer();
+		//Moving up and down cannot happen simultaneously
+//		if (Input.isKeyDown(Config.)) {
+//			player.move(Direction.UP);
+//		} else if (keybind == Keybinds.gameMoveDown) {
+//			player.move(Direction.DOWN);
+//		}
+		//Moving left and right cannot happen simultaneously
+		if (Input.isKeyDown(Config.KEY_GAME_LEFT.get())) {
+			player.move(Direction.LEFT);
+		} else if (Input.isKeyDown(Config.KEY_GAME_RIGHT.get())) {
+			player.move(Direction.RIGHT);
+		}
 	}
 
 	@Override
@@ -102,23 +121,6 @@ public final class GameManager implements IKeyListener {
 					final Entity player = this.runningWorld.getPlayer();
 					if (keybind == Keybinds.gameJump) {
 						player.execute(EntityAction.JUMPING, Entity.JUMP_TIMER);
-					}
-					//Moving up and down cannot happen simultaneously
-					if (keybind == Keybinds.gameMoveUp) {
-						player.getBounds().moveY(Entity.MOVE_STRENGTH);
-					} else if (keybind == Keybinds.gameMoveDown) {
-						player.getBounds().moveY(-Entity.MOVE_STRENGTH);
-					}
-
-					//Moving left and right cannot happen simultaneously
-					if (keybind == Keybinds.gameMoveLeft) {
-						if (player.canMove(Direction.LEFT)) {
-							player.getBounds().moveX(-Entity.MOVE_STRENGTH);
-						}
-					} else if (keybind == Keybinds.gameMoveRight) {
-						if (player.canMove(Direction.RIGHT)) {
-							player.getBounds().moveX(Entity.MOVE_STRENGTH);
-						}
 					}
 				}
 			}

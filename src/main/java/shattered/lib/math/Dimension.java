@@ -8,16 +8,16 @@ public final class Dimension {
 
 	public static final Dimension EMPTY = Dimension.create(0, 0);
 	private final boolean mutable;
-	private int width, height;
+	private double width, height;
 
-	private Dimension(final int width, final int height, final boolean mutable) {
+	private Dimension(final double width, final double height, final boolean mutable) {
 		this.mutable = mutable;
 		this.width = width;
 		this.height = height;
 	}
 
 	@NotNull
-	public Dimension setWidth(final int width) {
+	public Dimension setWidth(final double width) {
 		if (!this.mutable) {
 			return new Dimension(width, this.height, false);
 		}
@@ -26,7 +26,7 @@ public final class Dimension {
 	}
 
 	@NotNull
-	public Dimension setHeight(final int height) {
+	public Dimension setHeight(final double height) {
 		if (!this.mutable) {
 			return new Dimension(this.width, height, false);
 		}
@@ -35,17 +35,17 @@ public final class Dimension {
 	}
 
 	@NotNull
-	public Dimension addWidth(final int width) {
+	public Dimension addWidth(final double width) {
 		return this.setWidth(this.width + width);
 	}
 
 	@NotNull
-	public Dimension addHeight(final int height) {
+	public Dimension addHeight(final double height) {
 		return this.setHeight(this.height + height);
 	}
 
 	@NotNull
-	public Dimension grow(final int width, final int height) {
+	public Dimension grow(final double width, final double height) {
 		if (!this.mutable) {
 			return new Dimension(this.width + width, this.height + height, false);
 		}
@@ -65,10 +65,18 @@ public final class Dimension {
 	}
 
 	public int getWidth() {
+		return (int) this.width;
+	}
+
+	public double getDoubleWidth() {
 		return this.width;
 	}
 
 	public int getHeight() {
+		return (int) this.height;
+	}
+
+	public double getDoubleHeight() {
 		return this.height;
 	}
 
@@ -76,13 +84,21 @@ public final class Dimension {
 		return this.getWidth() / 2;
 	}
 
+	public final double getDoubleCenterX() {
+		return this.getDoubleWidth() / 2.0;
+	}
+
 	public final int getCenterY() {
 		return this.getHeight() / 2;
 	}
 
+	public final double getDoubleCenterY() {
+		return this.getDoubleHeight() / 2.0;
+	}
+
 	@NotNull
 	public final Point getCenter() {
-		return Point.create(this.getCenterX(), this.getCenterY());
+		return Point.create(this.getDoubleCenterX(), this.getDoubleCenterY());
 	}
 
 	public boolean isMutable() {
@@ -132,7 +148,17 @@ public final class Dimension {
 	}
 
 	@NotNull
+	public static Dimension create(final double width, final double height) {
+		return new Dimension(width, height, false);
+	}
+
+	@NotNull
 	public static Dimension createMutable(final int width, final int height) {
+		return new Dimension(width, height, true);
+	}
+
+	@NotNull
+	public static Dimension createMutable(final double width, final double height) {
 		return new Dimension(width, height, true);
 	}
 }

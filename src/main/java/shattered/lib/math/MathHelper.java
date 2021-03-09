@@ -25,12 +25,12 @@ public final class MathHelper {
 
 	@NotNull
 	public static Point min(@NotNull final Point a, @NotNull final Point b) {
-		return Point.create(Math.min(a.getX(), b.getY()), Math.min(a.getX(), b.getY()));
+		return Point.create(Math.min(a.getDoubleX(), b.getDoubleX()), Math.min(a.getDoubleY(), b.getDoubleY()));
 	}
 
 	@NotNull
 	public static Dimension min(@NotNull final Dimension a, @NotNull final Dimension b) {
-		return Dimension.create(Math.min(a.getWidth(), b.getWidth()), Math.min(a.getHeight(), b.getHeight()));
+		return Dimension.create(Math.min(a.getDoubleWidth(), b.getDoubleWidth()), Math.min(a.getDoubleHeight(), b.getDoubleHeight()));
 	}
 
 	@NotNull
@@ -40,12 +40,12 @@ public final class MathHelper {
 
 	@NotNull
 	public static Point max(@NotNull final Point a, @NotNull final Point b) {
-		return Point.create(Math.max(a.getX(), b.getY()), Math.max(a.getX(), b.getY()));
+		return Point.create(Math.max(a.getDoubleX(), b.getDoubleY()), Math.max(a.getDoubleY(), b.getDoubleY()));
 	}
 
 	@NotNull
 	public static Dimension max(@NotNull final Dimension a, @NotNull final Dimension b) {
-		return Dimension.create(Math.max(a.getWidth(), b.getWidth()), Math.max(a.getHeight(), b.getHeight()));
+		return Dimension.create(Math.max(a.getDoubleWidth(), b.getDoubleWidth()), Math.max(a.getDoubleHeight(), b.getDoubleHeight()));
 	}
 
 	@NotNull
@@ -79,16 +79,25 @@ public final class MathHelper {
 
 	@NotNull
 	public static Point clamp(@NotNull final Point value, @NotNull final Point min, @NotNull final Point max) {
-		return Point.create(MathHelper.clamp(value.getX(), min.getX(), max.getX()), MathHelper.clamp(value.getY(), min.getY(), max.getY()));
+		return Point.create(
+				MathHelper.clamp(value.getDoubleX(), min.getDoubleX(), max.getDoubleX()),
+				MathHelper.clamp(value.getDoubleY(), min.getDoubleY(), max.getDoubleY())
+		);
 	}
 
 	@NotNull
 	public static Dimension clamp(@NotNull final Dimension value, @NotNull final Dimension min, @NotNull final Dimension max) {
-		return Dimension.create(MathHelper.clamp(value.getWidth(), min.getWidth(), max.getWidth()), MathHelper.clamp(value.getHeight(), min.getHeight(), max.getHeight()));
+		return Dimension.create(
+				MathHelper.clamp(value.getDoubleWidth(), min.getDoubleWidth(), max.getDoubleWidth()),
+				MathHelper.clamp(value.getDoubleHeight(), min.getDoubleHeight(), max.getDoubleHeight())
+		);
 	}
 
 	@NotNull
 	public static Rectangle clamp(@NotNull final Rectangle value, @NotNull final Rectangle min, @NotNull final Rectangle max) {
-		return Rectangle.create(MathHelper.clamp(value.getPosition(), min.getPosition(), max.getPosition()), MathHelper.clamp(value.getSize(), min.getSize(), max.getSize()));
+		return Rectangle.create(
+				MathHelper.clamp(value.getPosition(), min.getPosition(), max.getPosition()),
+				MathHelper.clamp(value.getSize(), min.getSize(), max.getSize())
+		);
 	}
 }

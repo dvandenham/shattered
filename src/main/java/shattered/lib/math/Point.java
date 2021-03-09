@@ -8,16 +8,16 @@ public final class Point {
 
 	public static final Point EMPTY = Point.create(0, 0);
 	private final boolean mutable;
-	private int x, y;
+	private double x, y;
 
-	private Point(final int x, final int y, final boolean mutable) {
+	private Point(final double x, final double y, final boolean mutable) {
 		this.mutable = mutable;
 		this.x = x;
 		this.y = y;
 	}
 
 	@NotNull
-	public Point setX(final int x) {
+	public Point setX(final double x) {
 		if (!this.mutable) {
 			return new Point(x, this.y, false);
 		}
@@ -26,7 +26,7 @@ public final class Point {
 	}
 
 	@NotNull
-	public Point setY(final int y) {
+	public Point setY(final double y) {
 		if (!this.mutable) {
 			return new Point(this.x, y, false);
 		}
@@ -35,17 +35,17 @@ public final class Point {
 	}
 
 	@NotNull
-	public Point moveX(final int amount) {
+	public Point moveX(final double amount) {
 		return this.setX(this.x + amount);
 	}
 
 	@NotNull
-	public Point moveY(final int amount) {
+	public Point moveY(final double amount) {
 		return this.setY(this.y + amount);
 	}
 
 	@NotNull
-	public Point move(final int amountX, final int amountY) {
+	public Point move(final double amountX, final double amountY) {
 		if (!this.mutable) {
 			return new Point(this.x + amountX, this.y + amountY, false);
 		}
@@ -70,10 +70,18 @@ public final class Point {
 	}
 
 	public int getX() {
-		return this.x;
+		return (int) this.x;
 	}
 
 	public int getY() {
+		return (int) this.y;
+	}
+
+	public double getDoubleX() {
+		return this.x;
+	}
+
+	public double getDoubleY() {
 		return this.y;
 	}
 
@@ -124,7 +132,17 @@ public final class Point {
 	}
 
 	@NotNull
+	public static Point create(final double x, final double y) {
+		return new Point(x, y, false);
+	}
+
+	@NotNull
 	public static Point createMutable(final int x, final int y) {
+		return new Point(x, y, true);
+	}
+
+	@NotNull
+	public static Point createMutable(final double x, final double y) {
 		return new Point(x, y, true);
 	}
 }

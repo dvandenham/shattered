@@ -14,18 +14,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import com.google.gson.reflect.TypeToken;
-import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import shattered.Shattered;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.EventListener;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
-import shattered.Shattered;
-import shattered.lib.Localizer;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.json.JsonUtils;
@@ -33,6 +26,12 @@ import shattered.lib.math.Dimension;
 import shattered.lib.math.Rectangle;
 import shattered.lib.registry.CreateRegistryEvent;
 import shattered.lib.registry.Registry;
+import com.google.gson.reflect.TypeToken;
+import it.unimi.dsi.fastutil.objects.ObjectObjectImmutablePair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
 public final class AssetRegistry {
@@ -108,10 +107,27 @@ public final class AssetRegistry {
 	}
 
 	private static void loadLanguage(@NotNull final ResourceLocation resource) {
-		Localizer.addLanguage(
-				AssetRegistry.getPathUrl(AssetRegistry.getResourcePath(resource, AssetTypes.LANGUAGE, "lang")),
-				resource
-		);
+		LanguageAsset result = AssetRegistry.createLanguage(resource, "json");
+		if (result == null) {
+			result = AssetRegistry.createLanguage(resource, "lang");
+		}
+		if (result == null) {
+			AssetRegistry.LOGGER.error("Registered language \"{}\" does not exist!", resource);
+			AssetRegistry.LOGGER.error("\tExpected file paths (with priority):");
+			AssetRegistry.LOGGER.error("\t\t1: {}", AssetRegistry.getResourcePath(resource, AssetTypes.LANGUAGE, "json"));
+			AssetRegistry.LOGGER.error("\t\t2: {}", AssetRegistry.getResourcePath(resource, AssetTypes.LANGUAGE, "lua"));
+			AssetRegistry.registerInternal(resource, AssetTypes.LANGUAGE, null);
+			return;
+		}
+		AssetRegistry.registerInternal(resource, AssetTypes.LANGUAGE, result);
+		AssetRegistry.LOGGER.info("Registered language: {}", resource);
+	}
+
+	@Nullable
+	private static LanguageAsset createLanguage(@NotNull final ResourceLocation resource, @NotNull final String extension) {
+		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.LANGUAGE, extension);
+		final URL location = AssetRegistry.getPathUrl(path);
+		return location != null ? new LanguageAsset(resource, location) : null;
 	}
 
 	private static void loadTexture(@NotNull final ResourceLocation resource) {
@@ -197,14 +213,14 @@ public final class AssetRegistry {
 		final String path = AssetRegistry.getResourcePath(resource, AssetTypes.AUDIO, data.audioType.toString());
 		final URL location = AssetRegistry.getPathUrl(path);
 		if (location == null) {
-			AssetRegistry.LOGGER.error("Registered audio.json \"{}\" does not exist!", resource);
+			AssetRegistry.LOGGER.error("Registered audio \"{}\" does not exist!", resource);
 			AssetRegistry.LOGGER.error("\tExpected filepath: {}", path);
 			AssetRegistry.registerInternal(resource, AssetTypes.AUDIO, null);
 			return;
 		}
 		final Audio result = new Audio(resource, data);
 		AssetRegistry.registerInternal(resource, AssetTypes.AUDIO, result);
-		AssetRegistry.LOGGER.error("Registered audio: {}", resource);
+		AssetRegistry.LOGGER.info("Registered audio: {}", resource);
 	}
 
 	@ReflectionHelper.Reflectable

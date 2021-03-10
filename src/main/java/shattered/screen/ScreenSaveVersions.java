@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ScreenSaveVersions extends AbstractScreen {
 
-	private final GuiButton buttonDelete = new GlitchButton("screen.save_versions.button.delete");
-	private final GuiButton buttonRename = new GlitchButton("screen.save_versions.button.rename");
+	private final GuiButton buttonDelete = new GlitchButton("screen.save_manager.versions.button.delete");
+	private final GuiButton buttonRename = new GlitchButton("screen.save_manager.versions.button.rename");
 	private final GuiList listVersions = new GuiList().localize(false);
 	@NotNull
 	private final SaveData save;
@@ -51,7 +51,7 @@ public final class ScreenSaveVersions extends AbstractScreen {
 		final Map<String, Long> dates = this.save.listVersionData();
 		for (int i = 0; i < versions.length; ++i) {
 			if (i == 0) {
-				this.listVersions.add(Localizer.localize("screen.save_versions.list.name_newest"), new ButtonSaveDetails(versions[i], i));
+				this.listVersions.add(Localizer.localize("screen.save_manager.versions.list.name_newest"), new ButtonSaveDetails(versions[i], i));
 			} else {
 				this.listVersions.add(new Date(dates.get(versions[i])).toString(), new ButtonSaveDetails(versions[i], i));
 			}
@@ -61,7 +61,10 @@ public final class ScreenSaveVersions extends AbstractScreen {
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)
 	private void onButtonClicked(final GuiButton.ButtonEvent.LeftClick event) {
 		if (event.get() == this.buttonDelete) {
-			this.openScreen(new GuiPopupYesNo("screen.save_versions.popup.delete", "screen.save_versions.popup.delete.description"));
+			this.openScreen(new GuiPopupYesNo(
+					"screen.save_manager.versions.popup.delete",
+					"screen.save_manager.versions.popup.delete.description"
+			));
 		} else if (event.get() == this.buttonRename) {
 			//TODO rename here
 		} else if (event.get() instanceof ButtonSaveDetails) {
@@ -72,7 +75,7 @@ public final class ScreenSaveVersions extends AbstractScreen {
 	@EventListener(GuiPopupYesNo.ResultEvent.class)
 	private void onDeletePopupAnswered(final GuiPopupYesNo.ResultEvent event) {
 		assert event.get() != null;
-		if (event.get().equals("screen.save_versions.popup.delete") && event.answer) {
+		if (event.get().equals("screen.save_manager.versions.popup.delete") && event.answer) {
 			this.save.delete();
 			this.closeScreen();
 		}
@@ -84,7 +87,7 @@ public final class ScreenSaveVersions extends AbstractScreen {
 		private final String uuid;
 
 		private ButtonSaveDetails(@NotNull final String uuid, final int index) {
-			super("screen.save_versions.button.details", index % 2 == 0 ? Color.WHITE : Color.BLACK);
+			super("screen.save_manager.versions.button.details", index % 2 == 0 ? Color.WHITE : Color.BLACK);
 			this.setMaximumWidth(128);
 			this.uuid = uuid;
 		}

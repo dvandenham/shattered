@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ScreenSaveDetails extends AbstractScreen {
 
-	private final GuiButton buttonLoad = new GlitchButton("screen.save_details.button.load");
+	private final GuiButton buttonLoad = new GlitchButton("screen.save_manager.details.button.load");
 	@NotNull
 	private final SaveData save;
 	@NotNull
@@ -32,7 +32,7 @@ public final class ScreenSaveDetails extends AbstractScreen {
 	private final String dateModified;
 
 	ScreenSaveDetails(@NotNull final SaveData save, @NotNull final String uuid) {
-		super("screen.save_details.title");
+		super("screen.save_manager.details.title");
 		this.save = save;
 		this.uuid = uuid;
 		try {
@@ -70,8 +70,8 @@ public final class ScreenSaveDetails extends AbstractScreen {
 		//      Headers
 		fontRenderer.setFontSize(32);
 		fontRenderer.start();
-		fontRenderer.add(this.getInternalBounds().getCenterX() + 48, this.getInternalY() + 48, "screen.save_details.info.resource", Color.XEROS);
-		fontRenderer.add(this.getInternalBounds().getCenterX() + 48, this.getInternalY() + 110, "screen.save_details.info.date", Color.XEROS);
+		fontRenderer.add(this.getInternalBounds().getCenterX() + 48, this.getInternalY() + 48, "screen.save_manager.details.info.resource", Color.XEROS);
+		fontRenderer.add(this.getInternalBounds().getCenterX() + 48, this.getInternalY() + 110, "screen.save_manager.details.info.date", Color.XEROS);
 		fontRenderer.write();
 		fontRenderer.revertFontSize();
 		//      Data

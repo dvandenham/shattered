@@ -22,7 +22,7 @@ public class ScreenSaveList extends AbstractScreen {
 	private final GuiList listSaves = new GuiList().localize(false);
 
 	ScreenSaveList() {
-		super("screen.save_list.title");
+		super("screen.save_manager.list.title");
 		this.add(this.listSaves);
 	}
 
@@ -45,18 +45,18 @@ public class ScreenSaveList extends AbstractScreen {
 			}
 		} catch (final IOException e) {
 			this.closeScreen();
-			this.openScreen(new GuiPopupNotice(new StringData(Localizer.format("screen.save_list.popup.error.io", e.getMessage())), true));
+			this.openScreen(new GuiPopupNotice(new StringData(Localizer.format("screen.save_manager.list.popup.error.io", e.getMessage())), true));
 		} catch (final InvalidSaveException e) {
 			final String translationKey;
 			switch (e.getReason()) {
 				case METADATA_MISSING:
-					translationKey = "screen.save_list.popup.error.meta_missing";
+					translationKey = "screen.save_manager.list.popup.error.meta_missing";
 					break;
 				case METADATA_CORRUPT:
-					translationKey = "screen.save_list.popup.error.meta_corrupt";
+					translationKey = "screen.save_manager.list.popup.error.meta_corrupt";
 					break;
 				default:
-					translationKey = "screen.save_list.popup.error.generic";
+					translationKey = "screen.save_manager.list.popup.error.generic";
 					break;
 
 			}
@@ -86,7 +86,7 @@ public class ScreenSaveList extends AbstractScreen {
 		private final SaveData save;
 
 		private ButtonLoadVersions(@NotNull final SaveData save, final int index) {
-			super("screen.save_list.button.load_versions", index % 2 == 0 ? Color.WHITE : Color.BLACK);
+			super("screen.save_manager.list.button.load_versions", index % 2 == 0 ? Color.WHITE : Color.BLACK);
 			this.setMaximumWidth(128);
 			this.save = save;
 		}

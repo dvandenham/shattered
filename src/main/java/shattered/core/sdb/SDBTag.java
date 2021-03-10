@@ -1,4 +1,4 @@
-package shattered.core.nbtx;
+package shattered.core.sdb;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class NBTXTag {
+public abstract class SDBTag {
 
-	final NBTXTypes type;
+	final SDBTypes type;
 
-	NBTXTag(@NotNull final NBTXTypes type) {
+	SDBTag(@NotNull final SDBTypes type) {
 		this.type = type;
 	}
 
@@ -31,7 +31,7 @@ public abstract class NBTXTag {
 		if (o == null || this.getClass() != o.getClass()) {
 			return false;
 		}
-		final NBTXTag other = (NBTXTag) o;
+		final SDBTag other = (SDBTag) o;
 		return this.type == other.type;
 	}
 }

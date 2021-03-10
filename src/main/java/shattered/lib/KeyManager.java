@@ -3,12 +3,13 @@ package shattered.lib;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
+import shattered.Shattered;
+import shattered.core.sdb.SDBHelper;
+import shattered.core.sdb.SDBTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import shattered.core.nbtx.NBTX;
-import shattered.Shattered;
 
 public final class KeyManager {
 
@@ -16,7 +17,7 @@ public final class KeyManager {
 	private final ObjectArrayList<IKeyListener> LISTENERS = new ObjectArrayList<>();
 	private final Logger LOGGER = LogManager.getLogger("KeyManager");
 	private final File file;
-	private NBTX store;
+	private SDBTable store;
 
 	public KeyManager(@NotNull final Workspace workspace) {
 		this.file = workspace.getDataFile("keybinds.db");
@@ -29,9 +30,9 @@ public final class KeyManager {
 
 	private void load() throws IOException {
 		if (!this.file.exists()) {
-			new NBTX().serialize(this.file);
+			SDBHelper.serialize(new SDBTable(), this.file);
 		}
-		this.store = NBTX.deserializeNBTX(this.file);
+		this.store = SDBHelper.deserialize(this.file);
 	}
 
 	void poll() {
@@ -119,14 +120,9 @@ public final class KeyManager {
 	public void saveToDisk() {
 		this.BINDINGS.values().forEach(binding -> binding.save(this.store));
 		try {
-			this.store.serialize(this.file);
+			SDBHelper.serialize(this.store, this.file);
 		} catch (final IOException e) {
 			this.LOGGER.error("Could not save data to disk!", e);
 		}
 	}
-
-//	@NotNull
-//	public List<KeyBind> getBindings() {
-//		return new ArrayList<>(this.BINDINGS.values());
-//	}
 }

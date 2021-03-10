@@ -7,10 +7,9 @@ import shattered.core.lua.LuaSerializer;
 import shattered.core.lua.constant.LuaConstantStateContainer;
 import shattered.core.lua.lib.LuaLibTile;
 import shattered.core.lua.lib.LuaLibWorld;
-import shattered.core.nbtx.NBTX;
-import shattered.core.nbtx.NBTXTag;
-import shattered.core.nbtx.NBTXTagArray;
-import shattered.core.nbtx.NBTXTagTable;
+import shattered.core.sdb.SDBArray;
+import shattered.core.sdb.SDBTable;
+import shattered.core.sdb.SDBTag;
 import shattered.game.Direction;
 import shattered.game.GameRegistries;
 import shattered.game.entity.Entity;
@@ -108,27 +107,27 @@ public final class World {
 	}
 
 	@NotNull
-	public NBTX serialize(@NotNull final NBTX store) {
+	public SDBTable serialize(@NotNull final SDBTable store) {
 		store.set("tile_size", World.TILE_SIZE);
 
-		final NBTXTagArray tiles = store.newArray("tiles");
+		final SDBArray tiles = store.newArray("tiles");
 		this.tiles.forEach((position, tile) -> {
-			final NBTXTagTable table = tiles.addTable();
+			final SDBTable table = tiles.addTable();
 			table.set("id", tile.getResource().toString());
 			table.set("bounds", this.tilesBoundCache.get(position));
-			final NBTXTag state = LuaSerializer.serializeTable(this.tileStates.get(position));
+			final SDBTag state = LuaSerializer.serializeTable(this.tileStates.get(position));
 			if (state != null) {
 				table.setTag("state", state);
 			}
 		});
 
-		final NBTXTagArray entities = store.newArray("entities");
-		this.entities.forEach(entity -> entities.addTag(entity.serialize(new NBTXTagTable())));
+		final SDBArray entities = store.newArray("entities");
+		this.entities.forEach(entity -> entities.addTag(entity.serialize(new SDBTable())));
 
 		return store;
 	}
-	
-	public void deserialize(@NotNull final NBTX store) {
+
+	public void deserialize(@NotNull final SDBTable store) {
 	}
 
 	public boolean addTile(@NotNull final Point position, @Nullable final ResourceLocation tileResource, @Nullable final LuaTable storedState) {

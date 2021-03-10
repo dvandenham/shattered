@@ -6,7 +6,7 @@ import shattered.core.LuaScript;
 import shattered.core.lua.constant.LuaConstantStateContainer;
 import shattered.core.lua.lib.LuaLibEntity;
 import shattered.core.lua.lib.LuaLibWorld;
-import shattered.core.nbtx.NBTXTagTable;
+import shattered.core.sdb.SDBTable;
 import shattered.game.Direction;
 import shattered.game.world.World;
 import shattered.lib.ResourceLocation;
@@ -139,12 +139,12 @@ public final class Entity {
 	}
 
 	@NotNull
-	public NBTXTagTable serialize(@NotNull NBTXTagTable table) {
+	public SDBTable serialize(@NotNull final SDBTable table) {
 		return table;
 	}
 
-	public void deserialize(@NotNull NBTXTagTable table) {
-		
+	public void deserialize(@NotNull final SDBTable table) {
+
 	}
 
 	public void setVariant(@NotNull final String variant) {

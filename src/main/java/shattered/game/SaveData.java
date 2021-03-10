@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import shattered.core.nbtx.NBTX;
-import shattered.core.nbtx.NBTXTagArray;
-import shattered.core.nbtx.NBTXTagTable;
+import shattered.core.sdb.SDBArray;
+import shattered.core.sdb.SDBHelper;
+import shattered.core.sdb.SDBTable;
 import shattered.lib.FileUtils;
 import shattered.lib.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public final class SaveData {
 	@NotNull
 	private final File metaFile;
 	@NotNull
-	private final NBTX metadata;
+	private final SDBTable metadata;
 
 	SaveData(@NotNull final File saveDir) throws IOException, InvalidSaveException {
 		this.saveDir = saveDir;
@@ -32,7 +32,7 @@ public final class SaveData {
 		if (!this.metaFile.exists()) {
 			throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_MISSING, this.metaFile.getAbsolutePath());
 		} else {
-			this.metadata = NBTX.deserializeNBTX(this.metaFile);
+			this.metadata = SDBHelper.deserialize(this.metaFile);
 			if (!this.metadata.hasString("world_id")) {
 				throw new InvalidSaveException(InvalidSaveException.InvalidSaveReason.METADATA_CORRUPT, this.metaFile.getAbsolutePath());
 			} else if (!this.metadata.hasString("display_name")) {
@@ -45,7 +45,7 @@ public final class SaveData {
 		}
 	}
 
-	SaveData(@NotNull final File saveDir, @NotNull final NBTX store) throws IOException {
+	SaveData(@NotNull final File saveDir, @NotNull final SDBTable store) throws IOException {
 		this.saveDir = saveDir;
 		if (!this.saveDir.mkdirs()) {
 			throw new IOException("Cannot create save directory: " + saveDir.getAbsolutePath());
@@ -55,7 +55,7 @@ public final class SaveData {
 	}
 
 	public void save() throws IOException {
-		this.metadata.serialize(this.metaFile);
+		SDBHelper.serialize(this.metadata, this.metaFile);
 	}
 
 	public void delete() {
@@ -64,7 +64,7 @@ public final class SaveData {
 
 	@NotNull
 	String requestUUID() {
-		final NBTXTagTable versions = this.metadata.getTable("version_data");
+		final SDBTable versions = this.metadata.getTable("version_data");
 		assert versions != null;
 		String uuid = null;
 		while (uuid == null || versions.hasTag(uuid)) {
@@ -76,8 +76,8 @@ public final class SaveData {
 	@SuppressWarnings("ConstantConditions")
 	@Nullable
 	String storeUUID(@NotNull final String uuid) {
-		final NBTXTagArray array = this.metadata.getArray("versions");
-		final NBTXTagArray newArray = this.metadata.newArray("versions");
+		final SDBArray array = this.metadata.getArray("versions");
+		final SDBArray newArray = this.metadata.newArray("versions");
 
 		newArray.add(uuid);
 		for (int i = 0; i < Math.min(SaveData.MAX_SAVES, array.getSize()); ++i) {
@@ -86,7 +86,7 @@ public final class SaveData {
 
 		final String oldUuid = array.getSize() == SaveData.MAX_SAVES ? array.getString(array.getSize() - 1) : null;
 
-		final NBTXTagTable versionData = this.metadata.getTable("version_data");
+		final SDBTable versionData = this.metadata.getTable("version_data");
 		if (oldUuid != null) {
 			versionData.removeKey(oldUuid);
 		}
@@ -111,7 +111,7 @@ public final class SaveData {
 
 	@NotNull
 	public String[] listVersionsSorted() {
-		final NBTXTagArray array = this.metadata.getArray("versions");
+		final SDBArray array = this.metadata.getArray("versions");
 		assert array != null;
 		final String[] result = new String[array.getSize()];
 		for (int i = 0; i < result.length; ++i) {
@@ -122,7 +122,7 @@ public final class SaveData {
 
 	@NotNull
 	public Map<String, Long> listVersionData() {
-		final NBTXTagTable table = this.metadata.getTable("version_data");
+		final SDBTable table = this.metadata.getTable("version_data");
 		assert table != null;
 
 		final HashMap<String, Long> map = new HashMap<>();

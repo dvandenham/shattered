@@ -1,20 +1,20 @@
-package shattered.core.nbtx;
+package shattered.core.sdb;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Objects;
-import org.jetbrains.annotations.NotNull;
 import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public abstract class NBTXTagWrappers<T> extends NBTXTag {
+public abstract class SDBWrappers<T> extends SDBTag {
 
 	protected T value;
 
-	private NBTXTagWrappers(@NotNull final NBTXTypes type) {
+	private SDBWrappers(@NotNull final SDBTypes type) {
 		super(type);
 	}
 
@@ -38,14 +38,14 @@ public abstract class NBTXTagWrappers<T> extends NBTXTag {
 		if (!super.equals(o)) {
 			return false;
 		}
-		final NBTXTagWrappers<?> other = (NBTXTagWrappers<?>) o;
+		final SDBWrappers<?> other = (SDBWrappers<?>) o;
 		return Objects.equals(this.value, other.value);
 	}
 
-	static final class TagPoint extends NBTXTagWrappers<Point> {
+	static final class TagPoint extends SDBWrappers<Point> {
 
 		TagPoint() {
-			super(NBTXTypes.POINT);
+			super(SDBTypes.POINT);
 		}
 
 		@Override
@@ -61,10 +61,10 @@ public abstract class NBTXTagWrappers<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagDimension extends NBTXTagWrappers<Dimension> {
+	static final class TagDimension extends SDBWrappers<Dimension> {
 
 		TagDimension() {
-			super(NBTXTypes.DIMENSION);
+			super(SDBTypes.DIMENSION);
 		}
 
 		@Override
@@ -80,10 +80,10 @@ public abstract class NBTXTagWrappers<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagRectangle extends NBTXTagWrappers<Rectangle> {
+	static final class TagRectangle extends SDBWrappers<Rectangle> {
 
 		TagRectangle() {
-			super(NBTXTypes.RECTANGLE);
+			super(SDBTypes.RECTANGLE);
 		}
 
 		@Override

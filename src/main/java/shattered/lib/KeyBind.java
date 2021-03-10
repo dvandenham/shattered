@@ -1,8 +1,7 @@
 package shattered.lib;
 
+import shattered.core.sdb.SDBTable;
 import org.jetbrains.annotations.NotNull;
-import shattered.core.nbtx.NBTX;
-import shattered.core.nbtx.NBTXTagTable;
 
 public final class KeyBind {
 
@@ -78,19 +77,19 @@ public final class KeyBind {
 		this.manager.saveToDisk();
 	}
 
-	void save(@NotNull final NBTX store) {
-		final NBTXTagTable table = store.newTable(this.identifier);
+	void save(@NotNull final SDBTable store) {
+		final SDBTable table = store.newTable(this.identifier);
 		table.set("code", this.keyCode);
 		table.set("shift", this.shift);
 		table.set("ctrl", this.ctrl);
 		table.set("al", this.alt);
 	}
 
-	void load(@NotNull final NBTX store) {
+	void load(@NotNull final SDBTable store) {
 		if (!store.hasTable(this.identifier)) {
 			this.save(store);
 		}
-		final NBTXTagTable table = store.getTable(this.identifier);
+		final SDBTable table = store.getTable(this.identifier);
 		assert table != null;
 		this.keyCode = table.getInteger("code");
 		this.shift = table.getBoolean("shift");

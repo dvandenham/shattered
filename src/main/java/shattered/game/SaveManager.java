@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.TreeSet;
 import shattered.Shattered;
-import shattered.core.nbtx.NBTX;
+import shattered.core.sdb.SDBHelper;
+import shattered.core.sdb.SDBTable;
 import shattered.game.world.World;
 import shattered.lib.ResourceLocation;
 import shattered.lib.registry.NotRegisteredException;
@@ -29,8 +30,8 @@ public class SaveManager {
 		final SaveData save = this.loadOrCreateSave(this.getWorldSaveDir(world.getResource()), world);
 		final String newUuid = save.requestUUID();
 
-		final NBTX worldStore = world.serialize(new NBTX());
-		worldStore.serialize(save.getWorldFile(newUuid));
+		final SDBTable worldStore = world.serialize(new SDBTable());
+		SDBHelper.serialize(worldStore, save.getWorldFile(newUuid));
 
 		final String oldUuid = save.storeUUID(newUuid);
 		if (oldUuid != null) {
@@ -52,7 +53,7 @@ public class SaveManager {
 		if (!worldFile.exists()) {
 			return null;
 		}
-		final NBTX store = NBTX.deserializeNBTX(worldFile);
+		final SDBTable store = SDBHelper.deserialize(worldFile);
 		world.deserialize(store);
 		return world;
 	}
@@ -78,7 +79,7 @@ public class SaveManager {
 		if (saveDir.exists()) {
 			return new SaveData(saveDir);
 		} else {
-			final NBTX store = new NBTX();
+			final SDBTable store = new SDBTable();
 			store.newArray("versions");
 			store.newTable("version_data");
 			store.set("world_id", world.getResource().toString());

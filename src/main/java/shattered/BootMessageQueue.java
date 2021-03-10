@@ -3,9 +3,9 @@ package shattered;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import shattered.core.sdb.SDBHelper;
+import shattered.core.sdb.SDBTable;
 import org.jetbrains.annotations.NotNull;
-import shattered.core.nbtx.NBTX;
-import shattered.core.nbtx.NBTXTagTable;
 
 public final class BootMessageQueue {
 
@@ -51,8 +51,8 @@ public final class BootMessageQueue {
 				if (!file.exists()) {
 					return true;
 				} else {
-					final NBTX store = NBTX.deserializeNBTX(file);
-					final NBTXTagTable array = store.getTable("messages");
+					final SDBTable store = SDBHelper.deserialize(file);
+					final SDBTable array = store.getTable("messages");
 					if (array == null || array.getKeyCount() != this.queue.size()) {
 						return true;
 					}
@@ -72,14 +72,14 @@ public final class BootMessageQueue {
 	void writeToDisk() {
 		final File file = BootMessageQueue.getStoreFile();
 		file.deleteOnExit();
-		final NBTX store = new NBTX();
-		final NBTXTagTable table = store.newTable("messages");
+		final SDBTable store = new SDBTable();
+		final SDBTable table = store.newTable("messages");
 		this.queue.forEach(msg -> {
 			final String data = msg.typeIdentifier + "_" + msg.messageIdentifier;
 			table.set(data, data);
 		});
 		try {
-			store.serialize(file);
+			SDBHelper.serialize(store, file);
 		} catch (final IOException ignored) {
 		}
 	}

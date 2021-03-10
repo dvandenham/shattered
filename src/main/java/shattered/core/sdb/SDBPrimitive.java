@@ -1,4 +1,4 @@
-package shattered.core.nbtx;
+package shattered.core.sdb;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -7,11 +7,11 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public abstract class NBTXTagPrimitive<T> extends NBTXTag {
+public abstract class SDBPrimitive<T> extends SDBTag {
 
 	protected T value;
 
-	private NBTXTagPrimitive(@NotNull final NBTXTypes type) {
+	private SDBPrimitive(@NotNull final SDBTypes type) {
 		super(type);
 	}
 
@@ -35,14 +35,14 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		if (!super.equals(o)) {
 			return false;
 		}
-		final NBTXTagPrimitive<?> other = (NBTXTagPrimitive<?>) o;
+		final SDBPrimitive<?> other = (SDBPrimitive<?>) o;
 		return Objects.equals(this.value, other.value);
 	}
 
-	static final class TagBoolean extends NBTXTagPrimitive<Boolean> {
+	static final class TagBoolean extends SDBPrimitive<Boolean> {
 
 		TagBoolean() {
-			super(NBTXTypes.BOOLEAN);
+			super(SDBTypes.BOOLEAN);
 		}
 
 		@Override
@@ -56,10 +56,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagByte extends NBTXTagPrimitive<Byte> {
+	static final class TagByte extends SDBPrimitive<Byte> {
 
 		TagByte() {
-			super(NBTXTypes.BYTE);
+			super(SDBTypes.BYTE);
 		}
 
 		@Override
@@ -73,10 +73,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagShort extends NBTXTagPrimitive<Short> {
+	static final class TagShort extends SDBPrimitive<Short> {
 
 		TagShort() {
-			super(NBTXTypes.SHORT);
+			super(SDBTypes.SHORT);
 		}
 
 		@Override
@@ -90,10 +90,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagInteger extends NBTXTagPrimitive<Integer> {
+	static final class TagInteger extends SDBPrimitive<Integer> {
 
 		TagInteger() {
-			super(NBTXTypes.INTEGER);
+			super(SDBTypes.INTEGER);
 		}
 
 		@Override
@@ -107,10 +107,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagLong extends NBTXTagPrimitive<Long> {
+	static final class TagLong extends SDBPrimitive<Long> {
 
 		TagLong() {
-			super(NBTXTypes.LONG);
+			super(SDBTypes.LONG);
 		}
 
 		@Override
@@ -124,10 +124,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagFloat extends NBTXTagPrimitive<Float> {
+	static final class TagFloat extends SDBPrimitive<Float> {
 
 		TagFloat() {
-			super(NBTXTypes.FLOAT);
+			super(SDBTypes.FLOAT);
 		}
 
 		@Override
@@ -141,10 +141,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagDouble extends NBTXTagPrimitive<Double> {
+	static final class TagDouble extends SDBPrimitive<Double> {
 
 		TagDouble() {
-			super(NBTXTypes.DOUBLE);
+			super(SDBTypes.DOUBLE);
 		}
 
 		@Override
@@ -158,10 +158,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagCharacter extends NBTXTagPrimitive<Character> {
+	static final class TagCharacter extends SDBPrimitive<Character> {
 
 		TagCharacter() {
-			super(NBTXTypes.CHARACTER);
+			super(SDBTypes.CHARACTER);
 		}
 
 		@Override
@@ -175,10 +175,10 @@ public abstract class NBTXTagPrimitive<T> extends NBTXTag {
 		}
 	}
 
-	static final class TagString extends NBTXTagPrimitive<String> {
+	static final class TagString extends SDBPrimitive<String> {
 
 		TagString() {
-			super(NBTXTypes.STRING);
+			super(SDBTypes.STRING);
 		}
 
 		@Override

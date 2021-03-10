@@ -1,17 +1,5 @@
 package shattered.core;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
-import org.luaj.vm2.LuaString;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.jse.JseBaseLib;
-import org.luaj.vm2.lib.jse.JseMathLib;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
@@ -24,6 +12,18 @@ import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.IAsset;
 import shattered.lib.asset.ScriptAsset;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.luaj.vm2.Globals;
+import org.luaj.vm2.LoadState;
+import org.luaj.vm2.LuaString;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.compiler.LuaC;
+import org.luaj.vm2.lib.PackageLib;
+import org.luaj.vm2.lib.jse.JseBaseLib;
+import org.luaj.vm2.lib.jse.JseMathLib;
 
 @EventBusSubscriber("SYSTEM")
 public final class LuaMachine {
@@ -74,16 +74,6 @@ public final class LuaMachine {
 			return null;
 		}
 		return LuaMachine.registerLibs(new LuaScript((ScriptAsset) asset, true), true);
-	}
-
-	@NotNull
-	public static LuaScript loadScript(@NotNull final ScriptAsset asset) {
-		return LuaMachine.registerLibs(new LuaScript(asset, false), false);
-	}
-
-	@NotNull
-	public static LuaScript loadRenderScript(@NotNull final ScriptAsset asset) {
-		return LuaMachine.registerLibs(new LuaScript(asset, true), true);
 	}
 
 	@NotNull

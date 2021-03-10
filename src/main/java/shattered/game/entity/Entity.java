@@ -14,7 +14,6 @@ import shattered.game.GameRegistries;
 import shattered.game.world.World;
 import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
-import shattered.lib.StringUtils;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
@@ -32,8 +31,6 @@ public final class Entity {
 	private static final double MOVEMENT_SPEED_MODIFIER = 1.15;
 
 	@NotNull
-	private final ResourceLocation resource;
-	@NotNull
 	private final EntityType type;
 	@NotNull
 	private final World world;
@@ -47,8 +44,6 @@ public final class Entity {
 	private final EntityAttributeContainer attributes;
 	@NotNull
 	private LuaTable state = new LuaTable();
-	@NotNull
-	private String currentVariant;
 
 	@Nullable
 	private EntityAction currentAction;
@@ -59,14 +54,12 @@ public final class Entity {
 	private double moveSpeed = 0;
 
 	private Entity(@NotNull final EntityType type, @NotNull final World world, @NotNull final Rectangle bounds) {
-		this.resource = type.getResource();
 		this.type = type;
 		this.world = world;
 		this.updateScript = this.createScript(false, type.getUpdateScript(), this.state);
 		this.renderScript = this.createScript(true, type.getRenderScript(), this.state);
 		this.bounds = Rectangle.createMutable(bounds.getPosition(), bounds.getSize());
 		this.attributes = type.getAttributes().copy();
-		this.currentVariant = this.resource.getVariant();
 	}
 
 	@NotNull
@@ -75,7 +68,7 @@ public final class Entity {
 		assert result != null;
 		result.register(new LuaConstantStateContainer(state));
 		result.register(new LuaLibWorld(this.world));
-		result.register(new LuaLibEntity(this));
+		result.register(new LuaLibEntity(this.world, this));
 		return result;
 	}
 
@@ -145,8 +138,7 @@ public final class Entity {
 	@SuppressWarnings("ConstantConditions")
 	@NotNull
 	public SDBTable serialize(@NotNull final SDBTable table) {
-		table.set("id", this.resource.toString());
-		table.set("variant", this.currentVariant);
+		table.set("id", this.type.getResource().toString());
 		table.set("bounds", this.bounds);
 		final SDBTag state = LuaSerializer.serializeTable(this.state);
 		if (state != null) {
@@ -172,10 +164,6 @@ public final class Entity {
 
 	@SuppressWarnings("ConstantConditions")
 	public void deserialize(@NotNull final SDBTable table) {
-		this.currentVariant = table.getString("variant");
-		if (!StringUtils.isAlphaString(this.currentVariant)) {
-			this.currentVariant = this.getBaseResource().getVariant();
-		}
 		final Rectangle bounds = table.getRectangle("bounds");
 		this.bounds.setPosition(bounds.getPosition()).setSize(bounds.getSize());
 		if (table.hasTag("state")) {
@@ -195,13 +183,6 @@ public final class Entity {
 			this.didMoveLastTick = this.moveDirection != null && table.getBoolean("move_last_tick");
 			this.moveSpeed = this.moveDirection != null ? table.getDouble("move_speed") : 0;
 		}
-	}
-
-	public void setVariant(@NotNull final String variant) {
-		if (!StringUtils.isAlphaString(variant)) {
-			throw new IllegalArgumentException("Variant can only contain characters from range [a-z]");
-		}
-		this.currentVariant = variant;
 	}
 
 	public void move(@NotNull final Direction direction) {
@@ -244,12 +225,7 @@ public final class Entity {
 
 	@NotNull
 	public ResourceLocation getResource() {
-		return this.resource.toVariant(this.currentVariant);
-	}
-
-	@NotNull
-	public ResourceLocation getBaseResource() {
-		return this.resource;
+		return this.type.getResource();
 	}
 
 	@NotNull

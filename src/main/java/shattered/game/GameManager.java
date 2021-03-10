@@ -114,11 +114,13 @@ public final class GameManager implements IKeyListener {
 
 	private void handleMovement() {
 		final Entity player = this.runningWorld.getPlayer();
-		//Moving left and right cannot happen simultaneously
-		if (Input.isKeyDown(Config.KEY_GAME_LEFT.get())) {
-			player.move(Direction.LEFT);
-		} else if (Input.isKeyDown(Config.KEY_GAME_RIGHT.get())) {
-			player.move(Direction.RIGHT);
+		if (player != null) {
+			//Moving left and right cannot happen simultaneously
+			if (Input.isKeyDown(Config.KEY_GAME_LEFT.get())) {
+				player.move(Direction.LEFT);
+			} else if (Input.isKeyDown(Config.KEY_GAME_RIGHT.get())) {
+				player.move(Direction.RIGHT);
+			}
 		}
 	}
 
@@ -134,8 +136,10 @@ public final class GameManager implements IKeyListener {
 					this.pause();
 				} else {
 					final Entity player = this.runningWorld.getPlayer();
-					if (keybind == Keybinds.gameJump) {
-						player.execute(EntityAction.JUMPING, Entity.JUMP_TIMER);
+					if (player != null) {
+						if (keybind == Keybinds.gameJump) {
+							player.execute(EntityAction.JUMPING, Entity.JUMP_TIMER);
+						}
 					}
 				}
 			}

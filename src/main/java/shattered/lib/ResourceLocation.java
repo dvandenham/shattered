@@ -28,10 +28,10 @@ public final class ResourceLocation implements Serializable {
 		} else {
 			throw new InvalidResourceLocationException("Resource can only contain characters from range [a-z0-9] and '.' '/' '-' '_'");
 		}
-		if (StringUtils.isAlphaString(variant)) {
+		if (StringUtils.isVariantString(variant)) {
 			this.variant = variant;
 		} else {
-			throw new InvalidResourceLocationException("Variant can only contain characters from range [a-z]");
+			throw new InvalidResourceLocationException("Variant can only contain characters from range [a-z0-9] and '-' '_'");
 		}
 	}
 
@@ -52,8 +52,8 @@ public final class ResourceLocation implements Serializable {
 		}
 		this.resource = parts2[0];
 		this.variant = parts2.length > 1 ? parts2[1] : ResourceLocation.DEFAULT_VARIANT;
-		if (!StringUtils.isAlphaString(this.variant)) {
-			throw new InvalidResourceLocationException("Variant can only contain characters from range [a-z]");
+		if (!StringUtils.isVariantString(this.variant)) {
+			throw new InvalidResourceLocationException("Variant can only contain characters from range [a-z0-9] and '-' '_'");
 		}
 	}
 

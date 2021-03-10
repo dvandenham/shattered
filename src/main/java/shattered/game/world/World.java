@@ -1,6 +1,7 @@
 package shattered.game.world;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import shattered.core.LuaMachine;
 import shattered.core.LuaScript;
 import shattered.core.lua.LuaSerializer;
@@ -35,6 +36,7 @@ public final class World {
 	public static final int TILE_SIZE = 32;
 	public static final ResourceLocation DEATH_BARRIER_RESOURCE = new ResourceLocation("death_barrier");
 	static final Logger LOGGER = LogManager.getLogger("World");
+	private final ConcurrentLinkedQueue<Runnable> queue = new ConcurrentLinkedQueue<>();
 	@NotNull
 	private final ResourceLocation resource;
 	@NotNull
@@ -47,8 +49,8 @@ public final class World {
 	private final Object2ObjectArrayMap<Point, LuaScript> tileRenderScripts = new Object2ObjectArrayMap<>();
 
 	private final ObjectArrayList<Entity> entities = new ObjectArrayList<>();
-	@NotNull
-	private final Entity player;
+	@Nullable
+	private Entity player;
 
 	private World(@NotNull final ResourceLocation resource, @NotNull final WorldType type) {
 		this.resource = resource;
@@ -88,6 +90,9 @@ public final class World {
 	}
 
 	public void tick() {
+		while (!this.queue.isEmpty()) {
+			this.queue.poll().run();
+		}
 		this.tileUpdateScripts.values().forEach(LuaScript::executeScript);
 		this.entities.forEach(Entity::tick);
 	}
@@ -128,7 +133,9 @@ public final class World {
 				.filter(entity -> entity != this.player)
 				.forEach(entity -> entities.addTag(entity.serialize(new SDBTable())));
 
-		store.setTag("player", this.player.serialize(new SDBTable()));
+		if (this.player != null) {
+			store.setTag("player", this.player.serialize(new SDBTable()));
+		}
 
 		return store;
 	}
@@ -158,7 +165,9 @@ public final class World {
 			this.entities.add(entity);
 		}
 
-		this.player.deserialize(store.getTable("player"));
+		if (store.hasTag("player")) {
+			this.player.deserialize(store.getTable("player"));
+		}
 		this.entities.add(this.player);
 	}
 
@@ -194,6 +203,20 @@ public final class World {
 				}
 				return true;
 			}
+		}
+	}
+
+	public void removeEntity(@NotNull final Entity entity) {
+		this.entities.remove(entity);
+		if (entity == this.player) {
+			this.player = null;
+		}
+	}
+
+	public void addEntity(@NotNull final Entity entity) {
+		this.entities.add(entity);
+		if (entity.getResource().toVariant(ResourceLocation.DEFAULT_VARIANT).equals(new ResourceLocation("player"))) {
+			this.player = entity;
 		}
 	}
 
@@ -277,9 +300,13 @@ public final class World {
 		return this.type;
 	}
 
-	@NotNull
+	@Nullable
 	public Entity getPlayer() {
 		return this.player;
+	}
+
+	public void queueEvent(@NotNull final Runnable event) {
+		this.queue.offer(event);
 	}
 
 	@Nullable

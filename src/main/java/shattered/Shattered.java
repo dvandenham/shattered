@@ -51,6 +51,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerFrequency;
 import static org.lwjgl.glfw.GLFW.glfwGetTimerValue;
 
@@ -308,6 +309,7 @@ public final class Shattered {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			//Setup OpenGL
 			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glEnable(GL13.GL_MULTISAMPLE);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 			GLHelper.disableScissor();

@@ -1,6 +1,7 @@
 package shattered.lib.gfx;
 
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_RGB;
@@ -29,6 +30,8 @@ import static org.lwjgl.opengl.GL30.glCheckFramebufferStatus;
 import static org.lwjgl.opengl.GL30.glDeleteFramebuffers;
 import static org.lwjgl.opengl.GL30.glFramebufferTexture2D;
 import static org.lwjgl.opengl.GL30.glGenFramebuffers;
+import static org.lwjgl.opengl.GL32.GL_TEXTURE_2D_MULTISAMPLE;
+import static org.lwjgl.opengl.GL32.glTexImage2DMultisample;
 
 public final class FrameBufferObject {
 
@@ -39,15 +42,20 @@ public final class FrameBufferObject {
 	public FrameBufferObject() {
 		this.id = glGenFramebuffers();
 		this.texId = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, this.texId);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Display.getWidth(), Display.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		if (GL.getCapabilities().OpenGL32) {
+			glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, this.texId);
+			glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, Display.getWidth(), Display.getHeight(), true);
+		} else {
+			glBindTexture(GL_TEXTURE_2D, this.texId);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, Display.getWidth(), Display.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		}
 	}
 
 	public void bind() {
 		glBindFramebuffer(GL_FRAMEBUFFER, this.id);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this.texId, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL.getCapabilities().OpenGL32 ? GL_TEXTURE_2D_MULTISAMPLE : GL_TEXTURE_2D, this.texId, 0);
 	}
 
 	private void unbind() {

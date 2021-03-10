@@ -8,6 +8,13 @@ import java.nio.IntBuffer;
 import java.util.Objects;
 import java.util.function.Supplier;
 import javax.imageio.ImageIO;
+import shattered.Config;
+import shattered.Shattered;
+import shattered.core.event.EventBus;
+import shattered.core.event.EventBusSubscriber;
+import shattered.core.event.MessageEvent;
+import shattered.core.event.MessageListener;
+import shattered.lib.math.Dimension;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -21,13 +28,6 @@ import org.lwjgl.opengl.GL43;
 import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.Configuration;
 import org.lwjgl.system.MemoryStack;
-import shattered.core.event.EventBus;
-import shattered.core.event.EventBusSubscriber;
-import shattered.core.event.MessageEvent;
-import shattered.core.event.MessageListener;
-import shattered.Config;
-import shattered.Shattered;
-import shattered.lib.math.Dimension;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.GLFW_BLUE_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_CONTEXT_VERSION_MAJOR;
@@ -42,6 +42,8 @@ import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_PROFILE;
 import static org.lwjgl.glfw.GLFW.GLFW_RED_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_REFRESH_RATE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_SAMPLES;
+import static org.lwjgl.glfw.GLFW.GLFW_STENCIL_BITS;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
@@ -126,6 +128,9 @@ final class GLFWSetup {
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
 		glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
+
+		glfwWindowHint(GLFW_STENCIL_BITS, 4);
+		glfwWindowHint(GLFW_SAMPLES, 4);
 
 		final GLFWVidMode vidMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		assert vidMode != null;

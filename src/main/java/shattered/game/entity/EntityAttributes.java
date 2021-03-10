@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import shattered.Shattered;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.Shattered;
 
 public enum EntityAttributes {
 

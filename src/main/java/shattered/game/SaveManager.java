@@ -8,6 +8,7 @@ import shattered.Shattered;
 import shattered.core.sdb.SDBHelper;
 import shattered.core.sdb.SDBTable;
 import shattered.game.world.World;
+import shattered.lib.ReflectionHelper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.registry.NotRegisteredException;
 import org.jetbrains.annotations.NotNull;
@@ -16,12 +17,9 @@ import org.jetbrains.annotations.Nullable;
 public class SaveManager {
 
 	@NotNull
-	private final GameManager gameManager;
-	@NotNull
 	private final File rootDir;
 
-	SaveManager(@NotNull final GameManager gameManager, @NotNull final File rootDir) {
-		this.gameManager = gameManager;
+	SaveManager(@NotNull final File rootDir) {
 		this.rootDir = rootDir;
 	}
 
@@ -45,17 +43,16 @@ public class SaveManager {
 
 	@Nullable
 	public World deserializeWorld(@NotNull final SaveData save, @NotNull final String uuid) throws IOException {
-		final World world = this.gameManager.createWorld(save.getWorldId());
-		if (world == null) {
-			throw new NotRegisteredException("World", save.getWorldId());
-		}
 		final File worldFile = save.getWorldFile(uuid);
 		if (!worldFile.exists()) {
 			return null;
 		}
 		final SDBTable store = SDBHelper.deserialize(worldFile);
-		world.deserialize(store);
-		return world;
+		final World result = ReflectionHelper.invokeMethod(World.class, null, World.class, SDBTable.class, store);
+		if (result == null) {
+			throw new NotRegisteredException("World", save.getWorldId());
+		}
+		return result;
 	}
 
 	@NotNull

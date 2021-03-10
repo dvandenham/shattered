@@ -32,7 +32,7 @@ public final class ScreenSaveDetails extends AbstractScreen {
 	private final String dateModified;
 
 	ScreenSaveDetails(@NotNull final SaveData save, @NotNull final String uuid) {
-		super("screen.save_details.button.title");
+		super("screen.save_details.title");
 		this.save = save;
 		this.uuid = uuid;
 		try {

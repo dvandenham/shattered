@@ -108,12 +108,14 @@ public final class World {
 
 	@NotNull
 	public SDBTable serialize(@NotNull final SDBTable store) {
+		store.set("id", this.type.getResource().toString());
 		store.set("tile_size", World.TILE_SIZE);
 
 		final SDBArray tiles = store.newArray("tiles");
 		this.tiles.forEach((position, tile) -> {
 			final SDBTable table = tiles.addTable();
 			table.set("id", tile.getResource().toString());
+			table.set("position", position);
 			table.set("bounds", this.tilesBoundCache.get(position));
 			final SDBTag state = LuaSerializer.serializeTable(this.tileStates.get(position));
 			if (state != null) {
@@ -122,12 +124,42 @@ public final class World {
 		});
 
 		final SDBArray entities = store.newArray("entities");
-		this.entities.forEach(entity -> entities.addTag(entity.serialize(new SDBTable())));
+		this.entities.stream()
+				.filter(entity -> entity != this.player)
+				.forEach(entity -> entities.addTag(entity.serialize(new SDBTable())));
+
+		store.setTag("player", this.player.serialize(new SDBTable()));
 
 		return store;
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public void deserialize(@NotNull final SDBTable store) {
+		//TODO handle tile_size
+
+		this.tiles.clear();
+		this.tilesBoundCache.clear();
+		this.tileStates.clear();
+		this.tileUpdateScripts.clear();
+		this.tileRenderScripts.clear();
+		final SDBArray tiles = store.getArray("tiles");
+		for (int i = 0; i < tiles.getSize(); ++i) {
+			final SDBTable table = tiles.getTable(i);
+			final Point position = table.getPoint("position");
+			final LuaTable state = LuaSerializer.deserializeTable(table.getTag("state"));
+			this.addTile(position, new ResourceLocation(table.getString("id")), state);
+		}
+
+		this.entities.clear();
+		final SDBArray entities = store.getArray("entities");
+		for (int i = 0; i < entities.getSize(); ++i) {
+			final SDBTable table = entities.getTable(i);
+			final Entity entity = ReflectionHelper.invokeMethod(Entity.class, null, Entity.class, World.class, this, SDBTable.class, table);
+			this.entities.add(entity);
+		}
+
+		this.player.deserialize(store.getTable("player"));
+		this.entities.add(this.player);
 	}
 
 	public boolean addTile(@NotNull final Point position, @Nullable final ResourceLocation tileResource, @Nullable final LuaTable storedState) {
@@ -259,5 +291,20 @@ public final class World {
 			result.register(new LuaLibTile(world, position));
 		}
 		return result;
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	@Nullable
+	@ReflectionHelper.Reflectable
+	private static World deserializeWorld(@NotNull final SDBTable table) {
+		if (!table.hasString("id")) {
+			return null;
+		} else {
+			final ResourceLocation resource = new ResourceLocation(table.getString("id"));
+			final WorldType type = GameRegistries.WORLD().get(resource);
+			final World result = new World(type.getResource(), type);
+			result.deserialize(table);
+			return result;
+		}
 	}
 }

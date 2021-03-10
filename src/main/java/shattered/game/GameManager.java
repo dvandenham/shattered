@@ -33,7 +33,7 @@ public final class GameManager implements IKeyListener {
 	private IGuiScreen screenPaused;
 
 	private GameManager() {
-		this.saveManager = new SaveManager(this, Shattered.WORKSPACE.getDataFile("saves"));
+		this.saveManager = new SaveManager(Shattered.WORKSPACE.getDataFile("saves"));
 	}
 
 	public boolean loadWorld(@NotNull final ResourceLocation resource) {
@@ -74,12 +74,14 @@ public final class GameManager implements IKeyListener {
 		this.screenPaused = null;
 	}
 
-	public void stop() {
-		try {
-			this.saveManager.serializeWorld(this.runningWorld);
-		} catch (final IOException | InvalidSaveException e) {
-			//TODO handle error
-			e.printStackTrace();
+	public void stop(final boolean save) {
+		if (save) {
+			try {
+				this.saveManager.serializeWorld(this.runningWorld);
+			} catch (final IOException | InvalidSaveException e) {
+				//TODO handle error
+				e.printStackTrace();
+			}
 		}
 		this.runningWorld = null;
 		final GuiManager guiManager = Shattered.getInstance().getGuiManager();

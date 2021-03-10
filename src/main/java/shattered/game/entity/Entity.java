@@ -28,7 +28,7 @@ public final class Entity {
 	//Jumping takes 1 second and jumps 2.25 tiles
 	public static final int JUMP_TIMER = Shattered.TICK_RATE / 3;
 	private static final double JUMP_STRENGTH = (World.TILE_SIZE * 2.25) / (double) Entity.JUMP_TIMER;
-	private static final double MAX_MOVE_STRENGTH = 1.5;
+	private static final double MAX_MOVE_STRENGTH = 1.75;
 	private static final double MOVEMENT_SPEED_MODIFIER = 1.15;
 
 	@NotNull

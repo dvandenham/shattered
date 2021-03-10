@@ -6,6 +6,7 @@ import shattered.core.LuaScript;
 import shattered.core.lua.constant.LuaConstantStateContainer;
 import shattered.core.lua.lib.LuaLibEntity;
 import shattered.core.lua.lib.LuaLibWorld;
+import shattered.core.nbtx.NBTXTagTable;
 import shattered.game.Direction;
 import shattered.game.world.World;
 import shattered.lib.ResourceLocation;
@@ -135,6 +136,15 @@ public final class Entity {
 		final int renderY = Display.getHeight() - this.bounds.getY() - this.bounds.getHeight();
 		tessellator.drawQuick(this.bounds.getX(), renderY, this.bounds.getSize(), this.type.getTexture());
 		this.renderScript.executeScript();
+	}
+
+	@NotNull
+	public NBTXTagTable serialize(@NotNull NBTXTagTable table) {
+		return table;
+	}
+
+	public void deserialize(@NotNull NBTXTagTable table) {
+		
 	}
 
 	public void setVariant(@NotNull final String variant) {

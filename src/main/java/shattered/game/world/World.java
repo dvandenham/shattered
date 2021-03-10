@@ -3,13 +3,16 @@ package shattered.game.world;
 import java.util.Map;
 import shattered.core.LuaMachine;
 import shattered.core.LuaScript;
+import shattered.core.lua.LuaSerializer;
 import shattered.core.lua.constant.LuaConstantStateContainer;
 import shattered.core.lua.lib.LuaLibTile;
 import shattered.core.lua.lib.LuaLibWorld;
 import shattered.core.nbtx.NBTX;
+import shattered.core.nbtx.NBTXTag;
+import shattered.core.nbtx.NBTXTagArray;
+import shattered.core.nbtx.NBTXTagTable;
 import shattered.game.Direction;
 import shattered.game.GameRegistries;
-import shattered.game.ISerializable;
 import shattered.game.entity.Entity;
 import shattered.game.entity.EntityType;
 import shattered.game.tile.Tile;
@@ -28,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.luaj.vm2.LuaTable;
 
-public final class World implements ISerializable {
+public final class World {
 
 	public static final int TILE_SIZE = 32;
 	public static final ResourceLocation DEATH_BARRIER_RESOURCE = new ResourceLocation("death_barrier");
@@ -104,12 +107,27 @@ public final class World implements ISerializable {
 		this.entities.forEach(entity -> entity.render(tessellator, fontRenderer));
 	}
 
-	@Override
-	public @NotNull NBTX serialize(@NotNull final NBTX store) {
+	@NotNull
+	public NBTX serialize(@NotNull final NBTX store) {
+		store.set("tile_size", World.TILE_SIZE);
+
+		final NBTXTagArray tiles = store.newArray("tiles");
+		this.tiles.forEach((position, tile) -> {
+			final NBTXTagTable table = tiles.addTable();
+			table.set("id", tile.getResource().toString());
+			table.set("bounds", this.tilesBoundCache.get(position));
+			final NBTXTag state = LuaSerializer.serializeTable(this.tileStates.get(position));
+			if (state != null) {
+				table.setTag("state", state);
+			}
+		});
+
+		final NBTXTagArray entities = store.newArray("entities");
+		this.entities.forEach(entity -> entities.addTag(entity.serialize(new NBTXTagTable())));
+
 		return store;
 	}
-
-	@Override
+	
 	public void deserialize(@NotNull final NBTX store) {
 	}
 

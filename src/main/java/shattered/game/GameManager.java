@@ -112,12 +112,6 @@ public final class GameManager implements IKeyListener {
 
 	private void handleMovement() {
 		final Entity player = this.runningWorld.getPlayer();
-		//Moving up and down cannot happen simultaneously
-//		if (Input.isKeyDown(Config.)) {
-//			player.move(Direction.UP);
-//		} else if (keybind == Keybinds.gameMoveDown) {
-//			player.move(Direction.DOWN);
-//		}
 		//Moving left and right cannot happen simultaneously
 		if (Input.isKeyDown(Config.KEY_GAME_LEFT.get())) {
 			player.move(Direction.LEFT);

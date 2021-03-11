@@ -180,6 +180,11 @@ public abstract class IGuiScreen implements IComponentContainer {
 		}
 	}
 
+	protected final void setTitle(@NotNull final String title) {
+		this.title = title;
+		this.cacheBounds();
+	}
+
 	protected final void setY(final int y) {
 		if (y != this.bounds.getY()) {
 			this.bounds.setY(y);

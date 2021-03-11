@@ -82,7 +82,7 @@ public final class KeyBind {
 		table.set("code", this.keyCode);
 		table.set("shift", this.shift);
 		table.set("ctrl", this.ctrl);
-		table.set("al", this.alt);
+		table.set("alt", this.alt);
 	}
 
 	void load(@NotNull final SDBTable store) {

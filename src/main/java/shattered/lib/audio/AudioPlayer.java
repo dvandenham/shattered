@@ -1,10 +1,10 @@
 package shattered.lib.audio;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.openal.AL10;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.Audio;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.openal.AL10;
 
 @SuppressWarnings("unused")
 public final class AudioPlayer {
@@ -14,12 +14,12 @@ public final class AudioPlayer {
 
 	public void play(@NotNull final ResourceLocation audio) {
 		AudioThreadController.QUEUE.offer(QueueRequest.play(this, audio));
-		SoundSystem.CONTROLLER.wake();
+		SoundSystem.THREAD_CONTROLLER.wake();
 	}
 
 	public void pause(@NotNull final ResourceLocation audio) {
 		AudioThreadController.QUEUE.offer(QueueRequest.pause(this, audio));
-		SoundSystem.CONTROLLER.wake();
+		SoundSystem.THREAD_CONTROLLER.wake();
 	}
 
 	public void resume(@NotNull final ResourceLocation audio) {
@@ -28,7 +28,7 @@ public final class AudioPlayer {
 
 	public void stop(@NotNull final ResourceLocation audio) {
 		AudioThreadController.QUEUE.offer(QueueRequest.stop(this, audio));
-		SoundSystem.CONTROLLER.wake();
+		SoundSystem.THREAD_CONTROLLER.wake();
 	}
 
 	public boolean isPlaying(@NotNull final Audio audio) {

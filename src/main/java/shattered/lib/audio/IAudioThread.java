@@ -1,8 +1,10 @@
 package shattered.lib.audio;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 abstract class IAudioThread extends Thread {
 
-	volatile boolean shouldClose = false;
+	AtomicBoolean running = new AtomicBoolean(false);
 
 	IAudioThread(final String name) {
 		super("SoundSystem (" + name + ')');
@@ -10,6 +12,12 @@ abstract class IAudioThread extends Thread {
 
 	@Override
 	public abstract void run();
+
+	@Override
+	public synchronized void start() {
+		this.running.set(true);
+		super.start();
+	}
 
 	void trySleep(final long millis) {
 		try {
@@ -25,7 +33,7 @@ abstract class IAudioThread extends Thread {
 	}
 
 	public void close() {
-		this.shouldClose = true;
+		this.running.set(false);
 		this.wake();
 	}
 }

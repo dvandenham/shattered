@@ -5,10 +5,13 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import shattered.Shattered;
+import shattered.core.event.EventListener;
 import shattered.lib.Color;
 import shattered.lib.Lazy;
 import shattered.lib.Localizer;
 import shattered.lib.ResourceLocation;
+import shattered.lib.ResourcesReloadedEvent;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.Font;
 import shattered.lib.asset.IAsset;
@@ -35,6 +38,7 @@ public final class FontRendererImpl implements FontRenderer {
 		this.tessellator = tessellator;
 		this.fontDefault = fontDefault;
 		this.fontSizeStack.offerLast(Font.DEFAULT_SIZES[Font.DEFAULT_SIZE_INDEX]);
+		Shattered.SYSTEM_BUS.register(this);
 	}
 
 	@Override
@@ -264,10 +268,10 @@ public final class FontRendererImpl implements FontRenderer {
 			int y = call.y;
 			final StringData data = call.data;
 			final String[] textArray = data.getText();
-			for (int i = 0; i < textArray.length; ++i) {
+			for (final String textElement : textArray) {
 				//Store processed and current text
 				final StringBuilder textDone = new StringBuilder();
-				String text = textArray[i];
+				String text = textElement;
 				if (data.doLocalize()) {
 					text = Localizer.localize(text);
 				}
@@ -522,5 +526,11 @@ public final class FontRendererImpl implements FontRenderer {
 			result = this.fontDefault.get();
 		}
 		return result;
+	}
+
+	@EventListener(ResourcesReloadedEvent.class)
+	private void onResourcesReloaded(final ResourcesReloadedEvent ignored) {
+		this.fontDefault.invalidate();
+		this.fontCurrent = null;
 	}
 }

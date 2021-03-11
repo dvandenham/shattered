@@ -42,8 +42,19 @@ public final class AssetRegistry {
 	static final Logger LOGGER = LogManager.getLogger("Assets");
 	static final AtlasStitcher ATLAS = new AtlasStitcher(false);
 
+	private static boolean hasInitialized = false;
+
 	@MessageListener("init_assets")
 	private static void onInitAssets(final MessageEvent ignored) {
+		if (AssetRegistry.hasInitialized) {
+			AssetRegistry.ATLAS.reset();
+			AssetRegistry.ASSETS.forEach(entry -> entry.getValue().onDestroy());
+			AssetRegistry.ASSETS.unfreeze();
+			AssetRegistry.TYPES.unfreeze();
+			AssetRegistry.ASSETS.clearRegistry();
+			AssetRegistry.TYPES.clearRegistry();
+		}
+		AssetRegistry.hasInitialized = true;
 		//Loading json based registries
 		final Map<AssetTypes, List<ResourceLocation>> registries = Arrays.stream(AssetTypes.values())
 				.map(type -> {
@@ -97,8 +108,8 @@ public final class AssetRegistry {
 
 	@EventListener
 	private static void onCreateRegistry(final CreateRegistryEvent event) {
-		AssetRegistry.ASSETS = event.create(new ResourceLocation("assets"), IAsset.class);
-		AssetRegistry.TYPES = event.create(new ResourceLocation("asset_types"), AssetTypes.class);
+		AssetRegistry.ASSETS = event.createUnfreezable(new ResourceLocation("assets"), IAsset.class);
+		AssetRegistry.TYPES = event.createUnfreezable(new ResourceLocation("asset_types"), AssetTypes.class);
 	}
 
 	@Nullable

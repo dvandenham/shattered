@@ -7,18 +7,20 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class Registry<T> implements Iterable<Map.Entry<ResourceLocation, T>> {
+public abstract class Registry<T> implements Iterable<Map.Entry<ResourceLocation, T>> {
 
 	private final Object2ObjectArrayMap<ResourceLocation, T> mapping = new Object2ObjectArrayMap<>();
 	@NotNull
 	protected final ResourceLocation resource;
 	@NotNull
-	protected Class<T> typeClazz;
+	protected final Class<T> typeClazz;
+	private final boolean unfreezable;
 	boolean frozen = false;
 
-	Registry(@NotNull final ResourceLocation resource, @NotNull final Class<T> typeClazz) {
+	Registry(@NotNull final ResourceLocation resource, @NotNull final Class<T> typeClazz, final boolean unfreezable) {
 		this.resource = resource;
 		this.typeClazz = typeClazz;
+		this.unfreezable = unfreezable;
 	}
 
 	public final void register(@NotNull final ResourceLocation resource, @Nullable final T value) {
@@ -31,12 +33,12 @@ public final class Registry<T> implements Iterable<Map.Entry<ResourceLocation, T
 		this.mapping.put(resource, value);
 	}
 
-	public boolean contains(@NotNull final ResourceLocation resource) {
+	public final boolean contains(@NotNull final ResourceLocation resource) {
 		return this.mapping.containsKey(resource);
 	}
 
 	@Nullable
-	public T get(@NotNull final ResourceLocation resource) {
+	public final T get(@NotNull final ResourceLocation resource) {
 		return this.mapping.get(resource);
 	}
 
@@ -48,13 +50,42 @@ public final class Registry<T> implements Iterable<Map.Entry<ResourceLocation, T
 		return this.mapping.remove(resource);
 	}
 
+	public final void unfreeze() {
+		if (!this.unfreezable) {
+			throw new SecurityException(String.format("Unfreezing registry %s is forbidden!", this.resource));
+		} else if (!this.frozen) {
+			throw new IllegalStateException(String.format("Unfrozen registry %s cannot be unfrozen again!", this.resource));
+		}
+		this.frozen = false;
+	}
+
+	public final void refreeze() {
+		if (!this.unfreezable) {
+			throw new SecurityException(String.format("Freezing registry %s is forbidden!", this.resource));
+		} else if (this.frozen) {
+			throw new RegistryFrozenException(this.resource);
+		} else {
+			this.frozen = true;
+		}
+	}
+
+	public void clearRegistry() {
+		if (!this.unfreezable) {
+			throw new SecurityException(String.format("Freezing registry %s is forbidden!", this.resource));
+		} else if (this.frozen) {
+			throw new RegistryFrozenException(this.resource);
+		} else {
+			this.mapping.clear();
+		}
+	}
+
 	public final boolean isFrozen() {
 		return this.frozen;
 	}
 
 	@Override
 	@NotNull
-	public Iterator<Map.Entry<ResourceLocation, T>> iterator() {
+	public final Iterator<Map.Entry<ResourceLocation, T>> iterator() {
 		return new ReadOnlyIterator<>(this.mapping.entrySet().iterator());
 	}
 

@@ -3,14 +3,14 @@ package shattered.lib.gfx;
 import java.io.InputStream;
 import java.util.Objects;
 import java.util.function.Function;
+import shattered.Shattered;
+import shattered.lib.FileUtils;
+import shattered.lib.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import shattered.Shattered;
-import shattered.lib.FileUtils;
-import shattered.lib.ResourceLocation;
 import static org.lwjgl.opengl.GL20.GL_FALSE;
 import static org.lwjgl.opengl.GL20.GL_FLOAT;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL20.glAttachShader;
 import static org.lwjgl.opengl.GL20.glCompileShader;
 import static org.lwjgl.opengl.GL20.glCreateProgram;
 import static org.lwjgl.opengl.GL20.glCreateShader;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glDeleteShader;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
@@ -143,5 +144,9 @@ public final class Shader {
 
 	public int getId() {
 		return this.id;
+	}
+
+	public void destroy() {
+		glDeleteProgram(this.id);
 	}
 }

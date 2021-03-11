@@ -1,12 +1,12 @@
 package shattered.lib.asset;
 
+import shattered.lib.ResourceLocation;
+import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.chars.Char2IntArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import shattered.lib.ResourceLocation;
-import shattered.lib.math.Rectangle;
 
 public final class Font extends IAsset {
 
@@ -73,5 +73,11 @@ public final class Font extends IAsset {
 	public static int getPhysicalSizeForLogicalSize(final int logicalSize) {
 		final int index = Font.getSizeIndexForSize(logicalSize);
 		return Font.DEFAULT_SIZES[index];
+	}
+
+	@Override
+	void onDestroy() {
+		super.onDestroy();
+		this.atlas.reset();
 	}
 }

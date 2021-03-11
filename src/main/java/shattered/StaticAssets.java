@@ -14,6 +14,9 @@ public final class StaticAssets {
 	}
 
 	static void loadAssets() {
+		if (StaticAssets.SHADER != null) {
+			StaticAssets.SHADER.destroy();
+		}
 		StaticAssets.SHADER = new Shader(Assets.SHADER_VERTEX, Assets.SHADER_FRAGMENT);
 		ReflectionHelper.invokeMethod(
 				AssetRegistry.class,

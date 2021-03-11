@@ -6,6 +6,7 @@ import shattered.lib.KeyManager;
 import org.jetbrains.annotations.NotNull;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_F2;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F3;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
 public final class Keybinds implements IKeyListener {
@@ -14,6 +15,7 @@ public final class Keybinds implements IKeyListener {
 	public static KeyBind genericEscape;
 	//Internal keys
 	public static KeyBind internalOpenWorkspace;
+	public static KeyBind internalReloadShattered;
 	//Game Keys
 	public static KeyBind gamePause;
 	public static KeyBind gameJump;
@@ -25,6 +27,8 @@ public final class Keybinds implements IKeyListener {
 	public void onKeybindChanged(@NotNull final KeyBind keybind) {
 		if (keybind == Keybinds.internalOpenWorkspace) {
 			Shattered.WORKSPACE.openExternal();
+		} else if (keybind == Keybinds.internalReloadShattered) {
+			Shattered.getInstance().reloadShattered();
 		} else if (keybind == Keybinds.genericEscape) {
 			if (!Shattered.getInstance().getGameManager().isRunning()) {
 				Shattered.getInstance().getGuiManager().closeLastScreen();
@@ -38,6 +42,7 @@ public final class Keybinds implements IKeyListener {
 
 	private static void initInternal(@NotNull final KeyManager manager) {
 		Keybinds.internalOpenWorkspace = manager.addToggle("internal.open_workspace", "key.internal.open_workspace", GLFW_KEY_F2, true, true, false);
+		Keybinds.internalReloadShattered = manager.addToggle("internal.reload_shattered", "key.internal.reload_shattered", GLFW_KEY_F3, true, true, true);
 	}
 
 	private static void initGame(@NotNull final KeyManager manager) {

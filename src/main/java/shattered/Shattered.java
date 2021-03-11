@@ -26,9 +26,11 @@ import shattered.lib.ITimerListener;
 import shattered.lib.KeyManager;
 import shattered.lib.Lazy;
 import shattered.lib.ReflectionHelper;
+import shattered.lib.ResourcesReloadedEvent;
 import shattered.lib.Workspace;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.Font;
+import shattered.lib.audio.SoundSystem;
 import shattered.lib.gfx.Display;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.FontRendererImpl;
@@ -263,7 +265,7 @@ public final class Shattered {
 
 	private void cleanup() {
 		Shattered.LOGGER.debug("Cleaning up!");
-		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown"));
+		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown_sound_system"));
 		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown_glfw"));
 	}
 
@@ -455,6 +457,46 @@ public final class Shattered {
 			Runtime.getRuntime().halt(-1);
 		} catch (final InterruptedException ignored) {
 		}
+	}
+
+	public void reloadShattered() {
+		Shattered.LOGGER.info("RELOADING {}! THIS MAY TAKE A WHILE", Shattered.NAME.toUpperCase(Locale.ROOT));
+		final long startTime = Shattered.getSystemTime();
+
+		//Destroy SoundSystem
+		SoundSystem.INSTANCE.clearSystem();
+		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown_sound_system"));
+
+		//Load assets
+		Shattered.LOGGER.debug("Notifying AssetRegistry for initializing");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("init_assets"));
+
+		//Reload static assets
+		StaticAssets.loadAssets();
+
+		//Setup SoundSystem
+		Shattered.LOGGER.debug("Initializing SoundSystem");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("init_sound_system"));
+
+		//Stitching textures
+		Shattered.LOGGER.debug("Stitching all TextureAtlas subscribers");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("atlas_stitch"));
+
+		//Loading audio
+		Shattered.LOGGER.debug("Loading all audio into memory");
+		Shattered.SYSTEM_BUS.post(new MessageEvent("load_audio"));
+
+		//Freezing all registries again
+		Shattered.SYSTEM_BUS.post(new MessageEvent("freeze_registries"));
+
+		//Notify subscribers on the default and system event bus
+		Shattered.LOGGER.debug("Notifying subscribers that Shattered has been reloaded");
+		final ResourcesReloadedEvent event = ReflectionHelper.instantiate(ResourcesReloadedEvent.class);
+		assert event != null;
+		Shattered.SYSTEM_BUS.post(event);
+		EventBus.post(event);
+
+		Shattered.LOGGER.debug("Reloading took {} milliseconds!", Shattered.getSystemTime() - startTime);
 	}
 
 	private static final class RuntimeTimer {

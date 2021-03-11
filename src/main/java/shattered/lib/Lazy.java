@@ -12,6 +12,11 @@ public final class Lazy<T> implements Supplier<T> {
 		this.supplier = supplier;
 	}
 
+	public void invalidate() {
+		this.value = null;
+		this.fetched = false;
+	}
+
 	@Override
 	public T get() {
 		if (!this.fetched) {

@@ -15,7 +15,17 @@ public final class CreateRegistryEvent extends Event<Void> {
 		if (MasterRegistry.registryExists(resource)) {
 			throw new IllegalStateException(String.format("Registry %s already exists!", resource));
 		}
-		final Registry<T> result = new Registry<>(resource, typeClass);
+		final Registry<T> result = new PermanentlyFrozenRegistry<>(resource, typeClass);
+		MasterRegistry.register(resource, result, dependencies);
+		return result;
+	}
+
+	@NotNull
+	public <T> Registry<T> createUnfreezable(@NotNull final ResourceLocation resource, @NotNull final Class<T> typeClass, @NotNull final ResourceLocation... dependencies) {
+		if (MasterRegistry.registryExists(resource)) {
+			throw new IllegalStateException(String.format("Registry %s already exists!", resource));
+		}
+		final Registry<T> result = new UnfreezableRegistry<>(resource, typeClass);
 		MasterRegistry.register(resource, result, dependencies);
 		return result;
 	}

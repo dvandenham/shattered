@@ -18,8 +18,8 @@ public class GuiScrollbar extends IGuiComponent implements ITickable {
 
 	public GuiScrollbar(final boolean vertical, final int steps, final int defaultValue) {
 		this.vertical = vertical;
-		this.steps = steps;
-		this.value = defaultValue;
+		this.steps = Math.max(0, steps);
+		this.value = Math.max(0, defaultValue);
 	}
 
 	public GuiScrollbar(final boolean vertical, final int steps) {
@@ -34,9 +34,9 @@ public class GuiScrollbar extends IGuiComponent implements ITickable {
 	public void tick() {
 		if (Input.isMouseLeftClicked()) {
 			if (Input.containsMouse(this.getButtonPrevBounds())) {
-				--this.value;
+				this.value = Math.max(0, this.value - 1);
 			} else if (Input.containsMouse(this.getButtonNextBounds())) {
-				++this.value;
+				this.value = Math.min(this.steps - 1, this.value + 1);
 			}
 		} else if (Input.isMouseLeftPressed() && Input.containsMouse(this.getInternalBounds())) {
 			final Rectangle caret = this.getCaretBounds();
@@ -58,9 +58,9 @@ public class GuiScrollbar extends IGuiComponent implements ITickable {
 				final double rawPlaces = (double) change / (this.vertical ? caret.getDoubleHeight() : caret.getDoubleWidth());
 				final int moveTicks = (int) (rawPlaces < 0 ? Math.floor(rawPlaces) : Math.ceil(rawPlaces));
 				if (moveTicks < 0) {
-					--this.value;
+					this.value = Math.max(0, this.value - 1);
 				} else if (moveTicks > 0) {
-					++this.value;
+					this.value = Math.min(this.steps - 1, this.value + 1);
 				}
 			}
 		}
@@ -75,15 +75,13 @@ public class GuiScrollbar extends IGuiComponent implements ITickable {
 		final Rectangle buttonPrev = this.getButtonPrevBounds();
 		final Rectangle buttonNext = this.getButtonNextBounds();
 
-		Color caretColor = Color.XEROS;
 		if (this.vertical) {
-			if (caret.getHeight() == internal.getHeight()) {
-				caretColor = Color.WHITE;
+			if (caret.getHeight() != internal.getHeight()) {
+				tessellator.drawQuick(caret, Color.XEROS);
 			}
-		} else if (caret.getWidth() == internal.getWidth()) {
-			caretColor = Color.WHITE;
+		} else if (caret.getWidth() != internal.getWidth()) {
+			tessellator.drawQuick(caret, Color.XEROS);
 		}
-		tessellator.drawQuick(caret, caretColor);
 
 		if (this.vertical) {
 			RenderHelper.drawTriangle(tessellator,
@@ -115,11 +113,11 @@ public class GuiScrollbar extends IGuiComponent implements ITickable {
 	}
 
 	public final void setSteps(final int steps) {
-		this.steps = steps;
+		this.steps = Math.max(0, steps);
 	}
 
 	public final void setValue(final int value) {
-		this.value = value;
+		this.value = Math.max(0, value);
 	}
 
 	public final int getSteps() {

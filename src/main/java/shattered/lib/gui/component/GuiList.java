@@ -36,17 +36,19 @@ public class GuiList extends IGuiComponent implements ITickable, IComponentConta
 	@Override
 	public void setupComponents(@NotNull final Layout layout) {
 		this.scrollbar.setSteps(this.getPageCount());
-		this.scrollbar.setSize(this.getScrollbarSize(), this.getInternalBounds().getHeight());
-		this.scrollbar.setPosition(this.getInternalBounds().getMaxX() - this.scrollbar.getWidth(), this.getInternalBounds().getY());
+		this.scrollbar.setSize(this.getScrollbarSize(), getInternalBounds().getHeight());
 
+		final Rectangle internalBounds = this.getInternalBounds();
+		this.scrollbar.setPosition(internalBounds.getMaxX() + 4, internalBounds.getY());
+		
 		final IGuiComponent[][] visibleComponents = this.getVisibleComponents();
 		for (int i = 0; i < visibleComponents.length; ++i) {
-			final int y = this.getInternalBounds().getY() + this.getRowHeight() * i;
+			final int y = internalBounds.getY() + this.getRowHeight() * i;
 			int totalWidth = 0;
 			for (int j = 0; j < visibleComponents[i].length; ++j) {
 				final IGuiComponent component = visibleComponents[i][j];
 				totalWidth += component.getMaximumWidth();
-				component.setPosition(this.scrollbar.getX() - totalWidth, y);
+				component.setPosition(internalBounds.getMaxX() - totalWidth, y);
 				component.setSize(component.getMaximumWidth(), this.getRowHeight());
 			}
 		}
@@ -134,7 +136,7 @@ public class GuiList extends IGuiComponent implements ITickable, IComponentConta
 	protected Rectangle getInternalBounds() {
 		return Rectangle.create(
 				this.getX(), this.getY(),
-				this.getWidth() - this.scrollbar.getWidth(), this.getHeight()
+				this.getWidth() - this.scrollbar.getWidth() - 4, this.getHeight()
 		);
 	}
 

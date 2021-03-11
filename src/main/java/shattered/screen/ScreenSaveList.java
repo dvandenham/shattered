@@ -95,28 +95,17 @@ public class ScreenSaveList extends AbstractScreen {
 		@Override
 		public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 			switch (this.state) {
-				case DEFAULT:
-					return;
 				case ROLLOVER:
 				case LEFT_PRESS:
 				case RIGHT_PRESS:
 				case LEFT_CLICK:
 				case RIGHT_CLICK:
 					tessellator.drawQuick(this.getBounds(), Color.XEROS);
-					break;
-			}
-			switch (this.state) {
-				case ROLLOVER:
-				case LEFT_PRESS:
-				case RIGHT_PRESS:
-				case LEFT_CLICK:
-				case RIGHT_CLICK: {
 					final Color color = this.getTextColor();
 					this.setTextColor(Color.BLACK);
 					this.renderForeground(tessellator, fontRenderer);
 					this.setTextColor(color);
 					break;
-				}
 				default:
 					this.renderForeground(tessellator, fontRenderer);
 			}

@@ -1,6 +1,7 @@
 package shattered.lib.gui;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 
 public interface IComponentContainer {
@@ -15,5 +16,5 @@ public interface IComponentContainer {
 
 	void setupComponents(@NotNull Layout layout);
 
-	void doForAll(Consumer<IGuiComponent> action);
+	void doForAll(Consumer<IGuiComponent> action, Predicate<IGuiComponent> predicate);
 }

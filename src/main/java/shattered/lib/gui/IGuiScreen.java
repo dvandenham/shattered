@@ -1,6 +1,7 @@
 package shattered.lib.gui;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import shattered.Assets;
 import shattered.Shattered;
 import shattered.core.event.EventListener;
@@ -62,9 +63,6 @@ public abstract class IGuiScreen implements IComponentContainer {
 
 	protected final void localizeTitle(final boolean localize) {
 		this.localizeTitle = localize;
-	}
-
-	protected void tick() {
 	}
 
 	protected abstract void renderBackground(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
@@ -161,8 +159,8 @@ public abstract class IGuiScreen implements IComponentContainer {
 	}
 
 	@Override
-	public void doForAll(final Consumer<IGuiComponent> action) {
-		this.components.doForAll(action);
+	public void doForAll(final Consumer<IGuiComponent> action, final Predicate<IGuiComponent> predicate) {
+		this.components.doForAll(action, predicate);
 	}
 
 	protected void openScreen(@NotNull final IGuiScreen screen) {
@@ -397,10 +395,6 @@ public abstract class IGuiScreen implements IComponentContainer {
 	}
 
 	private static class GuiScreenComponentPanel extends GuiPanel {
-
-		@Override
-		public void tick() {
-		}
 
 		@Override
 		public void setupComponents(@NotNull final Layout layout) {

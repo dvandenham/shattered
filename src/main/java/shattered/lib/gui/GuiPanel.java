@@ -1,6 +1,7 @@
 package shattered.lib.gui;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -23,16 +24,12 @@ public abstract class GuiPanel extends IGuiComponent implements IComponentContai
 	}
 
 	@Override
-	public void doForAll(final Consumer<IGuiComponent> action) {
-		this.components.forEach(action);
+	public void doForAll(final Consumer<IGuiComponent> action, final Predicate<IGuiComponent> predicate) {
+		this.components.stream().filter(predicate).forEach(action);
 	}
 
 	@Override
-	public void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-	}
-
-	@Override
-	public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 	}
 
 	@Override

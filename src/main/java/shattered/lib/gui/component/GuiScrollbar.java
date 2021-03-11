@@ -1,5 +1,6 @@
 package shattered.lib.gui.component;
 
+import shattered.core.ITickable;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
@@ -9,7 +10,7 @@ import shattered.lib.gui.IGuiComponent;
 import shattered.lib.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiScrollbar extends IGuiComponent {
+public class GuiScrollbar extends IGuiComponent implements ITickable {
 
 	private final boolean vertical;
 	private int steps;
@@ -66,7 +67,7 @@ public class GuiScrollbar extends IGuiComponent {
 	}
 
 	@Override
-	public void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		tessellator.drawQuick(this.getBounds(), Color.WHITE.withAlpha(0.5F));
 
 		final Rectangle internal = this.getInternalBounds();
@@ -111,10 +112,6 @@ public class GuiScrollbar extends IGuiComponent {
 					Color.BLACK
 			);
 		}
-	}
-
-	@Override
-	public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 	}
 
 	public final void setSteps(final int steps) {

@@ -15,11 +15,7 @@ public abstract class IGuiComponent {
 	private boolean visible = true;
 	private int maximumWidth = -1;
 
-	public abstract void tick();
-
-	public abstract void renderBackground(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
-
-	public abstract void renderForeground(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
+	public abstract void render(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
 
 	@NotNull
 	public IGuiComponent setEnabled(final boolean enabled) {

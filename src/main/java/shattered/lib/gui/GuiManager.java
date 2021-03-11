@@ -2,10 +2,12 @@ package shattered.lib.gui;
 
 import java.util.function.BiConsumer;
 import shattered.Shattered;
+import shattered.core.ITickable;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.lib.Helper;
 import shattered.lib.ResourceLocation;
 import shattered.lib.audio.AudioPlayer;
 import shattered.lib.audio.SoundSystem;
@@ -111,27 +113,24 @@ public final class GuiManager {
 	}
 
 	private void tickScreen(@NotNull final IGuiScreen screen) {
-		screen.tick();
-		screen.doForAll(IGuiComponent::tick);
+		if (screen instanceof ITickable) {
+			((ITickable) screen).tick();
+		}
+		screen.doForAll(component -> ((ITickable) component).tick(), component -> component instanceof ITickable);
 		screen.tickTitlebar();
 	}
 
 	private void renderScreen(@NotNull final IGuiScreen screen, @NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		screen.renderBackground(tessellator, fontRenderer);
-		screen.doForAll(component -> component.renderBackground(tessellator, fontRenderer));
+		screen.doForAll(component -> component.render(tessellator, fontRenderer), Helper.testTrue());
 		screen.renderForeground(tessellator, fontRenderer);
-		screen.doForAll(component -> component.renderForeground(tessellator, fontRenderer));
 		screen.renderTitlebar(tessellator, fontRenderer);
 	}
 
 	void setupComponents(@NotNull final IGuiScreen screen) {
 		final Layout layout = GuiHelper.createDefaultLayout(screen);
 		screen.setupComponents(layout);
-		screen.doForAll(component -> {
-			if (component instanceof IComponentContainer) {
-				((IComponentContainer) component).setupComponents(layout);
-			}
-		});
+		screen.doForAll(component -> ((IComponentContainer) component).setupComponents(layout), component -> component instanceof IComponentContainer);
 	}
 
 	@Nullable

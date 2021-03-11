@@ -1,6 +1,7 @@
 package shattered.screen;
 
 import java.io.IOException;
+import shattered.Assets;
 import shattered.Shattered;
 import shattered.core.event.EventListener;
 import shattered.game.InvalidSaveException;
@@ -92,7 +93,7 @@ public class ScreenSaveList extends AbstractScreen {
 		}
 
 		@Override
-		public void renderBackground(@NotNull final Tessellator Tessellator, @NotNull final FontRenderer FontRenderer) {
+		public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 			switch (this.state) {
 				case DEFAULT:
 					return;
@@ -101,13 +102,9 @@ public class ScreenSaveList extends AbstractScreen {
 				case RIGHT_PRESS:
 				case LEFT_CLICK:
 				case RIGHT_CLICK:
-					Tessellator.drawQuick(this.getBounds(), Color.XEROS);
+					tessellator.drawQuick(this.getBounds(), Color.XEROS);
 					break;
 			}
-		}
-
-		@Override
-		public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 			switch (this.state) {
 				case ROLLOVER:
 				case LEFT_PRESS:
@@ -116,13 +113,22 @@ public class ScreenSaveList extends AbstractScreen {
 				case RIGHT_CLICK: {
 					final Color color = this.getTextColor();
 					this.setTextColor(Color.BLACK);
-					super.renderForeground(tessellator, fontRenderer);
+					this.renderForeground(tessellator, fontRenderer);
 					this.setTextColor(color);
 					break;
 				}
 				default:
-					super.renderForeground(tessellator, fontRenderer);
+					this.renderForeground(tessellator, fontRenderer);
 			}
+		}
+
+		private void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+			fontRenderer.setFont(Assets.FONT_SIMPLE);
+			fontRenderer.setFontSize(Math.min(this.getHeight() / 4 * 3, 48));
+			final int yOffset = 2;
+			fontRenderer.writeQuickCentered(this.getBounds().moveY(yOffset), new StringData(this.getText(), this.getTextColor()).localize(this.doLocalize()));
+			fontRenderer.revertFontSize();
+			fontRenderer.resetFont();
 		}
 	}
 }

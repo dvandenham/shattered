@@ -1,6 +1,7 @@
 package shattered.lib.gui.component;
 
 import shattered.Assets;
+import shattered.core.ITickable;
 import shattered.core.event.Event;
 import shattered.core.event.EventBus;
 import shattered.lib.Color;
@@ -12,7 +13,7 @@ import shattered.lib.gui.GuiManager;
 import shattered.lib.gui.IGuiComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiToggleButton extends IGuiComponent {
+public class GuiToggleButton extends IGuiComponent implements ITickable {
 
 	private boolean currentState = false;
 	private boolean previousState = false;
@@ -56,7 +57,7 @@ public class GuiToggleButton extends IGuiComponent {
 	}
 
 	@Override
-	public void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		final Color bgColor;
 		if (!this.isEnabled()) {
 			bgColor = Color.DARK_GRAY;
@@ -66,10 +67,6 @@ public class GuiToggleButton extends IGuiComponent {
 			bgColor = Color.RED;
 		}
 		tessellator.drawQuick(this.getBounds(), bgColor.withAlpha(0.5F));
-	}
-
-	@Override
-	public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		fontRenderer.setFont(Assets.FONT_SIMPLE);
 		fontRenderer.setFontSize(Math.min(this.getHeight() / 4 * 3, 48));
 		final int yOffset = 2;

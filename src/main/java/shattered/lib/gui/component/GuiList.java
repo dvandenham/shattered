@@ -2,7 +2,9 @@ package shattered.lib.gui.component;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import shattered.Assets;
+import shattered.core.ITickable;
 import shattered.lib.Color;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
@@ -14,7 +16,7 @@ import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiList extends IGuiComponent implements IComponentContainer {
+public class GuiList extends IGuiComponent implements ITickable, IComponentContainer {
 
 	private final ObjectArrayList<String> data = new ObjectArrayList<>();
 	private final ObjectArrayList<IGuiComponent[]> components = new ObjectArrayList<>();
@@ -54,8 +56,8 @@ public class GuiList extends IGuiComponent implements IComponentContainer {
 	}
 
 	@Override
-	public void doForAll(final Consumer<IGuiComponent> action) {
-		this.components.stream().flatMap(Arrays::stream).forEach(action);
+	public void doForAll(final Consumer<IGuiComponent> action, final Predicate<IGuiComponent> predicate) {
+		this.components.stream().flatMap(Arrays::stream).filter(predicate).forEach(action);
 	}
 
 	@Override
@@ -83,14 +85,17 @@ public class GuiList extends IGuiComponent implements IComponentContainer {
 		for (int i = 0; i < this.getVisibleLines().length; ++i) {
 			if (visibleComponents.length - 1 >= i) {
 				for (int j = 0; j < visibleComponents[i].length; ++j) {
-					visibleComponents[i][j].tick();
+					final IGuiComponent component = visibleComponents[i][j];
+					if (component instanceof ITickable) {
+						((ITickable) component).tick();
+					}
 				}
 			}
 		}
 	}
 
 	@Override
-	public void renderBackground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		final String[] visibleLines = this.getVisibleLines();
 		final int rowHeight = this.getRowHeight();
 		final Rectangle internalBounds = this.getInternalBounds();
@@ -105,30 +110,16 @@ public class GuiList extends IGuiComponent implements IComponentContainer {
 		fontRenderer.revertFontSize();
 		fontRenderer.resetFont();
 
-		this.scrollbar.renderBackground(tessellator, fontRenderer);
-
 		final IGuiComponent[][] visibleComponents = this.getVisibleComponents();
 		for (int i = 0; i < visibleLines.length; ++i) {
 			if (visibleComponents.length - 1 >= i) {
 				for (int j = 0; j < visibleComponents[i].length; ++j) {
-					visibleComponents[i][j].renderBackground(tessellator, fontRenderer);
+					visibleComponents[i][j].render(tessellator, fontRenderer);
 				}
 			}
 		}
-	}
 
-	@Override
-	public void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-		this.scrollbar.renderForeground(tessellator, fontRenderer);
-
-		final IGuiComponent[][] visibleComponents = this.getVisibleComponents();
-		for (int i = 0; i < this.getVisibleLines().length; ++i) {
-			if (visibleComponents.length - 1 >= i) {
-				for (int j = 0; j < visibleComponents[i].length; ++j) {
-					visibleComponents[i][j].renderForeground(tessellator, fontRenderer);
-				}
-			}
-		}
+		this.scrollbar.render(tessellator, fontRenderer);
 	}
 
 	protected int getScrollbarSize() {

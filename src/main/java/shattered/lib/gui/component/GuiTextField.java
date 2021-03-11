@@ -7,13 +7,18 @@ import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.KeyEvent;
 import shattered.lib.gfx.FontRenderer;
+import shattered.lib.gfx.GLHelper;
+import shattered.lib.gfx.MatrixUtils;
 import shattered.lib.gfx.RenderHelper;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiComponent;
+import shattered.lib.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 
@@ -45,62 +50,99 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 	public void render(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		tessellator.drawQuick(this.getBounds(), Color.BLACK.withAlpha(0.5F));
 		RenderHelper.renderFrame(tessellator, this.getBounds(), this.getBorderSize(), this.focussed ? this.colorBorder : Color.DARK_GRAY);
-		if (!this.getText().isEmpty()) {
-			fontRenderer.setFont(Assets.FONT_SIMPLE);
-			fontRenderer.setFontSize(24);
-			final String textReversed = new StringBuilder(this.getText()).reverse().toString();
-			final String textWrapped = fontRenderer.getWrappedText(
-					new StringData(textReversed).localize(false).wrap(this.getWidth() - this.getBorderSize() * 8, true)
-			)[0];
-			if (textWrapped != null) {
-				fontRenderer.start();
-				fontRenderer.add(
-						this.getX() + this.getBorderSize() * 3, this.getY(),
-						new StringData(new StringBuffer(textWrapped).reverse().toString(), this.colorText).localize(false).centerY(this.getHeight()));
-				fontRenderer.write();
-			}
-			if (this.focussed) {
-				int caretX = this.getBorderSize() * 4 + fontRenderer.getWidth(new StringData(this.getTextBeforeCaret()).localize(false));
-				if (caretX > this.getWidth() - this.getBorderSize() * 6) {
-					caretX = this.getWidth() - this.getBorderSize() * 6;
+
+		fontRenderer.setFont(Assets.FONT_SIMPLE);
+		fontRenderer.setFontSize(24);
+
+		if (!this.builder.isEmpty()) {
+			final Rectangle internalBounds = this.getInternalBounds();
+			GLHelper.scissor(internalBounds);
+			if (!this.focussed) {
+				fontRenderer.writeQuick(
+						internalBounds.getX(), internalBounds.getY(),
+						new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight())
+				);
+			} else {
+				final StringData[] data = this.getStringDataToRender();
+				if (data[0] != null && data[1] == null) { //Caret is at the end of the string
+					final int width = fontRenderer.getWidth(data[0]);
+					if (width > internalBounds.getWidth() - 8) {
+						tessellator.setUniformMatrix(
+								MatrixUtils.identity().translate(internalBounds.getWidth() - 8 - width, 0, 0)
+						);
+					}
+					fontRenderer.writeQuick(internalBounds.getX(), internalBounds.getY(), data[0]);
+					tessellator.resetUniformMatrix();
+				} else if (data[0] == null && data[1] != null) { //Caret is at the beginning of the string
+					fontRenderer.writeQuick(internalBounds.getX() + 8, internalBounds.getY(), data[1]);
+				} else {
+					assert data[0] != null;
+					final int widthLeft = fontRenderer.getWidth(data[0]);
+					final int widthRight = fontRenderer.getWidth(data[1]);
+					final int totalWidth = widthLeft + 12 + widthRight;
+					if (totalWidth > internalBounds.getWidth()) {
+						tessellator.setUniformMatrix(
+								MatrixUtils.identity().translate(internalBounds.getWidth() - totalWidth, 0, 0)
+						);
+					}
+					fontRenderer.writeQuick(internalBounds.getX(), internalBounds.getY(), data[0]);
+					fontRenderer.writeQuick(internalBounds.getX() + widthLeft + 12, internalBounds.getY(), data[1]);
+					tessellator.resetUniformMatrix();
 				}
-				this.renderCaret(tessellator, caretX);
 			}
-			fontRenderer.revertFontSize();
-			fontRenderer.resetFont();
-		} else if (this.focussed) {
-			this.renderCaret(tessellator, this.getBorderSize() * 2);
+			GLHelper.disableScissor();
+		}
+
+		if (this.focussed) {
+			tessellator.drawQuick(this.getCaretBounds(fontRenderer), this.colorCaret);
+		}
+
+		fontRenderer.revertFontSize();
+		fontRenderer.resetFont();
+	}
+
+	@Nullable
+	protected StringData[] getStringDataToRender() {
+		if (this.caretPos == this.builder.length()) {
+			return new StringData[]{
+					new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight()),
+					null
+			};
+		} else {
+			final String textBefore = this.getTextBeforeCaret();
+			if (textBefore == null) {
+				return new StringData[]{
+						null,
+						new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight())
+				};
+			} else {
+				return new StringData[]{
+						new StringData(textBefore, this.colorText).localize(false).centerY(this.getHeight()),
+						new StringData(this.getText().substring(textBefore.length()), this.colorText).localize(false).centerY(this.getHeight())
+				};
+			}
 		}
 	}
 
-	protected void renderCaret(@NotNull final Tessellator tessellator, final int offsetX) {
-		final int caretX = this.getX() + offsetX;
-		tessellator.drawQuick(
-				caretX, this.getY() + this.getBorderSize() * 2,
-				this.getBorderSize(), this.getHeight() - this.getBorderSize() * 4,
-				this.colorCaret
-		);
-	}
-
 	@NotNull
-	public GuiTextField setTextColor(@NotNull final Color textColor) {
+	public final GuiTextField setTextColor(@NotNull final Color textColor) {
 		this.colorText = textColor;
 		return this;
 	}
 
 	@NotNull
-	public GuiTextField setBorderColor(@NotNull final Color borderColor) {
+	public final GuiTextField setBorderColor(@NotNull final Color borderColor) {
 		this.colorBorder = borderColor;
 		return this;
 	}
 
 	@NotNull
-	public GuiTextField setCaretColor(@NotNull final Color caretColor) {
+	public final GuiTextField setCaretColor(@NotNull final Color caretColor) {
 		this.colorCaret = caretColor;
 		return this;
 	}
 
-	public void setText(@NotNull final String text) {
+	public final void setText(@NotNull final String text) {
 		if (this.builder.length() > 0) {
 			this.builder.replace(0, this.builder.length() - 1, text);
 		} else {
@@ -109,7 +151,7 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 		this.caretPos = this.builder.length();
 	}
 
-	public void setFocussed(final boolean focussed) {
+	public final void setFocussed(final boolean focussed) {
 		if (this.focussed != focussed) {
 			this.focussed = focussed;
 			if (this.focussed) {
@@ -123,13 +165,55 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 	}
 
 	@NotNull
-	public String getText() {
-		return this.builder.toString();
+	protected Rectangle getCaretBounds(@NotNull final FontRenderer fontRenderer) {
+		final Rectangle internalBounds = this.getInternalBounds();
+		return Rectangle.create(
+				this.getCaretPosX(fontRenderer),
+				internalBounds.getY() + this.getBorderSize(),
+				4,
+				internalBounds.getHeight() - this.getBorderSize() * 2
+		);
+	}
+
+	protected int getCaretPosX(@NotNull final FontRenderer fontRenderer) {
+		final Rectangle internalBounds = this.getInternalBounds();
+		final String textBefore = this.getTextBeforeCaret();
+		if (textBefore == null) {
+			return internalBounds.getX();
+		} else {
+			final int textWidth = fontRenderer.getWidth(new StringData(textBefore).localize(false));
+			int caretX = internalBounds.getX() + textWidth + 4;
+			if (caretX >= this.getInternalBounds().getMaxX() - 4) {
+				caretX = this.getInternalBounds().getMaxX() - 4;
+			}
+			return caretX;
+		}
 	}
 
 	@NotNull
-	protected String getTextBeforeCaret() {
-		return this.builder.isEmpty() ? "" : this.builder.substring(0, this.caretPos);
+	protected Rectangle getInternalBounds() {
+		return Rectangle.create(
+				this.getX() + this.getBorderSize(),
+				this.getY() + this.getBorderSize(),
+				this.getWidth() - this.getBorderSize() * 2,
+				this.getHeight() - this.getBorderSize() * 2
+		);
+	}
+
+	@NotNull
+	public final String getText() {
+		return this.builder.toString();
+	}
+
+	@Nullable
+	protected final String getTextBeforeCaret() {
+		if (this.caretPos == 0) {
+			return null;
+		} else if (this.caretPos == this.builder.length()) {
+			return this.builder.toString();
+		} else {
+			return this.builder.substring(0, this.caretPos);
+		}
 	}
 
 	protected int getBorderSize() {
@@ -153,6 +237,7 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 					}
 					return;
 				case GLFW_KEY_ENTER:
+				case GLFW_KEY_ESCAPE:
 					this.setFocussed(false);
 					return;
 				case GLFW_KEY_LEFT:

@@ -83,6 +83,7 @@ public final class TessellatorImpl implements Tessellator {
 		this.matrices.offer(MatrixUtils.identity());
 	}
 
+	@Override
 	public void setUniformMatrix(@NotNull final Matrix4f matrix) {
 		this.matUniform = matrix;
 		this.shader.setUniformMat4("matCustom", matrix);
@@ -93,6 +94,7 @@ public final class TessellatorImpl implements Tessellator {
 		return this.matUniform;
 	}
 
+	@Override
 	public void resetUniformMatrix() {
 		this.matUniform = null;
 		this.shader.setUniformMat4("matCustom", MatrixUtils.identity());

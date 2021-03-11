@@ -6,6 +6,7 @@ import shattered.lib.math.Dimension;
 import shattered.lib.math.Point;
 import shattered.lib.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
 public interface Tessellator {
@@ -84,6 +85,10 @@ public interface Tessellator {
 
 	@NotNull
 	PolygonBuilder createPolygon();
+
+	void setUniformMatrix(@NotNull final Matrix4f matrix);
+
+	void resetUniformMatrix();
 
 	void start();
 

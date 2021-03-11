@@ -17,6 +17,7 @@ public final class Assets {
 	public static final ResourceLocation TEXTURE_GUI_PANEL = new ResourceLocation("gui/panel");
 
 	public static final ResourceLocation AUDIO_BOOT = new ResourceLocation("boot");
+	public static final ResourceLocation AUDIO_UI_CLICK = new ResourceLocation("ui/click");
 
 	private Assets() {
 	}

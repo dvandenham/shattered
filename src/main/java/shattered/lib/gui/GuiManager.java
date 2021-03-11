@@ -6,6 +6,9 @@ import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.lib.ResourceLocation;
+import shattered.lib.audio.AudioPlayer;
+import shattered.lib.audio.SoundSystem;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -16,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 public final class GuiManager {
 
 	private final ObjectArrayList<IGuiScreen> screens = new ObjectArrayList<>();
+	private final AudioPlayer audioPlayer = SoundSystem.createPlayer();
 
 	private GuiManager() {
 	}
@@ -135,6 +139,9 @@ public final class GuiManager {
 		return !this.screens.isEmpty() ? this.screens.get(this.screens.size() - 1) : null;
 	}
 
+	public static void playAudio(@NotNull final ResourceLocation resource) {
+		Shattered.getInstance().getGuiManager().audioPlayer.play(resource);
+	}
 
 	@MessageListener("init_gui")
 	private static void onMessageReceived(final MessageEvent event) {

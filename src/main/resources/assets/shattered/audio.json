@@ -1,3 +1,4 @@
 [
-	"shattered:boot"
+    "shattered:boot",
+    "shattered:ui/click"
 ]

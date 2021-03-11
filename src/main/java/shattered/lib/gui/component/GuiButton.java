@@ -8,6 +8,7 @@ import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
+import shattered.lib.gui.GuiManager;
 import shattered.lib.gui.IGuiComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,6 +93,14 @@ public class GuiButton extends IGuiComponent {
 				this.state = ButtonState.RIGHT_PRESS;
 			} else {
 				this.state = ButtonState.ROLLOVER;
+			}
+			if (this.state != this.prevState) {
+				switch (this.state) {
+					case LEFT_CLICK:
+					case RIGHT_CLICK:
+						GuiManager.playAudio(Assets.AUDIO_UI_CLICK);
+						break;
+				}
 			}
 		}
 	}

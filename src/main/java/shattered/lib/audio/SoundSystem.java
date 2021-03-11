@@ -1,87 +1,138 @@
 package shattered.lib.audio;
 
-import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import shattered.Shattered;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
+import shattered.lib.asset.Audio;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALC10;
+import static org.lwjgl.openal.AL10.alSourcePause;
+import static org.lwjgl.openal.AL10.alSourcePlay;
+import static org.lwjgl.openal.AL10.alSourceStop;
+import static org.lwjgl.openal.ALC10.ALC_DEFAULT_DEVICE_SPECIFIER;
+import static org.lwjgl.openal.ALC10.alcCloseDevice;
+import static org.lwjgl.openal.ALC10.alcCreateContext;
+import static org.lwjgl.openal.ALC10.alcDestroyContext;
+import static org.lwjgl.openal.ALC10.alcGetString;
+import static org.lwjgl.openal.ALC10.alcMakeContextCurrent;
+import static org.lwjgl.openal.ALC10.alcOpenDevice;
 
-@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
-public final class SoundSystem {
+public final class SoundSystem extends Thread {
 
-	public static final SoundSystem INSTANCE = new SoundSystem();
-	static AudioThreadController THREAD_CONTROLLER;
-	static AudioThreadPlayer THREAD_PLAYER;
-	private final ArrayList<AudioPlayer> players = new ArrayList<>();
-	private long deviceID, context;
+	private static final AtomicBoolean RUNNING = new AtomicBoolean(false);
+	private static final ObjectArrayList<AudioPlayer> PLAYERS = new ObjectArrayList<>();
+	private static final ConcurrentLinkedQueue<QueueRequest> QUEUE = new ConcurrentLinkedQueue<>();
+	private static long deviceID, context;
+	static SoundSystem INSTANCE;
 
-	private SoundSystem() {
+	SoundSystem() {
+		super("SoundSystem");
 	}
 
 	@NotNull
 	public static AudioPlayer createPlayer() {
 		final AudioPlayer player = new AudioPlayer();
-		SoundSystem.INSTANCE.players.add(player);
+		SoundSystem.PLAYERS.add(player);
 		return player;
 	}
 
-	private void initialize() {
-		SoundSystem.THREAD_CONTROLLER = new AudioThreadController();
-		SoundSystem.THREAD_PLAYER = new AudioThreadPlayer();
-
-		final String defaultName = ALC10.alcGetString(0, ALC10.ALC_DEFAULT_DEVICE_SPECIFIER);
-		this.deviceID = ALC10.alcOpenDevice(defaultName);
-		this.context = ALC10.alcCreateContext(this.deviceID, new int[]{0});
-		ALC10.alcMakeContextCurrent(this.context);
-		AL.createCapabilities(ALC.createCapabilities(this.deviceID));
-		SoundSystem.THREAD_CONTROLLER.start();
-		SoundSystem.THREAD_PLAYER.start();
-	}
-
-	public long getContext() {
-		return this.context;
-	}
-
-	public void clearSystem() {
-		AudioThreadPlayer.QUEUE.clear();
-		AudioThreadPlayer.PLAYING.clear();
-		AudioThreadController.QUEUE.clear();
-		for (final AudioPlayer player : this.players) {
-			player.nowPlaying.clear();
+	@Override
+	public void run() {
+		while (SoundSystem.RUNNING.get()) {
+			QueueRequest request;
+			long sleepMillis = 0;
+			while ((request = SoundSystem.QUEUE.peek()) != null) {
+				final Audio audio = request.audio;
+				final AudioPlayer player = request.player;
+				switch (request.request) {
+					case QueueRequest.REQUEST_PLAY:
+						if (!player.playing.contains(audio)) {
+							player.playing.add(audio);
+							if (player.getVolume(audio) > player.getMasterVolume()) {
+								player.setVolume(audio, player.getMasterVolume());
+							}
+							alSourcePlay(audio.getSourcePointer());
+							SoundSystem.QUEUE.remove();
+							if (audio.getLengthMillis() > sleepMillis) {
+								sleepMillis = audio.getLengthMillis();
+							}
+						}
+						break;
+					case QueueRequest.REQUEST_PAUSE:
+						alSourcePause(audio.getSourcePointer());
+						player.playing.remove(audio);
+						break;
+					case QueueRequest.REQUEST_STOP:
+						alSourceStop(audio.getSourcePointer());
+						player.playing.remove(audio);
+						break;
+				}
+			}
+			this.trySleep(sleepMillis);
 		}
 	}
 
-	private void destroy() {
-		if (SoundSystem.THREAD_PLAYER != null) {
-			SoundSystem.THREAD_PLAYER.close();
-			SoundSystem.THREAD_PLAYER = null;
+	private synchronized void trySleep(final long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (final InterruptedException ignored) {
 		}
-		if (SoundSystem.THREAD_CONTROLLER != null) {
-			SoundSystem.THREAD_CONTROLLER.close();
-			SoundSystem.THREAD_CONTROLLER = null;
-		}
-
-		for (final AudioPlayer player : this.players) {
-			player.destroy();
-		}
-
-		ALC10.alcDestroyContext(this.context);
-		ALC10.alcCloseDevice(this.deviceID);
 	}
 
-	@MessageListener("init_sound_system")
-	private static void onInitSoundSystem(final MessageEvent ignored) {
-		SoundSystem.INSTANCE.initialize();
-		Shattered.LOGGER.debug("SoundSystem has been initialized");
+	private synchronized void wake() {
+		synchronized (this) {
+			this.interrupt();
+		}
 	}
 
-	@MessageListener("shutdown_sound_system")
-	private static void onShutdown(final MessageEvent ignored) {
-		Shattered.LOGGER.debug("SoundSystem is shutting down!");
-		SoundSystem.INSTANCE.destroy();
+	static void queue(@NotNull final QueueRequest request) {
+		SoundSystem.QUEUE.offer(request);
+		SoundSystem.INSTANCE.wake();
+	}
+
+	public static void clearSystem() {
+		SoundSystem.PLAYERS.forEach(AudioPlayer::destroy);
+		SoundSystem.QUEUE.clear();
+		SoundSystem.PLAYERS.clear();
+	}
+
+	@EventBusSubscriber(Shattered.SYSTEM_BUS_NAME)
+	private static class EventHandler {
+
+		@MessageListener("init_sound_system")
+		private static void onInitSoundSystem(final MessageEvent ignored) {
+			SoundSystem.INSTANCE = new SoundSystem();
+
+			final String specifier = alcGetString(0, ALC_DEFAULT_DEVICE_SPECIFIER);
+			SoundSystem.deviceID = alcOpenDevice(specifier);
+			SoundSystem.context = alcCreateContext(SoundSystem.deviceID, new int[]{0});
+
+			alcMakeContextCurrent(SoundSystem.context);
+			AL.createCapabilities(ALC.createCapabilities(SoundSystem.deviceID));
+
+			SoundSystem.RUNNING.set(true);
+			SoundSystem.INSTANCE.start();
+
+			Shattered.LOGGER.debug("SoundSystem has been initialized");
+		}
+
+		@MessageListener("shutdown_sound_system")
+		private static void onShutdown(final MessageEvent ignored) {
+			Shattered.LOGGER.debug("SoundSystem is shutting down!");
+
+			SoundSystem.RUNNING.set(false);
+			SoundSystem.INSTANCE.wake();
+
+			SoundSystem.QUEUE.clear();
+			SoundSystem.PLAYERS.forEach(AudioPlayer::destroy);
+
+			alcDestroyContext(SoundSystem.context);
+			alcCloseDevice(SoundSystem.deviceID);
+		}
 	}
 }

@@ -464,7 +464,7 @@ public final class Shattered {
 		final long startTime = Shattered.getSystemTime();
 
 		//Destroy SoundSystem
-		SoundSystem.INSTANCE.clearSystem();
+		SoundSystem.clearSystem();
 		Shattered.SYSTEM_BUS.post(new MessageEvent("shutdown_sound_system"));
 
 		//Load assets

@@ -1,12 +1,15 @@
 package shattered.lib.audio;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.AssetRegistry;
 import shattered.lib.asset.Audio;
+import org.jetbrains.annotations.NotNull;
 
 final class QueueRequest {
 
+	static final byte REQUEST_PLAY = 0;
+	static final byte REQUEST_PAUSE = 1;
+	static final byte REQUEST_STOP = 2;
 	final AudioPlayer player;
 	final Audio audio;
 	final byte request;

@@ -1,25 +1,29 @@
 package shattered.lib.audio;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.Audio;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.openal.AL10;
+import static org.lwjgl.openal.AL10.AL_GAIN;
+import static org.lwjgl.openal.AL10.AL_PAUSED;
+import static org.lwjgl.openal.AL10.AL_PLAYING;
+import static org.lwjgl.openal.AL10.AL_SOURCE_STATE;
+import static org.lwjgl.openal.AL10.alGetSourcef;
+import static org.lwjgl.openal.AL10.alGetSourcei;
+import static org.lwjgl.openal.AL10.alSourcef;
 
 @SuppressWarnings("unused")
 public final class AudioPlayer {
 
-	final CopyOnWriteArrayList<Audio> nowPlaying = new CopyOnWriteArrayList<>();
+	final ObjectArraySet<Audio> playing = new ObjectArraySet<>();
 	private float volume = 1.0F;
 
 	public void play(@NotNull final ResourceLocation audio) {
-		AudioThreadController.QUEUE.offer(QueueRequest.play(this, audio));
-		SoundSystem.THREAD_CONTROLLER.wake();
+		SoundSystem.queue(QueueRequest.play(this, audio));
 	}
 
 	public void pause(@NotNull final ResourceLocation audio) {
-		AudioThreadController.QUEUE.offer(QueueRequest.pause(this, audio));
-		SoundSystem.THREAD_CONTROLLER.wake();
+		SoundSystem.queue(QueueRequest.pause(this, audio));
 	}
 
 	public void resume(@NotNull final ResourceLocation audio) {
@@ -27,35 +31,34 @@ public final class AudioPlayer {
 	}
 
 	public void stop(@NotNull final ResourceLocation audio) {
-		AudioThreadController.QUEUE.offer(QueueRequest.stop(this, audio));
-		SoundSystem.THREAD_CONTROLLER.wake();
+		SoundSystem.queue(QueueRequest.stop(this, audio));
 	}
 
 	public boolean isPlaying(@NotNull final Audio audio) {
 		final int pointer = audio.getSourcePointer();
-		return pointer != -1 && AL10.alGetSourcei(pointer, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+		return pointer != -1 && alGetSourcei(pointer, AL_SOURCE_STATE) == AL_PLAYING;
 	}
 
 	public boolean isPaused(@NotNull final Audio audio) {
 		final int pointer = audio.getSourcePointer();
-		return pointer != -1 && AL10.alGetSourcei(pointer, AL10.AL_SOURCE_STATE) == AL10.AL_PAUSED;
+		return pointer != -1 && alGetSourcei(pointer, AL_SOURCE_STATE) == AL_PAUSED;
 	}
 
 	public void setVolume(@NotNull final Audio audio, final float volume) {
 		final int pointer = audio.getSourcePointer();
 		if (pointer != -1) {
-			AL10.alSourcef(pointer, AL10.AL_GAIN, volume);
+			alSourcef(pointer, AL_GAIN, volume);
 		}
 	}
 
 	public float getVolume(@NotNull final Audio audio) {
 		final int pointer = audio.getSourcePointer();
-		return pointer != -1 ? AL10.alGetSourcef(pointer, AL10.AL_GAIN) : 0F;
+		return pointer != -1 ? alGetSourcef(pointer, AL_GAIN) : 0F;
 	}
 
 	public void setMasterVolume(final float volume) {
 		this.volume = volume;
-		for (final Audio audio : this.nowPlaying) {
+		for (final Audio audio : this.playing) {
 			if (this.getVolume(audio) > this.volume) {
 				this.setVolume(audio, this.volume);
 			}
@@ -67,6 +70,6 @@ public final class AudioPlayer {
 	}
 
 	public void destroy() {
-		this.nowPlaying.clear();
+		this.playing.clear();
 	}
 }

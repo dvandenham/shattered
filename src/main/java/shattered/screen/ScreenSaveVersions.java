@@ -13,6 +13,7 @@ import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.GuiHelper;
 import shattered.lib.gui.GuiPopupYesNo;
 import shattered.lib.gui.Layout;
+import shattered.lib.gui.ScreenEvent;
 import shattered.lib.gui.component.GuiButton;
 import shattered.lib.gui.component.GuiList;
 import shattered.screen.component.GlitchButton;
@@ -68,7 +69,7 @@ public final class ScreenSaveVersions extends AbstractScreen {
 					"screen.save_manager.versions.popup.delete.description"
 			));
 		} else if (event.get() == this.buttonRename) {
-			//TODO rename here
+			this.openScreen(new ScreenSaveRename(this.save));
 		} else if (event.get() instanceof ButtonSaveDetails) {
 			this.openScreen(new ScreenSaveDetails(this.save, ((ButtonSaveDetails) event.get()).uuid));
 		}
@@ -80,6 +81,13 @@ public final class ScreenSaveVersions extends AbstractScreen {
 		if (event.get().equals("screen.save_manager.versions.popup.delete") && event.answer) {
 			this.save.delete();
 			this.closeScreen();
+		}
+	}
+
+	@EventListener(ScreenEvent.Closing.class)
+	private void onScreenClosing(final ScreenEvent.Closing event) {
+		if (event.get() instanceof ScreenSaveRename) {
+			this.setTitle(this.save.getDisplayName());
 		}
 	}
 

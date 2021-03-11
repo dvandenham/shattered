@@ -2,7 +2,7 @@
     "popup": {
         "yes_no": {
             "button.no": "No",
-            "button.yes": "No"
+            "button.yes": "Yes"
         },
         "notice.button.close": "Close"
     },
@@ -56,9 +56,12 @@
                     "date": "Save date"
                 }
             },
-            "rename.button": {
-                "cancel": "Cancel",
-                "confirm": "Confirm"
+            "rename": {
+                "button": {
+                    "cancel": "Cancel",
+                    "confirm": "Confirm"
+                },
+                "popup.error.io.description": "Could not save new name"
             }
         }
     }

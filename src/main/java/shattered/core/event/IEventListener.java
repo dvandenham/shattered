@@ -2,5 +2,9 @@ package shattered.core.event;
 
 public interface IEventListener {
 
-	void invoke(final Event<?> event);
+	abstract void invoke(final Event<?> event);
+
+	default void test() {
+
+	}
 }

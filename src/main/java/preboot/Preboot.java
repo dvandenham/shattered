@@ -21,7 +21,7 @@ import org.objectweb.asm.ClassReader;
 
 public final class Preboot {
 
-	static final PrebootClassLoader LOADER = new PrebootClassLoader();
+	private static final PrebootClassLoader LOADER = new PrebootClassLoader();
 	static final boolean DEVELOPER_MODE = Boolean.getBoolean("shattered.developer");
 	static final String PREBOOT_PACKAGE_NAME = Preboot.class.getPackage().getName();
 	static final Map<String, byte[]> CLASS_BYTES = new ConcurrentHashMap<>();

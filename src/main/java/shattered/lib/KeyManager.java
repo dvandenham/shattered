@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class KeyManager {
 
-	private final ConcurrentHashMap<String, KeyBind> BINDINGS = new ConcurrentHashMap<>();
-	private final ObjectArrayList<IKeyListener> LISTENERS = new ObjectArrayList<>();
-	private final Logger LOGGER = LogManager.getLogger("KeyManager");
+	private final ConcurrentHashMap<String, KeyBind> bindings = new ConcurrentHashMap<>();
+	private final ObjectArrayList<IKeyListener> listeners = new ObjectArrayList<>();
+	private final Logger logger = LogManager.getLogger("KeyManager");
 	private final File file;
 	private SDBTable store;
 
@@ -36,46 +36,45 @@ public final class KeyManager {
 	}
 
 	void poll() {
-		if (Input.isKeyManagerBlocked()) {
-			return;
+		if (!Input.isEventBusModeEnabled()) {
+			this.bindings.values().forEach(binding -> {
+				if (binding.timeOut > 0) {
+					--binding.timeOut;
+					return;
+				}
+				if (!Input.isKeyDown(binding.getKeyCode())) {
+					binding.isPressed = false;
+					binding.timeOut = 0;
+					return;
+				}
+				if (binding.isPressed && binding.isToggle) {
+					return;
+				}
+				if (binding.hasShift() != Input.isKeyboardShiftDown()) {
+					return;
+				}
+				if (binding.hasCtrl() != Input.isKeyboardControlDown()) {
+					return;
+				}
+				if (binding.hasAlt() != Input.isKeyboardAltDown()) {
+					return;
+				}
+				this.logger.debug("Key '{}' has been pressed", Localizer.localize(binding.getDisplayName()));
+				binding.isPressed = true;
+				binding.timeOut = binding.defaultTimeOut;
+				this.listeners.forEach(listener -> listener.onKeybindChanged(binding));
+			});
 		}
-		this.BINDINGS.values().forEach(keybind -> {
-			if (keybind.timeOut > 0) {
-				--keybind.timeOut;
-				return;
-			}
-			if (!Input.isKeyDown(keybind.getKeyCode())) {
-				keybind.isPressed = false;
-				keybind.timeOut = 0;
-				return;
-			}
-			if (keybind.isPressed && keybind.isToggle) {
-				return;
-			}
-			if (keybind.hasShift() != Input.isKeyboardShiftDown()) {
-				return;
-			}
-			if (keybind.hasCtrl() != Input.isKeyboardControlDown()) {
-				return;
-			}
-			if (keybind.hasAlt() != Input.isKeyboardAltDown()) {
-				return;
-			}
-			this.LOGGER.debug("Key \"{}\" has been pressed", Localizer.localize(keybind.getDisplayName()));
-			keybind.isPressed = true;
-			keybind.timeOut = keybind.defaultTimeOut;
-			this.LISTENERS.forEach(listener -> listener.onKeybindChanged(keybind));
-		});
 	}
 
 	public void registerListener(@NotNull final IKeyListener listener) {
-		if (!this.LISTENERS.contains(listener)) {
-			this.LISTENERS.add(listener);
+		if (!this.listeners.contains(listener)) {
+			this.listeners.add(listener);
 		}
 	}
 
 	public void unregisterListener(@NotNull final IKeyListener listener) {
-		this.LISTENERS.remove(listener);
+		this.listeners.remove(listener);
 	}
 
 	@NotNull
@@ -84,7 +83,7 @@ public final class KeyManager {
 	                         final int defaultKeyCode) {
 		final KeyBind result = new KeyBind(this, identifier, displayName, defaultKeyCode);
 		result.load(this.store);
-		this.BINDINGS.put(identifier, result);
+		this.bindings.put(identifier, result);
 		return result;
 	}
 
@@ -95,7 +94,7 @@ public final class KeyManager {
 	                         final boolean defaultShift, final boolean defaultCtrl, final boolean defaultAlt) {
 		final KeyBind result = new KeyBind(this, identifier, displayName, defaultKeyCode, defaultShift, defaultCtrl, defaultAlt);
 		result.load(this.store);
-		this.BINDINGS.put(identifier, result);
+		this.bindings.put(identifier, result);
 		return result;
 	}
 
@@ -106,7 +105,7 @@ public final class KeyManager {
 	                            final boolean defaultShift, final boolean defaultCtrl, final boolean defaultAlt) {
 		final KeyBind result = new KeyBind(this, identifier, displayName, defaultKeyCode, defaultTimeOut, defaultShift, defaultCtrl, defaultAlt);
 		result.load(this.store);
-		this.BINDINGS.put(identifier, result);
+		this.bindings.put(identifier, result);
 		return result;
 	}
 
@@ -118,11 +117,11 @@ public final class KeyManager {
 	}
 
 	public void saveToDisk() {
-		this.BINDINGS.values().forEach(binding -> binding.save(this.store));
+		this.bindings.values().forEach(binding -> binding.save(this.store));
 		try {
 			SDBHelper.serialize(this.store, this.file);
 		} catch (final IOException e) {
-			this.LOGGER.error("Could not save data to disk!", e);
+			this.logger.error("Could not save data to disk!", e);
 		}
 	}
 }

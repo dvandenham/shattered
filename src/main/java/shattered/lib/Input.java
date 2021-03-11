@@ -1,10 +1,11 @@
 package shattered.lib;
 
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import shattered.Shattered;
+import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
+import shattered.core.event.IEventBus;
 import shattered.core.event.MessageEvent;
 import shattered.core.event.MessageListener;
 import shattered.lib.gfx.Display;
@@ -24,11 +25,11 @@ public final class Input {
 	private static final int MAX_CLICK_POS_DELTA = 4;
 	private static final long MOUSE_CLICK_TIMEOUT_MS = 250;
 
-	private static final ConcurrentLinkedQueue<KeyEvent> KEY_QUEUE = new ConcurrentLinkedQueue<>();
 	static final Int2ObjectArrayMap<String> KEY_NAMES = new Int2ObjectArrayMap<>();
 	static final Int2ObjectArrayMap<Character[]> KEY_CHARS = new Int2ObjectArrayMap<>();
+	public static final IEventBus INPUT_BUS = EventBus.createBus("INPUT");
 	private static KeyManager keyManager;
-	private static boolean keyManagerBlocked = false;
+	private static boolean eventBusMode = false;
 
 	private static final Vector2d MOUSE_POS_PREV = new Vector2d();
 	private static final Vector2d MOUSE_POS = new Vector2d();
@@ -103,10 +104,7 @@ public final class Input {
 			Input.mouseRightDownX = -1;
 			Input.mouseRightDownY = -1;
 		}
-		if (!Input.keyManagerBlocked) {
-			Input.keyManager.poll();
-			Input.KEY_QUEUE.clear();
-		}
+		Input.keyManager.poll();
 	}
 
 	private static boolean checkClickValid(final boolean leftButton) {
@@ -229,21 +227,16 @@ public final class Input {
 		Input.mouseBlocked = blocked;
 	}
 
-	public static boolean isKeyManagerBlocked() {
-		return Input.keyManagerBlocked;
+	public static boolean isEventBusModeEnabled() {
+		return Input.eventBusMode;
 	}
 
-	public static void setKeyManagerBlocked(final boolean blocked) {
-		Input.keyManagerBlocked = blocked;
+	public static void enableEventBusMode() {
+		Input.eventBusMode = true;
 	}
 
-	public static boolean hasKeyEventQueued() {
-		return !Input.KEY_QUEUE.isEmpty();
-	}
-
-	@Nullable
-	public static KeyEvent nextQueuedKey() {
-		return Input.KEY_QUEUE.poll();
+	public static void disableEventBusMode() {
+		Input.eventBusMode = false;
 	}
 
 	@NotNull
@@ -254,6 +247,12 @@ public final class Input {
 	public static char getKeyChar(final int keyCode, final boolean shiftPressed) {
 		final Character[] result = Input.KEY_CHARS.get(keyCode);
 		return result == null ? 0 : result[result.length == 2 && shiftPressed ? 1 : 0];
+	}
+
+	private static void handleKeyEvent(final int[] data) {
+		if (Input.eventBusMode) {
+			Input.INPUT_BUS.post(new KeyEvent(data[0], data[1], data[2], data[3]));
+		}
 	}
 
 	@MessageListener("input_setup")
@@ -269,7 +268,7 @@ public final class Input {
 				(Consumer<Boolean>) entered -> Input.mouseEntered = entered,
 				(Consumer<Boolean>) down -> Input.mouseLeft = down,
 				(Consumer<Boolean>) down -> Input.mouseRight = down,
-				Input.KEY_QUEUE
+				(Consumer<int[]>) Input::handleKeyEvent
 		});
 	}
 }

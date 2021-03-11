@@ -2,6 +2,7 @@ package shattered.lib.gui.component;
 
 import shattered.Assets;
 import shattered.core.ITickable;
+import shattered.core.event.EventListener;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.KeyEvent;
@@ -32,52 +33,10 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 	public void tick() {
 		if (Input.isMouseLeftClicked()) {
 			if (this.containsMouse() && !this.focussed) {
-				this.focussed = true;
-				Input.setKeyManagerBlocked(true);
+				this.setFocussed(true);
 			}
 			if (!this.containsMouse() && this.focussed) {
-				this.focussed = false;
-				Input.setKeyManagerBlocked(false);
-			}
-		}
-		if (this.focussed) {
-			while (Input.hasKeyEventQueued()) {
-				final KeyEvent event = Input.nextQueuedKey();
-				assert event != null;
-				if (event.isPressed()) {
-					final int keyCode = event.getKeyCode();
-					final char keyChar = Input.getKeyChar(keyCode, Input.isKeyboardShiftDown());
-					switch (keyCode) {
-						case GLFW_KEY_BACKSPACE:
-							if (this.builder.length() >= 1) {
-								this.builder.deleteCharAt(this.caretPos - 1);
-								--this.caretPos;
-							}
-							continue;
-						case GLFW_KEY_ENTER:
-							Input.setKeyManagerBlocked(false);
-							this.focussed = false;
-							continue;
-						case GLFW_KEY_LEFT:
-							if (this.caretPos > 0) {
-								--this.caretPos;
-							}
-							continue;
-						case GLFW_KEY_RIGHT:
-							if (this.caretPos < this.builder.length()) {
-								++this.caretPos;
-							}
-							continue;
-					}
-					if (keyChar != 0) {
-						if (Character.isWhitespace(keyChar) && keyChar != ' ') {
-							continue;
-						}
-						if (keyChar < 256) {
-							this.builder.insert(this.caretPos++, keyChar);
-						}
-					}
-				}
+				this.setFocussed(false);
 			}
 		}
 	}
@@ -151,8 +110,16 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 	}
 
 	public void setFocussed(final boolean focussed) {
-		this.focussed = focussed;
-		Input.setKeyManagerBlocked(true);
+		if (this.focussed != focussed) {
+			this.focussed = focussed;
+			if (this.focussed) {
+				Input.INPUT_BUS.register(this);
+				Input.enableEventBusMode();
+			} else {
+				Input.INPUT_BUS.unregister(this);
+				Input.disableEventBusMode();
+			}
+		}
 	}
 
 	@NotNull
@@ -171,5 +138,42 @@ public class GuiTextField extends IGuiComponent implements ITickable {
 
 	public final boolean isFocussed() {
 		return this.focussed;
+	}
+
+	@EventListener(KeyEvent.class)
+	private void onKeyEvent(final KeyEvent event) {
+		if (event.isPressed() || event.isRepeat()) {
+			final int keyCode = event.getKeyCode();
+			final char keyChar = Input.getKeyChar(keyCode, Input.isKeyboardShiftDown());
+			switch (keyCode) {
+				case GLFW_KEY_BACKSPACE:
+					if (this.builder.length() >= 1) {
+						this.builder.deleteCharAt(this.caretPos - 1);
+						--this.caretPos;
+					}
+					return;
+				case GLFW_KEY_ENTER:
+					this.setFocussed(false);
+					return;
+				case GLFW_KEY_LEFT:
+					if (this.caretPos > 0) {
+						--this.caretPos;
+					}
+					return;
+				case GLFW_KEY_RIGHT:
+					if (this.caretPos < this.builder.length()) {
+						++this.caretPos;
+					}
+					return;
+			}
+			if (keyChar != 0) {
+				if (Character.isWhitespace(keyChar) && keyChar != ' ') {
+					return;
+				}
+				if (keyChar < 256) {
+					this.builder.insert(this.caretPos++, keyChar);
+				}
+			}
+		}
 	}
 }

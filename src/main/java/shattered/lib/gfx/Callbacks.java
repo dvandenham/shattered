@@ -1,13 +1,11 @@
 package shattered.lib.gfx;
 
 import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import org.lwjgl.glfw.GLFW;
-import shattered.core.event.MessageEvent;
 import shattered.Shattered;
-import shattered.lib.KeyEvent;
+import shattered.core.event.MessageEvent;
+import org.lwjgl.glfw.GLFW;
 
 final class Callbacks {
 
@@ -42,7 +40,7 @@ final class Callbacks {
 				((Consumer<Boolean>) callbacks[2 + button]).accept(action == GLFW.GLFW_PRESS)
 		);
 		GLFW.glfwSetKeyCallback(windowId, (id, keycode, scancode, action, mods) ->
-				((ConcurrentLinkedQueue<KeyEvent>) callbacks[callbacks.length - 1]).offer(new KeyEvent(keycode, scancode, action, mods))
+				((Consumer<int[]>) callbacks[callbacks.length - 1]).accept(new int[]{keycode, scancode, action, mods})
 		);
 	}
 }

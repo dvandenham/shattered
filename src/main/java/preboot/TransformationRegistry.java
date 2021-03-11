@@ -11,6 +11,7 @@ final class TransformationRegistry {
 	private static final TreeSet<ITransformer> TRANSFORMERS = new TreeSet<>((o1, o2) -> o2.priority() - o1.priority());
 
 	static {
+		TransformationRegistry.TRANSFORMERS.add(new TransformerObjectInstantiation());      //-1
 		TransformationRegistry.TRANSFORMERS.add(new TransformerEventBusSubscriber());       // 1
 		TransformationRegistry.TRANSFORMERS.add(new TransformerEventListener());            // 2
 		TransformationRegistry.TRANSFORMERS.add(new TransformerMessageListener());          // 3
@@ -36,7 +37,7 @@ final class TransformationRegistry {
 				}
 			}
 		}
-		if (hasTransformed && TransformationRegistry.DUMP_CLASSES) {
+		if (TransformationRegistry.DUMP_CLASSES) {
 			TransformationRegistry.dumpClass(className, bytes);
 		}
 		return bytes;
@@ -44,10 +45,11 @@ final class TransformationRegistry {
 
 	private static void dumpClass(final String className, final byte[] data) {
 		final File dir = new File("shattered_class_dump");
-		if (dir.mkdir()) {
+		if (dir.mkdirs() || dir.exists()) {
 			try (final FileOutputStream stream = new FileOutputStream(new File(dir, className.replaceAll("\\.", "_") + ".class"))) {
 				stream.write(data);
-			} catch (final IOException ignored) {
+			} catch (final IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

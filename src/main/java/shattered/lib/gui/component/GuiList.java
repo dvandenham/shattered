@@ -36,11 +36,11 @@ public class GuiList extends IGuiComponent implements ITickable, IComponentConta
 	@Override
 	public void setupComponents(@NotNull final Layout layout) {
 		this.scrollbar.setSteps(this.getPageCount());
-		this.scrollbar.setSize(this.getScrollbarSize(), getInternalBounds().getHeight());
+		this.scrollbar.setSize(this.getScrollbarSize(), this.getInternalBounds().getHeight());
 
 		final Rectangle internalBounds = this.getInternalBounds();
 		this.scrollbar.setPosition(internalBounds.getMaxX() + 4, internalBounds.getY());
-		
+
 		final IGuiComponent[][] visibleComponents = this.getVisibleComponents();
 		for (int i = 0; i < visibleComponents.length; ++i) {
 			final int y = internalBounds.getY() + this.getRowHeight() * i;

@@ -2,7 +2,6 @@ package shattered.lib.audio;
 
 import shattered.lib.ResourceLocation;
 import shattered.lib.asset.Audio;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import org.jetbrains.annotations.NotNull;
 import static org.lwjgl.openal.AL10.AL_GAIN;
 import static org.lwjgl.openal.AL10.AL_PAUSED;
@@ -15,7 +14,6 @@ import static org.lwjgl.openal.AL10.alSourcef;
 @SuppressWarnings("unused")
 public final class AudioPlayer {
 
-	final ObjectArraySet<Audio> playing = new ObjectArraySet<>();
 	private float volume = 1.0F;
 
 	public void play(@NotNull final ResourceLocation audio) {
@@ -58,18 +56,9 @@ public final class AudioPlayer {
 
 	public void setMasterVolume(final float volume) {
 		this.volume = volume;
-		for (final Audio audio : this.playing) {
-			if (this.getVolume(audio) > this.volume) {
-				this.setVolume(audio, this.volume);
-			}
-		}
 	}
 
 	public float getMasterVolume() {
 		return this.volume;
-	}
-
-	public void destroy() {
-		this.playing.clear();
 	}
 }

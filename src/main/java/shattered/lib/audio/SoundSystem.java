@@ -51,25 +51,20 @@ public final class SoundSystem extends Thread {
 				final AudioPlayer player = request.player;
 				switch (request.request) {
 					case QueueRequest.REQUEST_PLAY:
-						if (!player.playing.contains(audio)) {
-							player.playing.add(audio);
-							if (player.getVolume(audio) > player.getMasterVolume()) {
-								player.setVolume(audio, player.getMasterVolume());
-							}
-							alSourcePlay(audio.getSourcePointer());
-							SoundSystem.QUEUE.remove();
-							if (audio.getLengthMillis() > sleepMillis) {
-								sleepMillis = audio.getLengthMillis();
-							}
+						if (player.getVolume(audio) > player.getMasterVolume()) {
+							player.setVolume(audio, player.getMasterVolume());
+						}
+						alSourcePlay(audio.getSourcePointer());
+						SoundSystem.QUEUE.remove();
+						if (audio.getLengthMillis() > sleepMillis) {
+							sleepMillis = audio.getLengthMillis();
 						}
 						break;
 					case QueueRequest.REQUEST_PAUSE:
 						alSourcePause(audio.getSourcePointer());
-						player.playing.remove(audio);
 						break;
 					case QueueRequest.REQUEST_STOP:
 						alSourceStop(audio.getSourcePointer());
-						player.playing.remove(audio);
 						break;
 				}
 			}
@@ -96,7 +91,6 @@ public final class SoundSystem extends Thread {
 	}
 
 	public static void clearSystem() {
-		SoundSystem.PLAYERS.forEach(AudioPlayer::destroy);
 		SoundSystem.QUEUE.clear();
 		SoundSystem.PLAYERS.clear();
 	}
@@ -129,7 +123,6 @@ public final class SoundSystem extends Thread {
 			SoundSystem.INSTANCE.wake();
 
 			SoundSystem.QUEUE.clear();
-			SoundSystem.PLAYERS.forEach(AudioPlayer::destroy);
 
 			alcDestroyContext(SoundSystem.context);
 			alcCloseDevice(SoundSystem.deviceID);

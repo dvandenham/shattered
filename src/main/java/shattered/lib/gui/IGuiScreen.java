@@ -133,6 +133,7 @@ public abstract class IGuiScreen implements IComponentContainer {
 				}
 			} else if (this.hasCloseButton && Input.containsMouse(this.closeButtonBoundsCached)) {
 				if (Input.isMouseLeftClicked()) {
+					GuiManager.playAudio(Assets.AUDIO_UI_CLICK);
 					this.closeScreen();
 				}
 			}

@@ -8,6 +8,7 @@ import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
+import shattered.lib.gui.GuiManager;
 import shattered.lib.gui.IGuiComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +49,9 @@ public class GuiToggleButton extends IGuiComponent {
 		}
 		if (this.containsMouse() && Input.isMouseLeftClicked()) {
 			this.currentState = !this.currentState;
+		}
+		if (this.currentState != this.previousState) {
+			GuiManager.playAudio(Assets.AUDIO_UI_CLICK);
 		}
 	}
 

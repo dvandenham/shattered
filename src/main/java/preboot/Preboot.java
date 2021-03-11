@@ -35,6 +35,7 @@ public final class Preboot {
 			loggerConfig.setLevel(Level.ALL);
 			context.updateLoggers();
 		}
+		Thread.currentThread().setContextClassLoader(Preboot.LOADER);
 		Preboot.loadClasses();
 		Preboot.registerAnnotations();
 		Preboot.LOGGER.debug("Starting secondary boot stage");

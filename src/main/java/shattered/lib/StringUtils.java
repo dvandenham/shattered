@@ -9,6 +9,9 @@ public final class StringUtils {
 	private static final int[] RANGE_NUMERIC = {'0', '9'};
 	private static final int[] CHARS_SEPARATOR = {'.', '-', '_', '/'};
 
+	private StringUtils() {
+	}
+
 	public static boolean isAlphaString(@Nullable final String str) {
 		final int length;
 		if (str == null || (length = str.length()) == 0) {
@@ -64,6 +67,14 @@ public final class StringUtils {
 		return true;
 	}
 
-	private StringUtils() {
+	public static boolean isNullOrEmpty(@Nullable final String str) {
+		if (str != null) {
+			for (int i = 0; i < str.length(); ++i) {
+				if (!Character.isWhitespace(str.charAt(i))) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

@@ -39,10 +39,7 @@ public abstract class GuiPanel extends IGuiComponent implements IComponentContai
 
 	@Override
 	public boolean deepHasComponent(@NotNull final IGuiComponent component) {
-		if (this.hasComponent(component)) {
-			return true;
-		}
-		return this.components.stream()
+		return this.hasComponent(component) || this.components.stream()
 				.filter(c -> c instanceof IComponentContainer)
 				.map(c -> (IComponentContainer) c)
 				.anyMatch(c -> c.deepHasComponent(component));

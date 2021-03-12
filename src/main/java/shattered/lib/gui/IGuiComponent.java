@@ -1,5 +1,7 @@
 package shattered.lib.gui;
 
+import shattered.core.event.EventBus;
+import shattered.core.event.EventListener;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
@@ -18,7 +20,7 @@ public abstract class IGuiComponent {
 	public abstract void render(@NotNull Tessellator tessellator, @NotNull FontRenderer fontRenderer);
 
 	@NotNull
-	public IGuiComponent setEnabled(final boolean enabled) {
+	public final IGuiComponent setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 		return this;
 	}
@@ -161,6 +163,14 @@ public abstract class IGuiComponent {
 	private void tryCache() {
 		if (this instanceof IGuiCacheable) {
 			((IGuiCacheable) this).cache();
+		}
+	}
+
+	@EventListener(ScreenEvent.Closed.class)
+	private void onScreenClosing(final ScreenEvent.Closed event) {
+		assert event.get() != null;
+		if (event.get().deepHasComponent(this)) {
+			EventBus.unregister(this);
 		}
 	}
 }

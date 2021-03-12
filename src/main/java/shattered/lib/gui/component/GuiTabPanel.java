@@ -1,5 +1,6 @@
 package shattered.lib.gui.component;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import shattered.Assets;
@@ -118,7 +119,9 @@ public class GuiTabPanel extends IGuiComponent implements IComponentContainer, I
 			if (i != this.currentTab) {
 				final Rectangle tabBounds = this.cachedTabButtons.get(this.tabs.get(i));
 				if (Input.containsMouse(tabBounds) && Input.isMouseLeftClicked()) {
+					EventBus.unregister(Objects.requireNonNull(this.getCurrentTab()));
 					this.currentTab = i;
+					EventBus.register(Objects.requireNonNull(this.getCurrentTab()));
 					break;
 				}
 			}

@@ -18,7 +18,24 @@
         },
         "settings": {
             "title": "Settings",
-            "toggle.boot_animation": "Enable boot animation"
+            "tab.general": {
+                "title": "General",
+                "toggle.boot_animation": "Enable boot animation"
+            },
+            "tab.input": {
+                "title": "Mouse and Keyboard",
+                "button.key": {
+                    "move_left": "Move left: %s",
+                    "move_right": "Move right: %s"
+                },
+                "screen.keybind": {
+                    "title": "Configure key binding",
+                    "button": {
+                        "start": "Start",
+                        "stop": "Stop"
+                    }
+                }
+            }
         },
         "in_game.paused": {
             "label.paused": "Game paused",

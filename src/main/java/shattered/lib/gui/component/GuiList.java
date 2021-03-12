@@ -4,19 +4,19 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import shattered.Assets;
-import shattered.core.ITickable;
 import shattered.lib.Color;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IComponentContainer;
 import shattered.lib.gui.IGuiComponent;
+import shattered.lib.gui.IGuiTickable;
 import shattered.lib.gui.Layout;
 import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiList extends IGuiComponent implements ITickable, IComponentContainer {
+public class GuiList extends IGuiComponent implements IGuiTickable, IComponentContainer {
 
 	private final ObjectArrayList<String> data = new ObjectArrayList<>();
 	private final ObjectArrayList<IGuiComponent[]> components = new ObjectArrayList<>();
@@ -88,8 +88,8 @@ public class GuiList extends IGuiComponent implements ITickable, IComponentConta
 			if (visibleComponents.length - 1 >= i) {
 				for (int j = 0; j < visibleComponents[i].length; ++j) {
 					final IGuiComponent component = visibleComponents[i][j];
-					if (component instanceof ITickable) {
-						((ITickable) component).tick();
+					if (component instanceof IGuiTickable) {
+						((IGuiTickable) component).tick();
 					}
 				}
 			}

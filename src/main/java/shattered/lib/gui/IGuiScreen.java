@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import shattered.Assets;
 import shattered.Shattered;
-import shattered.core.ICacheable;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventListener;
 import shattered.lib.Color;
@@ -393,7 +392,7 @@ public abstract class IGuiScreen implements IComponentContainer {
 					.move(GuiHelper.BORDER_SIZE, 0)
 					.shrink(GuiHelper.BORDER_SIZE * 2, GuiHelper.BORDER_SIZE);
 		}
-		this.doForAll(component -> ((ICacheable) component).cache(), component -> component instanceof ICacheable);
+		this.doForAll(component -> ((IGuiCacheable) component).cache(), component -> component instanceof IGuiCacheable);
 		EventBus.post(new ScreenEvent.Resized(this));
 	}
 

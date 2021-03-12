@@ -1,17 +1,17 @@
 package shattered.lib.gui.component;
 
 import shattered.Assets;
-import shattered.core.ICacheable;
 import shattered.lib.Color;
 import shattered.lib.ResourceLocation;
 import shattered.lib.StringUtils;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
+import shattered.lib.gui.IGuiCacheable;
 import shattered.lib.gui.IGuiComponent;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiLabel extends IGuiComponent implements ICacheable {
+public class GuiLabel extends IGuiComponent implements IGuiCacheable {
 
 	@NotNull
 	private ResourceLocation font = Assets.FONT_DEFAULT;
@@ -22,7 +22,7 @@ public class GuiLabel extends IGuiComponent implements ICacheable {
 	private boolean localize = true;
 	private boolean centerX = true, centerY = true;
 	@NotNull
-	private StringData stringDataCached;
+	private StringData stringDataCached = this.createStringData();
 
 	public GuiLabel(@NotNull final ResourceLocation font, @NotNull final String text, @NotNull final Color textColor) {
 		this.font = font;
@@ -52,6 +52,11 @@ public class GuiLabel extends IGuiComponent implements ICacheable {
 
 	@Override
 	public void cache() {
+		this.stringDataCached = this.createStringData();
+	}
+
+	private StringData createStringData() {
+		assert this.text != null;
 		final StringData data = new StringData(this.text, this.textColor).localize(this.localize);
 		if (this.centerX) {
 			data.centerX(this.getWidth());
@@ -59,7 +64,7 @@ public class GuiLabel extends IGuiComponent implements ICacheable {
 		if (this.centerY) {
 			data.centerY(this.getHeight());
 		}
-		this.stringDataCached = data;
+		return data;
 	}
 
 	@NotNull

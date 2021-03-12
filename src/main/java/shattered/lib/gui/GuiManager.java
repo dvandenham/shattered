@@ -2,7 +2,6 @@ package shattered.lib.gui;
 
 import java.util.function.BiConsumer;
 import shattered.Shattered;
-import shattered.core.ITickable;
 import shattered.core.event.EventBus;
 import shattered.core.event.EventBusSubscriber;
 import shattered.core.event.MessageEvent;
@@ -113,10 +112,10 @@ public final class GuiManager {
 	}
 
 	private void tickScreen(@NotNull final IGuiScreen screen) {
-		if (screen instanceof ITickable) {
-			((ITickable) screen).tick();
+		if (screen instanceof IGuiTickable) {
+			((IGuiTickable) screen).tick();
 		}
-		screen.doForAll(component -> ((ITickable) component).tick(), component -> component instanceof ITickable);
+		screen.doForAll(component -> ((IGuiTickable) component).tick(), component -> component instanceof IGuiTickable);
 		screen.tickTitlebar();
 	}
 

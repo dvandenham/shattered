@@ -1,16 +1,16 @@
 package shattered.lib.gui.component;
 
-import shattered.core.ITickable;
 import shattered.lib.Color;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.RenderHelper;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IGuiComponent;
+import shattered.lib.gui.IGuiTickable;
 import shattered.lib.math.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiScrollbar extends IGuiComponent implements ITickable {
+public class GuiScrollbar extends IGuiComponent implements IGuiTickable {
 
 	private final boolean vertical;
 	private int steps;

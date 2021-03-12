@@ -1,6 +1,5 @@
 package shattered.lib.gui;
 
-import shattered.core.ICacheable;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
@@ -120,10 +119,12 @@ public abstract class IGuiComponent {
 		this.setSize(bounds.getSize());
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public final boolean isEnabled() {
 		return this.enabled;
 	}
 
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public final boolean isVisible() {
 		return this.visible;
 	}
@@ -158,8 +159,8 @@ public abstract class IGuiComponent {
 	}
 
 	private void tryCache() {
-		if (this instanceof ICacheable) {
-			((ICacheable) this).cache();
+		if (this instanceof IGuiCacheable) {
+			((IGuiCacheable) this).cache();
 		}
 	}
 }

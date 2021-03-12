@@ -1,7 +1,6 @@
 package shattered.lib.gui.component;
 
 import shattered.Assets;
-import shattered.core.ITickable;
 import shattered.core.event.Event;
 import shattered.core.event.EventBus;
 import shattered.lib.Color;
@@ -11,9 +10,10 @@ import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.GuiManager;
 import shattered.lib.gui.IGuiComponent;
+import shattered.lib.gui.IGuiTickable;
 import org.jetbrains.annotations.NotNull;
 
-public class GuiToggleButton extends IGuiComponent implements ITickable {
+public class GuiToggleButton extends IGuiComponent implements IGuiTickable {
 
 	private boolean currentState = false;
 	private boolean previousState = false;

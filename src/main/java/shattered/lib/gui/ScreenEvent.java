@@ -1,7 +1,7 @@
 package shattered.lib.gui;
 
-import org.jetbrains.annotations.NotNull;
 import shattered.core.event.Event;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ScreenEvent extends Event<IGuiScreen> {
 
@@ -44,6 +44,13 @@ public abstract class ScreenEvent extends Event<IGuiScreen> {
 		@Override
 		public boolean isCancellable() {
 			return true;
+		}
+	}
+
+	public static class Resized extends ScreenEvent {
+
+		Resized(@NotNull final IGuiScreen screen) {
+			super(screen);
 		}
 	}
 }

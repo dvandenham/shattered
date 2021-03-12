@@ -8,11 +8,13 @@ import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
+import shattered.lib.gui.component.GuiLabel;
 import shattered.screen.component.GlitchButton;
 import org.jetbrains.annotations.NotNull;
 
 public final class ScreenMainMenu extends AbstractScreen {
 
+	private final GuiLabel labelWelcome = new GuiLabel("screen.main_menu.label.welcome");
 	private final GuiButton buttonContinue = new GlitchButton("screen.main_menu.button.continue");
 	private final GuiButton buttonSaveList = new GlitchButton("screen.main_menu.button.save_list");
 	private final GuiButton buttonNewGame = new GlitchButton("screen.main_menu.button.new_game");
@@ -21,6 +23,7 @@ public final class ScreenMainMenu extends AbstractScreen {
 
 	public ScreenMainMenu() {
 		this.setHasTitlebar(false);
+		this.add(this.labelWelcome);
 		this.add(this.buttonContinue);
 		this.add(this.buttonSaveList);
 		this.add(this.buttonNewGame);
@@ -37,6 +40,8 @@ public final class ScreenMainMenu extends AbstractScreen {
 		layout.add(this.buttonNewGame);
 		layout.add(this.buttonSaveList);
 		layout.add(this.buttonContinue);
+		layout.addEmptyRow();
+		layout.add(this.labelWelcome);
 	}
 
 	@Override

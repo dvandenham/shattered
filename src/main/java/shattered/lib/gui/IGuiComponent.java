@@ -1,5 +1,6 @@
 package shattered.lib.gui;
 
+import shattered.core.ICacheable;
 import shattered.lib.Input;
 import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.Tessellator;
@@ -31,40 +32,67 @@ public abstract class IGuiComponent {
 
 	@NotNull
 	public final IGuiComponent setMaximumWidth(final int maximumWidth) {
-		this.maximumWidth = maximumWidth;
+		if (this.maximumWidth != maximumWidth) {
+			this.maximumWidth = maximumWidth;
+			this.tryCache();
+		}
 		return this;
 	}
 
 	public final void setX(final int x) {
-		this.bounds.setX(x);
+		if (this.bounds.getX() != x) {
+			this.bounds.setX(x);
+			this.tryCache();
+		}
 	}
 
 	public final void setY(final int y) {
-		this.bounds.setY(y);
+		if (this.bounds.getY() != y) {
+			this.bounds.setY(y);
+			this.tryCache();
+		}
 	}
 
 	public final void setPosition(final int x, final int y) {
-		this.bounds.setPosition(x, y);
+		if (x != this.bounds.getX() || y != this.bounds.getY()) {
+			this.bounds.setPosition(x, y);
+			this.tryCache();
+		}
 	}
 
 	public final void setPosition(@NotNull final Point position) {
-		this.bounds.setPosition(position);
+		if (this.bounds.getDoubleX() != position.getDoubleX() || this.bounds.getDoubleY() != position.getDoubleY()) {
+			this.bounds.setPosition(position);
+			this.tryCache();
+		}
 	}
 
 	public final void setWidth(final int width) {
-		this.bounds.setWidth(width);
+		if (this.bounds.getWidth() != width) {
+			this.bounds.setWidth(width);
+			this.tryCache();
+		}
 	}
 
 	public final void setHeight(final int height) {
-		this.bounds.setHeight(height);
+		if (this.bounds.getHeight() != height) {
+			this.bounds.setHeight(height);
+			this.tryCache();
+		}
 	}
 
 	public final void setSize(final int width, final int height) {
-		this.bounds.setSize(width, height);
+		if (this.bounds.getWidth() != width || this.bounds.getHeight() != height) {
+			this.bounds.setSize(width, height);
+			this.tryCache();
+		}
 	}
 
 	public final void setSize(@NotNull final Dimension size) {
-		this.bounds.setSize(size);
+		if (this.bounds.getDoubleWidth() != size.getDoubleWidth() || this.bounds.getDoubleHeight() != size.getDoubleHeight()) {
+			this.bounds.setSize(size);
+			this.tryCache();
+		}
 	}
 
 	public final void setBounds(final int x, final int y, final int width, final int height) {
@@ -127,5 +155,11 @@ public abstract class IGuiComponent {
 
 	public final int getHeight() {
 		return this.bounds.getHeight();
+	}
+
+	private void tryCache() {
+		if (this instanceof ICacheable) {
+			((ICacheable) this).cache();
+		}
 	}
 }

@@ -2,6 +2,7 @@ package preboot;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import shattered.core.event.EventListener;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
@@ -10,7 +11,6 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.CheckClassAdapter;
-import shattered.core.event.EventListener;
 
 final class TransformerEventListener implements ITransformer {
 
@@ -34,9 +34,16 @@ final class TransformerEventListener implements ITransformer {
 		node.accept(new ClassVisitor(Opcodes.ASM5, adapter) {
 
 			@Override
+			public void visit(final int version, final int access, final String name, final String signature, final String superName, final String[] interfaces) {
+				final int newAccess = (access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED) | Opcodes.ACC_PUBLIC;
+				super.visit(version, newAccess, name, signature, superName, interfaces);
+			}
+
+			@Override
 			public MethodVisitor visitMethod(final int access, final String name, final String descriptor, final String signature, final String[] exceptions) {
 				if (validMethods.contains(descriptor)) {
-					return super.visitMethod((access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED) | Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions);
+					final int newAccess = (access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED) | Opcodes.ACC_PUBLIC;
+					return super.visitMethod(newAccess, name, descriptor, signature, exceptions);
 				} else {
 					return super.visitMethod(access, name, descriptor, signature, exceptions);
 				}

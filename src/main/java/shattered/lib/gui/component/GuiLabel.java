@@ -22,21 +22,24 @@ public class GuiLabel extends IGuiComponent implements IGuiCacheable {
 	private boolean localize = true;
 	private boolean centerX = true, centerY = true;
 	@NotNull
-	private StringData stringDataCached = this.createStringData();
+	private StringData stringDataCached;
 
 	public GuiLabel(@NotNull final ResourceLocation font, @NotNull final String text, @NotNull final Color textColor) {
 		this.font = font;
 		this.text = text;
 		this.textColor = textColor;
+		this.stringDataCached = this.createStringData();
 	}
 
 	public GuiLabel(@NotNull final String text, @NotNull final Color textColor) {
 		this.text = text;
 		this.textColor = textColor;
+		this.stringDataCached = this.createStringData();
 	}
 
 	public GuiLabel(@NotNull final String text) {
 		this.text = text;
+		this.stringDataCached = this.createStringData();
 	}
 
 	@Override
@@ -56,7 +59,6 @@ public class GuiLabel extends IGuiComponent implements IGuiCacheable {
 	}
 
 	private StringData createStringData() {
-		assert this.text != null;
 		final StringData data = new StringData(this.text, this.textColor).localize(this.localize);
 		if (this.centerX) {
 			data.centerX(this.getWidth());

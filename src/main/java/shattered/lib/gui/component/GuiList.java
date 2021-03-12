@@ -9,19 +9,25 @@ import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.IComponentContainer;
+import shattered.lib.gui.IGuiCacheable;
 import shattered.lib.gui.IGuiComponent;
 import shattered.lib.gui.IGuiTickable;
 import shattered.lib.gui.Layout;
 import shattered.lib.math.Rectangle;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class GuiList extends IGuiComponent implements IGuiTickable, IComponentContainer {
+public class GuiList extends IGuiComponent implements IGuiTickable, IComponentContainer, IGuiCacheable {
 
 	private final ObjectArrayList<String> data = new ObjectArrayList<>();
 	private final ObjectArrayList<IGuiComponent[]> components = new ObjectArrayList<>();
 	private final GuiScrollbar scrollbar = new GuiScrollbar(0);
 	private boolean localize = true;
+	@Nullable
+	private String[] visibleLinesCached;
+	@Nullable
+	private IGuiComponent[][] visibleComponentsCached;
 
 	public void add(@NotNull final String text, @NotNull final IGuiComponent... components) {
 		this.data.add(text);
@@ -64,10 +70,18 @@ public class GuiList extends IGuiComponent implements IGuiTickable, IComponentCo
 
 	@Override
 	public void add(@NotNull final IGuiComponent component) {
+		//NOOP
 	}
 
 	@Override
 	public void remove(@NotNull final IGuiComponent component) {
+		//NOOP
+	}
+
+	@Override
+	public void cache() {
+		this.visibleLinesCached = this.getVisibleLines();
+		this.visibleComponentsCached = this.getVisibleComponents();
 	}
 
 	@Override
@@ -82,7 +96,11 @@ public class GuiList extends IGuiComponent implements IGuiTickable, IComponentCo
 
 	@Override
 	public void tick() {
+		final int prevScrollbarState = this.scrollbar.getValue();
 		this.scrollbar.tick();
+		if (prevScrollbarState != this.scrollbar.getValue()) {
+			this.cache();
+		}
 		final IGuiComponent[][] visibleComponents = this.getVisibleComponents();
 		for (int i = 0; i < this.getVisibleLines().length; ++i) {
 			if (visibleComponents.length - 1 >= i) {
@@ -163,6 +181,14 @@ public class GuiList extends IGuiComponent implements IGuiTickable, IComponentCo
 
 	@NotNull
 	protected final String[] getVisibleLines() {
+		if (this.visibleLinesCached == null) {
+			this.visibleLinesCached = this.calcVisibleLines();
+		}
+		return this.visibleLinesCached;
+	}
+
+	@NotNull
+	protected final String[] calcVisibleLines() {
 		if (this.getRowsForPage() < 0) {
 			return new String[0];
 		} else {
@@ -176,6 +202,14 @@ public class GuiList extends IGuiComponent implements IGuiTickable, IComponentCo
 
 	@NotNull
 	protected final IGuiComponent[][] getVisibleComponents() {
+		if (this.visibleComponentsCached == null) {
+			this.visibleComponentsCached = this.calcVisibleComponents();
+		}
+		return this.visibleComponentsCached;
+	}
+
+	@NotNull
+	protected final IGuiComponent[][] calcVisibleComponents() {
 		if (this.getRowsForPage() < 0) {
 			return new IGuiComponent[0][0];
 		} else {

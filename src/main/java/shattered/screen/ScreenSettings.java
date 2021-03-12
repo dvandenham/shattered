@@ -2,8 +2,6 @@ package shattered.screen;
 
 import shattered.Config;
 import shattered.core.event.EventListener;
-import shattered.lib.gfx.FontRenderer;
-import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiToggleButton;
 import org.jetbrains.annotations.NotNull;
@@ -23,10 +21,6 @@ public final class ScreenSettings extends AbstractScreen {
 	@Override
 	public void setupComponents(@NotNull final Layout layout) {
 		layout.add(this.toggleBootAnimation);
-	}
-
-	@Override
-	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 	}
 
 	@EventListener(GuiToggleButton.ToggleButtonEvent.StateChanged.class)

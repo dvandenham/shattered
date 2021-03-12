@@ -44,10 +44,6 @@ public final class ScreenSaveVersions extends AbstractScreen {
 		this.makeList();
 	}
 
-	@Override
-	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-	}
-
 	private void makeList() {
 		this.listVersions.reset();
 		final String[] versions = this.save.listVersionsSorted();

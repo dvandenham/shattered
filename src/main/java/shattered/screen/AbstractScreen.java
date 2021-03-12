@@ -24,4 +24,8 @@ abstract class AbstractScreen extends IGuiScreen {
 		}
 		tessellator.drawQuick(this.getBounds(), Assets.TEXTURE_ARGON);
 	}
+
+	@Override
+	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+	}
 }

@@ -4,17 +4,15 @@ import shattered.Assets;
 import shattered.Shattered;
 import shattered.core.event.EventListener;
 import shattered.lib.ResourceLocation;
-import shattered.lib.gfx.FontRenderer;
-import shattered.lib.gfx.Tessellator;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
-import shattered.lib.gui.component.GuiLabel;
+import shattered.lib.gui.component.GuiTextureLabel;
 import shattered.screen.component.GlitchButton;
 import org.jetbrains.annotations.NotNull;
 
 public final class ScreenMainMenu extends AbstractScreen {
 
-	private final GuiLabel labelWelcome = new GuiLabel("screen.main_menu.label.welcome");
+	private final GuiTextureLabel labelLogo = (GuiTextureLabel) new GuiTextureLabel(Assets.TEXTURE_LOGO).setUseAspectY(true).setMaximumWidth(768);
 	private final GuiButton buttonContinue = new GlitchButton("screen.main_menu.button.continue");
 	private final GuiButton buttonSaveList = new GlitchButton("screen.main_menu.button.save_list");
 	private final GuiButton buttonNewGame = new GlitchButton("screen.main_menu.button.new_game");
@@ -23,7 +21,7 @@ public final class ScreenMainMenu extends AbstractScreen {
 
 	public ScreenMainMenu() {
 		this.setHasTitlebar(false);
-		this.add(this.labelWelcome);
+		this.add(this.labelLogo);
 		this.add(this.buttonContinue);
 		this.add(this.buttonSaveList);
 		this.add(this.buttonNewGame);
@@ -33,6 +31,10 @@ public final class ScreenMainMenu extends AbstractScreen {
 
 	@Override
 	public void setupComponents(@NotNull final Layout layout) {
+		final Layout logoLayout = layout.recreate();
+		logoLayout.addEmptyRow();
+		logoLayout.add(this.labelLogo);
+
 		layout.setInverted();
 		layout.add(this.buttonShutdown);
 		layout.add(this.buttonSettings);
@@ -40,17 +42,6 @@ public final class ScreenMainMenu extends AbstractScreen {
 		layout.add(this.buttonNewGame);
 		layout.add(this.buttonSaveList);
 		layout.add(this.buttonContinue);
-		layout.addEmptyRow();
-		layout.add(this.labelWelcome);
-	}
-
-	@Override
-	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-		tessellator.start();
-		tessellator.set(this.getPosition(), Assets.TEXTURE_LOGO);
-		tessellator.scale(1.5F, 1.5F);
-		tessellator.center(this.getWidth(), this.getHeight() / 4);
-		tessellator.draw();
 	}
 
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)

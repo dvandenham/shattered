@@ -33,10 +33,6 @@ public class ScreenSaveList extends AbstractScreen {
 		this.makeList();
 	}
 
-	@Override
-	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-	}
-
 	private void makeList() {
 		this.listSaves.reset();
 		try {

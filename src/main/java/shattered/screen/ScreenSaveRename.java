@@ -49,6 +49,7 @@ public final class ScreenSaveRename extends IGuiScreen {
 
 	@Override
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
+		//NOOP
 	}
 
 	@EventListener(GuiButton.ButtonEvent.LeftClick.class)

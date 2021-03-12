@@ -13,7 +13,6 @@ import shattered.lib.gfx.FontRenderer;
 import shattered.lib.gfx.MatrixUtils;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
-import shattered.lib.gfx.TessellatorImpl;
 import shattered.lib.gui.Layout;
 import shattered.lib.gui.component.GuiButton;
 import shattered.screen.component.GlitchButton;
@@ -57,11 +56,11 @@ public final class ScreenSaveDetails extends AbstractScreen {
 
 	@Override
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
-		((TessellatorImpl) tessellator).setUniformMatrix(MatrixUtils.identity().translate(this.getInternalX(), this.getInternalY() + 48, 0).scale(0.5F));
+		tessellator.setUniformMatrix(MatrixUtils.identity().translate(this.getInternalX(), this.getInternalY() + 48, 0).scale(0.5F));
 		Display.setLogicalResolution(600, 480);
 		this.world.render(tessellator, fontRenderer);
 		Display.resetLogicalResolution();
-		((TessellatorImpl) tessellator).resetUniformMatrix();
+		tessellator.resetUniformMatrix();
 
 		//Render name
 		fontRenderer.writeQuick(this.getInternalX(), this.getInternalY(), new StringData(this.save.getDisplayName()).centerX(this.getInternalWidth()).localize(false));

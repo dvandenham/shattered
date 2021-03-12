@@ -45,7 +45,7 @@ public final class ScreenInGamePaused extends IGuiScreen {
 	protected void renderForeground(@NotNull final Tessellator tessellator, @NotNull final FontRenderer fontRenderer) {
 		RenderHelper.writeGlitchedCentered(
 				fontRenderer,
-				this.getBounds().setHeight(this.getHeight() / 4),
+				this.getBounds().setHeight(this.getHeight() / 4.0),
 				"screen.in_game.paused.label.paused"
 		);
 	}

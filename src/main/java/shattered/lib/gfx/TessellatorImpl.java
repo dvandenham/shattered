@@ -264,7 +264,7 @@ public final class TessellatorImpl implements Tessellator {
 		if (this.currentCall == null) {
 			throw new IllegalStateException("No call to modify! Use the set() method first!");
 		}
-		this.currentCall.bounds = this.currentCall.bounds.moveX((width - this.currentCall.bounds.getWidth()) / 2);
+		this.currentCall.bounds = this.currentCall.bounds.moveX((width - this.currentCall.bounds.getWidth()) / 2.0);
 	}
 
 	@Override
@@ -275,7 +275,7 @@ public final class TessellatorImpl implements Tessellator {
 		if (this.currentCall == null) {
 			throw new IllegalStateException("No call to modify! Use the set() method first!");
 		}
-		this.currentCall.bounds = this.currentCall.bounds.moveY((height - this.currentCall.bounds.getHeight()) / 2);
+		this.currentCall.bounds = this.currentCall.bounds.moveY((height - this.currentCall.bounds.getHeight()) / 2.0);
 	}
 
 	@Override
@@ -608,12 +608,32 @@ public final class TessellatorImpl implements Tessellator {
 	}
 
 	private void render(final DrawCall call, final Matrix4f matrix) {
-		//Calculate all positions
-		final float startX = call.bounds.getX();
-		final float startY = call.bounds.getY();
-		final float stopX = call.bounds.getMaxX();
-		final float stopY = call.bounds.getMaxY();
 		if (call.useTexture) {
+			//Calculate all positions
+			final float startX = call.bounds.getX();
+			final float startY = call.bounds.getY();
+			final float stopX;// = call.bounds.getWidth() < 0 ? -1 :
+			final float stopY;// = call.bounds.getHeight() < 0 ? -1 : call.bounds.getMaxY();
+			if (call.bounds.getWidth() > 0) {
+				stopX = call.bounds.getMaxX();
+			} else {
+				if (call.bounds.getHeight() > 0) { //Keep aspect ratio
+					final double ratio = call.bounds.getDoubleHeight() / call.texture.getTextureSize().getDoubleHeight();
+					stopX = (float) (startX + (ratio * call.texture.getTextureSize().getDoubleWidth()));
+				} else { //Ignore bounds
+					stopX = startX + call.texture.getTextureSize().getWidth();
+				}
+			}
+			if (call.bounds.getHeight() > 0) {
+				stopY = call.bounds.getMaxY();
+			} else {
+				if (call.bounds.getWidth() > 0) { //Keep aspect ratio
+					final double ratio = call.bounds.getDoubleWidth() / call.texture.getTextureSize().getDoubleWidth();
+					stopY = (float) (startY + (ratio * call.texture.getTextureSize().getDoubleHeight()));
+				} else { //Ignore bounds
+					stopY = startY + call.texture.getTextureSize().getHeight();
+				}
+			}
 			if (call.texture == TessellatorImpl.TEXTURE_MISSING) {
 				call.uMin = 0;
 				call.vMin = 0;
@@ -676,6 +696,12 @@ public final class TessellatorImpl implements Tessellator {
 			builder.position(startX, stopY).color(call.colors[3]).uv(uMin, vMax).endVertex();
 			builder.draw();
 		} else {
+
+			//Calculate all positions
+			final float startX = call.bounds.getX();
+			final float startY = call.bounds.getY();
+			final float stopX = call.bounds.getMaxX();
+			final float stopY = call.bounds.getMaxY();
 			final BufferBuilder builder = new BufferBuilder(GeneralVertexFormats.FORMAT_COLOR, 4, GL11.GL_TRIANGLE_FAN, () -> {
 				this.shader.bind();
 				this.shader.setUniform1B("doTexture", false);

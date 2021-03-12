@@ -32,11 +32,13 @@ public class GuiList extends IGuiComponent implements IGuiTickable, IComponentCo
 	public void add(@NotNull final String text, @NotNull final IGuiComponent... components) {
 		this.data.add(text);
 		this.components.add(components);
+		this.cache();
 	}
 
 	public void reset() {
 		this.data.clear();
 		this.components.clear();
+		this.cache();
 	}
 
 	@Override
@@ -80,8 +82,8 @@ public class GuiList extends IGuiComponent implements IGuiTickable, IComponentCo
 
 	@Override
 	public void cache() {
-		this.visibleLinesCached = this.getVisibleLines();
-		this.visibleComponentsCached = this.getVisibleComponents();
+		this.visibleLinesCached = null;
+		this.visibleComponentsCached = null;
 	}
 
 	@Override

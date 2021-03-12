@@ -11,6 +11,7 @@ import shattered.lib.gfx.MatrixUtils;
 import shattered.lib.gfx.RenderHelper;
 import shattered.lib.gfx.StringData;
 import shattered.lib.gfx.Tessellator;
+import shattered.lib.gui.IGuiCacheable;
 import shattered.lib.gui.IGuiComponent;
 import shattered.lib.gui.IGuiTickable;
 import shattered.lib.math.Rectangle;
@@ -22,7 +23,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 
-public class GuiTextField extends IGuiComponent implements IGuiTickable {
+public class GuiTextField extends IGuiComponent implements IGuiTickable, IGuiCacheable {
 
 	private final StringBuilder builder = new StringBuilder();
 	@NotNull
@@ -33,6 +34,9 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 	private Color colorCaret = Color.XEROS;
 	protected boolean focussed = false;
 	protected int caretPos = 0;
+
+	@Nullable
+	private StringData[] cachedData;
 
 	@Override
 	public void tick() {
@@ -103,25 +107,28 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 
 	@Nullable
 	protected StringData[] getStringDataToRender() {
-		if (this.caretPos == this.builder.length()) {
-			return new StringData[]{
-					new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight()),
-					null
-			};
-		} else {
-			final String textBefore = this.getTextBeforeCaret();
-			if (textBefore == null) {
-				return new StringData[]{
-						null,
-						new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight())
+		if (this.cachedData == null) {
+			if (this.caretPos == this.builder.length()) {
+				this.cachedData = new StringData[]{
+						new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight()),
+						null
 				};
 			} else {
-				return new StringData[]{
-						new StringData(textBefore, this.colorText).localize(false).centerY(this.getHeight()),
-						new StringData(this.getText().substring(textBefore.length()), this.colorText).localize(false).centerY(this.getHeight())
-				};
+				final String textBefore = this.getTextBeforeCaret();
+				if (textBefore == null) {
+					this.cachedData = new StringData[]{
+							null,
+							new StringData(this.getText(), this.colorText).localize(false).centerY(this.getHeight())
+					};
+				} else {
+					this.cachedData = new StringData[]{
+							new StringData(textBefore, this.colorText).localize(false).centerY(this.getHeight()),
+							new StringData(this.getText().substring(textBefore.length()), this.colorText).localize(false).centerY(this.getHeight())
+					};
+				}
 			}
 		}
+		return this.cachedData;
 	}
 
 	@NotNull
@@ -149,6 +156,7 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 			this.builder.append(text);
 		}
 		this.caretPos = this.builder.length();
+		this.cache();
 	}
 
 	public final void setFocussed(final boolean focussed) {
@@ -162,6 +170,11 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 				Input.disableEventBusMode();
 			}
 		}
+	}
+
+	@Override
+	public void cache() {
+		this.cachedData = null;
 	}
 
 	@NotNull
@@ -234,6 +247,7 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 					if (this.builder.length() >= 1) {
 						this.builder.deleteCharAt(this.caretPos - 1);
 						--this.caretPos;
+						this.cache();
 					}
 					return;
 				case GLFW_KEY_ENTER:
@@ -243,11 +257,13 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 				case GLFW_KEY_LEFT:
 					if (this.caretPos > 0) {
 						--this.caretPos;
+						this.cache();
 					}
 					return;
 				case GLFW_KEY_RIGHT:
 					if (this.caretPos < this.builder.length()) {
 						++this.caretPos;
+						this.cache();
 					}
 					return;
 			}
@@ -257,6 +273,7 @@ public class GuiTextField extends IGuiComponent implements IGuiTickable {
 				}
 				if (keyChar < 256) {
 					this.builder.insert(this.caretPos++, keyChar);
+					this.cache();
 				}
 			}
 		}
